@@ -11,6 +11,7 @@ Continuous Integration (Travis CI)
             :alt: Build Status
                   :target: https://travis-ci.org/darjeeling/k-board
 
-developer
 
+developer
+======
 - jihun
