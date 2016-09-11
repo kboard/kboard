@@ -12,7 +12,7 @@ Continuous Integration (Travis CI)
                   :target: https://travis-ci.org/darjeeling/k-board
 
 
-
 Developers_
 -----
 - Bae KwonHan
+- jihun
