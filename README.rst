@@ -16,3 +16,4 @@ Continuous Integration (Travis CI)
 Developers
 -----
 - Bae KwonHan
+- Choi HyeSun
