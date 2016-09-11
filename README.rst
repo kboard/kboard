@@ -14,5 +14,5 @@ Continuous Integration (Travis CI)
 Developers
 -----
 - Bae KwonHan <darjeeling@gmail.com>
-- Choi HyeSun
+- Choi HyeSun <chsun0303@gmail.com>
 - 전현준 (guswnsxodlf@gmail.com)
