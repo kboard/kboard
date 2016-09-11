@@ -15,4 +15,4 @@ Continuous Integration (Travis CI)
 
 Developers
 -----
-- Bae KwonHan
+- Bae KwonHan <darjeeling@gmail.com>
