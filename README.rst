@@ -11,9 +11,8 @@ Continuous Integration (Travis CI)
             :alt: Build Status
                   :target: https://travis-ci.org/darjeeling/k-board
 
-
-
 Developers
 -----
 - Bae KwonHan <darjeeling@gmail.com>
 - Choi HyeSun
+- 전현준 (guswnsxodlf@gmail.com)
