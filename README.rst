@@ -10,3 +10,10 @@ Continuous Integration (Travis CI)
       .. image:: https://secure.travis-ci.org/darjeeling/k-board.svg?branch=master
             :alt: Build Status
                   :target: https://travis-ci.org/darjeeling/k-board
+
+Developers
+-----
+- Bae KwonHan <darjeeling@gmail.com>
+- Choi HyeSun <chsun0303@gmail.com>
+- 전현준 (guswnsxodlf@gmail.com)
+- Choi jihun <cjh5414@gmail.com>
