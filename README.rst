@@ -16,4 +16,4 @@ Developers
 - Bae KwonHan <darjeeling@gmail.com>
 - Choi HyeSun <chsun0303@gmail.com>
 - Jeon HyunJun <guswnsxodlf@gmail.com>
-- Choi jihun <cjh5414@gmail.com>
+- Choi JiHun <cjh5414@gmail.com>
