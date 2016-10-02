@@ -10,6 +10,8 @@ class NewVisitorTest(unittest.TestCase):
             self.browser = webdriver.Chrome('./chromedriver')
         else:
             self.browser = webdriver.Firefox()
+        self.browser.implicitly_wait(3)
+
 
     def tearDown(self):
         self.browser.quit()
@@ -21,7 +23,7 @@ class NewVisitorTest(unittest.TestCase):
 
         # 웹 페이지 타이틀과 헤더가 'k-board'를 표시하고 있다
         self.assertIn('Create Post', self.browser.title)
-        header_text = self.browser.find_element_by_tag_name('h3').text
+        header_text = self.browser.find_element_by_tag_name('h2').text
         self.assertIn('Create Post', header_text)
 
         # 그는 새 게시글을 작성한다
