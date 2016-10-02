@@ -58,3 +58,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# .DS_Store
+*.DS_Store
+
+# Ignore Pycharm
+.idea/
