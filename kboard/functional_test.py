@@ -45,7 +45,6 @@ class NewVisitorTest(unittest.TestCase):
 
         # 하단의 버튼을 누르면 글 작성이 완료된다
         # 글 작성 완료와 동시에 게시글 목록으로 돌아간다
-
         self.fail('Finish the test.....')
         
     
