@@ -4,7 +4,6 @@ KBoard_
 
 Continuous Integration (Travis CI)
    https://travis-ci.org/kboard/kboard
-
       .. image:: https://api.travis-ci.org/kboard/kboard.svg?branch=master
             :alt: Build Status
                   :target: https://travis-ci.org/kobard/kboard
