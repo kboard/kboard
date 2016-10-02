@@ -5,11 +5,11 @@ K-Board_
 K-Board is blah
 
 Continuous Integration (Travis CI)
-   https://travis-ci.org/darjeeling/k-board
+   https://travis-ci.org/kboard/kboard
 
-      .. image:: https://secure.travis-ci.org/darjeeling/k-board.svg?branch=master
+      .. image:: https://secure.travis-ci.org/kboard/kboard.svg?branch=master
             :alt: Build Status
-                  :target: https://travis-ci.org/darjeeling/k-board
+                  :target: https://travis-ci.org/kboard/kboard
 
 Developers
 -----
