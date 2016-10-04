@@ -3,7 +3,7 @@ from selenium.webdriver.common.keys import Keys
 import unittest
 import sys, time
 
-class NewVisitorTest(unittest.TestCase):
+class NewPostTest(unittest.TestCase):
     
     def setUp(self):
         if sys.platform == 'darwin':
@@ -35,7 +35,7 @@ class NewVisitorTest(unittest.TestCase):
 
         contentbox = self.browser.find_element_by_id('id_new_post_content')
         self.assertEqual(
-            titlebox.get_attribute('placeholder'),
+            contentbox.get_attribute('placeholder'),
             'Insert Content'
         )
 
@@ -47,7 +47,9 @@ class NewVisitorTest(unittest.TestCase):
 
         # 하단의 버튼을 누르면 글 작성이 완료된다
         # 글 작성 완료와 동시에 게시글 목록으로 돌아간다
-        self.fail('Finish the test.....')
+
+
+
         
     
 if __name__ == '__main__':
