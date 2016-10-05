@@ -16,15 +16,14 @@ class NewPostTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def test_can_start_a_list_and_retrieve_it_later(self):
-        # 지훈이는 멋진 게시판 앱이 나왔다는 소식을 듣고 
+    def test_new_visitor(self):
+        # 지훈이는 멋진 게시판 앱이 나왔다는 소식을 듣고
         # 해당 웹 사이트를 확인하러 간다
         self.browser.get('http://localhost:8000')
 
-        # 웹 페이지 타이틀과 헤더가 'k-board'를 표시하고 있다
-        self.assertIn('Create Post', self.browser.title)
-
+        # 웹 페이지 타이틀과 헤더가 'Create Post'를 표시하고 있다
         header_text = self.browser.find_element_by_tag_name('h2').text
+        self.assertIn('Create Post', self.browser.title)
         self.assertIn('Create Post', header_text)
 
         # 그는 새 게시글을 작성한다
@@ -51,6 +50,10 @@ class NewPostTest(unittest.TestCase):
         submit_button.click()
         self.assertRegex(self.browser.current_url, '.+/board')
 
+        # 게시글 목록 페이지의 타이틀에 'Post list'라고 씌여져 있다.
+        header_text = self.browser.find_element_by_tag_name('h2').text
+        self.assertIn('Post list', self.browser.title)
+        self.assertIn('Post list', header_text)
 
 
 if __name__ == '__main__':
