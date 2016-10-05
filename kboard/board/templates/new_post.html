@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>Create Post</title>
 </head>
 <body>
     <h2>Create Post</h2>
-    <input id="id_new_post_title" placeholder="Insert Title"/>
-    <br/><br/>
-    <textarea id="id_new_post_content" placeholder="Insert Content"></textarea>
+        <form method="post" action="board/">
+        <input id="id_new_post_title" placeholder="Insert Title"/><br/>
+        <textarea id="id_new_post_content" placeholder="Insert Content"></textarea><br/>
+        <button type="submit">등록</button>
+    </form>
 </body>
 </html>
