@@ -7,5 +7,5 @@ from . import views
 app_name = 'board'
 urlpatterns = [
     url(r'^$', views.new_post, name='new_post'),
-    url(r'^board/', views.post_list, name='post_list')
+    url(r'^board/$', views.post_list, name='post_list')
 ]
