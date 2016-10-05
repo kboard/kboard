@@ -6,7 +6,8 @@
 </head>
 <body>
     <h2>Create Post</h2>
-        <form method="post" action="board/">
+    <form method="post" action="{% url 'board:post_list' %}">
+        {% csrf_token %}
         <input id="id_new_post_title" placeholder="Insert Title"/><br/>
         <textarea id="id_new_post_content" placeholder="Insert Content"></textarea><br/>
         <button type="submit">등록</button>
