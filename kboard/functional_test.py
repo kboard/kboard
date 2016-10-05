@@ -55,6 +55,11 @@ class NewPostTest(unittest.TestCase):
         self.assertIn('Post list', self.browser.title)
         self.assertIn('Post list', header_text)
 
+        # 게시글 목록에 "Title of This Post"라고 씌여져 있다.
+        # TODO
+
+        # 제목을 누르니 "Content of This Post"라고 씌여져 있다.
+
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
