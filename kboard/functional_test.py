@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 import unittest
 import sys, time
 
+
 class NewPostTest(unittest.TestCase):
     
     def setUp(self):
@@ -11,7 +12,6 @@ class NewPostTest(unittest.TestCase):
         else:
             self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
-
 
     def tearDown(self):
         self.browser.quit()
@@ -23,6 +23,7 @@ class NewPostTest(unittest.TestCase):
 
         # 웹 페이지 타이틀과 헤더가 'k-board'를 표시하고 있다
         self.assertIn('Create Post', self.browser.title)
+
         header_text = self.browser.find_element_by_tag_name('h2').text
         self.assertIn('Create Post', header_text)
 
@@ -45,12 +46,12 @@ class NewPostTest(unittest.TestCase):
         # "Content of This Post"라고 본문 상자에 입력한다
         contentbox.send_keys('Content of This Post')
 
-        # 하단의 버튼을 누르면 글 작성이 완료된다
-        # 글 작성 완료와 동시에 게시글 목록으로 돌아간다
+        # 하단의 등록 버튼을 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
+        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
+        submit_button.click()
+        self.assertRegex(self.browser.current_url, '.+/board')
 
 
 
-        
-    
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
