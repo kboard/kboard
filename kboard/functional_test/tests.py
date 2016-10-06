@@ -60,3 +60,9 @@ class NewVisitorTest(LiveServerTestCase):
         # TODO
 
         # 제목을 누르니 "Content of This Post"라고 씌여져 있다.
+<<<<<<< HEAD:kboard/functional_test/tests.py
+=======
+
+if __name__ == '__main__':
+    unittest.main(warnings='ignore')
+>>>>>>> d42de506fd5c048340070f35b3be76d9a82800ba:kboard/functional_test.py
