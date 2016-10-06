@@ -1,9 +1,11 @@
 from selenium import webdriver
+from django.test import LiveServerTestCase
 from selenium.webdriver.common.keys import Keys
 import unittest
 import sys, time
 
-class NewPostTest(unittest.TestCase):
+
+class NewVisitorTest(LiveServerTestCase):
     
     def setUp(self):
         if sys.platform == 'darwin':
@@ -18,7 +20,7 @@ class NewPostTest(unittest.TestCase):
     def test_new_visitor(self):
         # 지훈이는 멋진 게시판 앱이 나왔다는 소식을 듣고
         # 해당 웹 사이트를 확인하러 간다
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # 웹 페이지 타이틀과 헤더가 'Create Post'를 표시하고 있다
         header_text = self.browser.find_element_by_tag_name('h2').text
@@ -58,6 +60,3 @@ class NewPostTest(unittest.TestCase):
         # TODO
 
         # 제목을 누르니 "Content of This Post"라고 씌여져 있다.
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
