@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 import unittest
 import sys, time
 
+
 class NewPostTest(unittest.TestCase):
     
     def setUp(self):
@@ -12,18 +13,17 @@ class NewPostTest(unittest.TestCase):
             self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
 
-
     def tearDown(self):
         self.browser.quit()
 
-    def test_can_start_a_list_and_retrieve_it_later(self):
-        # 지훈이는 멋진 게시판 앱이 나왔다는 소식을 듣고 
+    def test_new_visitor(self):
+        # 지훈이는 멋진 게시판 앱이 나왔다는 소식을 듣고
         # 해당 웹 사이트를 확인하러 간다
         self.browser.get('http://localhost:8000')
 
-        # 웹 페이지 타이틀과 헤더가 'k-board'를 표시하고 있다
-        self.assertIn('Create Post', self.browser.title)
+        # 웹 페이지 타이틀과 헤더가 'Create Post'를 표시하고 있다
         header_text = self.browser.find_element_by_tag_name('h2').text
+        self.assertIn('Create Post', self.browser.title)
         self.assertIn('Create Post', header_text)
 
         # 그는 새 게시글을 작성한다
@@ -45,12 +45,21 @@ class NewPostTest(unittest.TestCase):
         # "Content of This Post"라고 본문 상자에 입력한다
         contentbox.send_keys('Content of This Post')
 
-        # 하단의 버튼을 누르면 글 작성이 완료된다
-        # 글 작성 완료와 동시에 게시글 목록으로 돌아간다
+        # 하단의 등록 버튼을 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
+        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
+        submit_button.click()
+        self.assertRegex(self.browser.current_url, '.+/board')
+
+        # 게시글 목록 페이지의 타이틀에 'Post list'라고 씌여져 있다.
+        header_text = self.browser.find_element_by_tag_name('h2').text
+        self.assertIn('Post list', self.browser.title)
+        self.assertIn('Post list', header_text)
+
+        # 게시글 목록에 "Title of This Post"라고 씌여져 있다.
+        # TODO
+
+        # 제목을 누르니 "Content of This Post"라고 씌여져 있다.
 
 
-
-        
-    
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
