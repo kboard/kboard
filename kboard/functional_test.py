@@ -3,7 +3,6 @@ from selenium.webdriver.common.keys import Keys
 import unittest
 import sys, time
 
-
 class NewPostTest(unittest.TestCase):
     
     def setUp(self):
@@ -59,7 +58,6 @@ class NewPostTest(unittest.TestCase):
         # TODO
 
         # 제목을 누르니 "Content of This Post"라고 씌여져 있다.
-
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
