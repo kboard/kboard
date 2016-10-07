@@ -58,5 +58,11 @@ class NewVisitorTest(LiveServerTestCase):
 
         # 게시글 목록에 "Title of This Post"라고 씌여져 있다.
         # TODO
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(
+            any(row.text == 'Title of This Post' for row in rows),
+            "New Post does not appear in this table"
+        )
 
         # 제목을 누르니 "Content of This Post"라고 씌여져 있다.
