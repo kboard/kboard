@@ -1,7 +1,6 @@
 from selenium import webdriver
 from django.test import LiveServerTestCase
 from selenium.webdriver.common.keys import Keys
-import unittest
 import sys, time
 
 class NewVisitorTest(LiveServerTestCase):

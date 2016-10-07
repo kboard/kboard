@@ -84,4 +84,6 @@ class PostModelTest(TestCase):
         first_saved_post = saved_posts[0]
         second_saved_post = saved_posts[1]
         self.assertEqual(first_saved_post.title, 'first post of title')
+        self.assertEqual(first_saved_post.content, 'first post of content')
         self.assertEqual(second_saved_post.title, 'second post of title')
+        self.assertEqual(second_saved_post.content, 'second post of content')
