@@ -57,6 +57,9 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('Post list', header_text)
 
         # 게시글 목록에 "Title of This Post"라고 씌여져 있다.
-        # TODO
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('Title of This Post', [row.text for row in rows])
 
         # 제목을 누르니 "Content of This Post"라고 씌여져 있다.
+        # TODO
