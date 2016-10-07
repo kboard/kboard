@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 import re
 
-from .views import new_post, post_list
+from .views import new_post, post_list, view_post
 from .models import Post
 
 class CreatePostPageTest(TestCase):
@@ -66,13 +66,10 @@ class CreatePostPageTest(TestCase):
 
 class PostViewTest(TestCase):
 
-    def test_view_post_page_returns_correct_html(self):
-        request = HttpRequest()
-        response = new_post(request)
-
-        expected_html = render_to_string('view_post.html')
-        response_decoded = self.remove_csrf(response.content.decode())
-        self.assertEqual(response_decoded, expected_html)
+    def test_uses_list_template(self):
+        post_ = Post.objects.create(title='post of title', content='post of content')
+        response = self.client.get('/posts/%d/' % (post_.id,))
+        self.assertTemplateUsed(response, 'view_post.html')
 
     def test_passes_correct_post_to_template(self):
         other_post = Post.objects.create(title='other post of title', content='other post of content')
