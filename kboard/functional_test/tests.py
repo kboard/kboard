@@ -83,6 +83,27 @@ class NewVisitorTest(LiveServerTestCase):
         self.check_for_row_in_list_table('2: Title of Second Post')
         self.check_for_row_in_list_table('1: Title of This Post')
 
-        # 지훈이는 게시글의 내용을 보고싶어한다.
-        # 제목을 누르니 "Content of This Post"라고 씌여져 있다.
+        # 지훈이는 게시글이 잘 작성 되었는지 확인하고 싶어졌다.
+        # '1: Title of This Post' 게시글을 클릭한다.
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        row = rows[0].find_element_by_tag_name('td')
+        row.find_element_by_tag_name('a').click()
+
+        # 게시글에 대한 자세한 내용을 보여주는 새로운 창이 뜬다.
+        self.assertRegex(self.browser.current_url, '.+/post')
+
+        # 게시글 페이지의 타이틀에는 'View Post'라고 씌여져 있다.
+        self.assertIn('View Post', self.browser.title)
+
+        # 게시글의 제목에는 '1: Title of This Post'이 표시되고
+        post_title = self.browser.find_element_by_id('id_post_title').text
+        self.assertIn('Title of This Post', post_title)
+
+        # 게시글의 내용에는 'Content of This Post'이 표시된다.
+        post_content = self.browser.find_element_by_id('id_post_content').text
+        self.assertIn('Content of This Post', post_content)
+
+        # 지훈이는 게시글이 잘 작성된 것을 확인하고 잠자리에 든다.
+
         # TODO
