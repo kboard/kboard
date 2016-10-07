@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from board.models import Post
 
+
 def new_post(request):
     return render(request, 'new_post.html')
+
 
 def post_list(request):
     if request.method == 'POST':
@@ -12,3 +14,9 @@ def post_list(request):
     posts = Post.objects.all()
 
     return render(request, 'post_list.html', {'posts': posts})
+
+
+def view_post(request, post_id):
+    post_ = Post.objects.get(id = post_id)
+
+    return render(request, 'view_post.html', {'post': post_})
