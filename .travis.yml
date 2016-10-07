@@ -13,3 +13,4 @@ before_script:
 
 # command to run tests
 script: cd kboard && python manage.py test functional_test/
+
