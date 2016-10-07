@@ -63,7 +63,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('Post list', header_text)
 
         # 게시글 목록에 "Title of This Post"라고 씌여져 있다.
-        self.check_for_row_in_list_table('Title of This Post')
+        self.check_for_row_in_list_table('1: Title of This Post')
 
         # 게시글 목록 하단에 있는 '글쓰기' 버튼을 눌러서 새 글을 작성한다.
         create_post_button = self.browser.find_element_by_id('id_create_post_button')
@@ -83,8 +83,8 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertRegex(self.browser.current_url, '.+/board')
 
         # 게시글 목록에 두 개의 게시글 제목이 보인다.
-        self.check_for_row_in_list_table('Title of Second Post')
-        self.check_for_row_in_list_table('Title of This Post')
+        self.check_for_row_in_list_table('2: Title of Second Post')
+        self.check_for_row_in_list_table('1: Title of This Post')
 
         # 지훈이는 게시글의 내용을 보고싶어한다.
         # 제목을 누르니 "Content of This Post"라고 씌여져 있다.
