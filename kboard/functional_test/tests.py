@@ -4,8 +4,6 @@ from selenium.webdriver.common.keys import Keys
 import unittest
 import sys, time
 
-from board.models import Post
-
 class NewVisitorTest(LiveServerTestCase):
     
     def setUp(self):
@@ -89,24 +87,3 @@ class NewVisitorTest(LiveServerTestCase):
         # 지훈이는 게시글의 내용을 보고싶어한다.
         # 제목을 누르니 "Content of This Post"라고 씌여져 있다.
         # TODO
-
-class PostModelTest(LiveServerTestCase):
-
-    def test_saving_and_retrieving_post(self):
-        first_post = Post()
-        first_post.title = 'first post of title'
-        first_post.content = 'first post of content'
-        first_post.save()
-
-        second_post = Post()
-        second_post.title = 'second post of title'
-        second_post.content = 'second post of content'
-        second_post.save()
-
-        saved_posts = Post.objects.all()
-        self.assertEqual(saved_posts.count(), 2)
-
-        first_saved_post = saved_posts[0]
-        second_saved_post = saved_posts[1]
-        self.assertEqual(first_saved_post.title, 'first post of title')
-        self.assertEqual(second_saved_post.title, 'second post of title')
