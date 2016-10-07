@@ -62,3 +62,28 @@ class CreatePostPageTest(TestCase):
 
         self.assertIn('turtle1', response.content.decode())
         self.assertIn('turtle2', response.content.decode())
+
+
+
+class PostModelTest(TestCase):
+
+    def test_saving_and_retrieving_post(self):
+        first_post = Post()
+        first_post.title = 'first post of title'
+        first_post.content = 'first post of content'
+        first_post.save()
+
+        second_post = Post()
+        second_post.title = 'second post of title'
+        second_post.content = 'second post of content'
+        second_post.save()
+
+        saved_posts = Post.objects.all()
+        self.assertEqual(saved_posts.count(), 2)
+
+        first_saved_post = saved_posts[0]
+        second_saved_post = saved_posts[1]
+        self.assertEqual(first_saved_post.title, 'first post of title')
+        self.assertEqual(first_saved_post.content, 'first post of content')
+        self.assertEqual(second_saved_post.title, 'second post of title')
+        self.assertEqual(second_saved_post.content, 'second post of content')
