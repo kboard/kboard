@@ -64,6 +64,35 @@ class CreatePostPageTest(TestCase):
         self.assertIn('turtle2', response.content.decode())
 
 
+class PostViewTest(TestCase):
+
+    def test_view_post_page_returns_correct_html(self):
+        request = HttpRequest()
+        response = new_post(request)
+
+        expected_html = render_to_string('view_post.html')
+        response_decoded = self.remove_csrf(response.content.decode())
+        self.assertEqual(response_decoded, expected_html)
+
+    def test_passes_correct_post_to_template(self):
+        other_post = Post.objects.create(title='other post of title', content='other post of content')
+        correct_post = Post.objects.create(title='correct post of title', content='correct post of content')
+
+        response = self.client.get('/posts/%d/' % (correct_post.id,))
+
+        self.assertEqual(response.context['post'], correct_post)
+
+    def test_view_post_page_displays_correct_title_and_content(self):
+        other_post = Post.objects.create(title='other post of title', content='other post of content')
+        correct_post = Post.objects.create(title='correct post of title', content='correct post of content')
+
+        response = self.client.get('/posts/%d/' % (correct_post.id,))
+
+        self.assertContains(response, 'correct post of title')
+        self.assertContains(response, 'correct post of content')
+        self.assertNotContains(response, 'other post of title')
+        self.assertNotContains(response, 'other post of content')
+
 
 class PostModelTest(TestCase):
 
