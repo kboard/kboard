@@ -12,4 +12,6 @@ before_script:
   - sleep 3 # give xvfb some time to start
 
 # command to run tests
-script: cd kboard && python manage.py test functional_test/
+script:
+ - cd kboard && python manage.py test board/
+ - python manage.py test functional_test/
