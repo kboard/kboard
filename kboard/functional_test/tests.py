@@ -130,6 +130,12 @@ class NewVisitorTest(LiveServerTestCase):
         post_content = self.browser.find_element_by_id('id_post_content').text
         self.assertIn('Content of This Post', post_content)
 
-        # 지훈이는 게시글이 잘 작성된 것을 확인하고 잠자리에 든다.
+        # 게시글이 잘 작성된 것을 확인한 지훈이는
+        # 다시 게시글 목록을 보여주는 페이지로 돌아가기 위해 게시글 하단의 '목록' 버튼을 누른다.
+        create_post_button = self.browser.find_element_by_id('id_back_to_post_list_button')
+        create_post_button.click()
+
+        # 게시글 목록 페이지가 뜬다.
+        self.assertRegex(self.browser.current_url, '.+/board')
 
         # TODO
