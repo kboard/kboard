@@ -46,7 +46,7 @@ class CreatePostPageTest(TestCase):
         response = post_list(request)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/board')
+        self.assertEqual(response['location'], '/board/list')
 
     def test_create_post_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
@@ -68,14 +68,14 @@ class PostViewTest(TestCase):
 
     def test_uses_list_template(self):
         post_ = Post.objects.create(title='post of title', content='post of content')
-        response = self.client.get('/posts/%d/' % (post_.id,))
+        response = self.client.get('/board/posts/%d/' % (post_.id,))
         self.assertTemplateUsed(response, 'view_post.html')
 
     def test_passes_correct_post_to_template(self):
         other_post = Post.objects.create(title='other post of title', content='other post of content')
         correct_post = Post.objects.create(title='correct post of title', content='correct post of content')
 
-        response = self.client.get('/posts/%d/' % (correct_post.id,))
+        response = self.client.get('/board/posts/%d/' % (correct_post.id,))
 
         self.assertEqual(response.context['post'], correct_post)
 
@@ -83,7 +83,7 @@ class PostViewTest(TestCase):
         other_post = Post.objects.create(title='other post of title', content='other post of content')
         correct_post = Post.objects.create(title='correct post of title', content='correct post of content')
 
-        response = self.client.get('/posts/%d/' % (correct_post.id,))
+        response = self.client.get('/board/posts/%d/' % (correct_post.id,))
 
         self.assertContains(response, 'correct post of title')
         self.assertContains(response, 'correct post of content')

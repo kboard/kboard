@@ -9,7 +9,7 @@ def new_post(request):
 def post_list(request):
     if request.method == 'POST':
         Post.objects.create(title=request.POST['post_title_text'], content=request.POST['post_content_text'])
-        return redirect('/board')
+        return redirect('/board/list')
 
     posts = Post.objects.all()
 
@@ -17,6 +17,6 @@ def post_list(request):
 
 
 def view_post(request, post_id):
-    post_ = Post.objects.get(id = post_id)
+    post_ = Post.objects.get(id=post_id)
 
     return render(request, 'view_post.html', {'post': post_})
