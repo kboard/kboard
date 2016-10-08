@@ -6,7 +6,8 @@ from . import views
 
 app_name = 'board'
 urlpatterns = [
-    url(r'^new$', views.new_post, name='new_post'),
-    url(r'^list$', views.post_list, name='post_list'),
+    url(r'^posts/new/$', views.new_post, name='new_post'),
     url(r'^posts/(\d+)/$', views.view_post, name='view_post'),
+    url(r'^board/(\d+)/$', views.post_list, name='post_list'),
+    url(r'^$', views.board_list, name='board_list')
 ]

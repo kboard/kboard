@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Board List</title>
+</head>
+<body>
+    <h2>Board List</h2>
+    <table id="id_board_list_table">
+        {% for board in boards %}
+            <tr><td><a href="/board/{{ board.id }}">{{ board.name }}</a></td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

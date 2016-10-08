@@ -1,22 +1,25 @@
 from selenium import webdriver
 from django.test import LiveServerTestCase
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 import sys, time
 
+from board.models import Board
+
 class NewVisitorTest(LiveServerTestCase):
-    
     def setUp(self):
         if sys.platform == 'darwin':
             self.browser = webdriver.Chrome('./chromedriver')
         else:
             self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
+        Board.objects.create(name='Default')
 
     def tearDown(self):
         self.browser.quit()
 
-    def check_for_row_in_list_table(self, row_text):
-        table = self.browser.find_element_by_id('id_post_list_table')
+    def check_for_row_in_list_table(self, id, row_text):
+        table = self.browser.find_element_by_id(id)
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
 
@@ -24,6 +27,29 @@ class NewVisitorTest(LiveServerTestCase):
         # 지훈이는 멋진 게시판 앱이 나왔다는 소식을 듣고
         # 해당 웹 사이트를 확인하러 간다.
         self.browser.get(self.live_server_url)
+
+        # 타이틀과 헤더가 'Board List'를 표시하고 있다.
+        header_text = self.browser.find_element_by_tag_name('h2').text
+        self.assertIn('Board List', self.browser.title)
+        self.assertIn('Board List', header_text)
+
+        # 게시판 목록에 'Default' 게시판이라고 씌여져 있다.
+        self.check_for_row_in_list_table('id_board_list_table', 'Default')
+
+        # 지훈이는 첫 번째에 있는 'Default'게시판에 들어간다.
+        default_board = self.browser.find_element_by_css_selector('table#id_board_list_table a')
+        default_board.click()
+
+        # 게시판에 아무런 글이 없다.
+        with self.assertRaises(NoSuchElementException):
+            self.browser.find_element_by_tag_name('tr')
+
+        # 글 쓰기 버튼을 누른다.
+        create_post_button = self.browser.find_element_by_id('id_create_post_button')
+        create_post_button.click()
+
+        # 글 쓰기 페이지로 이동한다.
+        self.assertRegex(self.browser.current_url, '.+/posts/new/')
 
         # 웹 페이지 타이틀과 헤더가 'Create Post'를 표시하고 있다.
         header_text = self.browser.find_element_by_tag_name('h2').text
@@ -60,7 +86,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('Post list', header_text)
 
         # 게시글 목록에 "Title of This Post"라고 씌여져 있다.
-        self.check_for_row_in_list_table('1: Title of This Post')
+        self.check_for_row_in_list_table('id_post_list_table', '1: Title of This Post')
 
         # 게시글 목록 하단에 있는 '글쓰기' 버튼을 눌러서 새 글을 작성한다.
         create_post_button = self.browser.find_element_by_id('id_create_post_button')
@@ -80,8 +106,8 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertRegex(self.browser.current_url, '.+/board')
 
         # 게시글 목록에 두 개의 게시글 제목이 보인다.
-        self.check_for_row_in_list_table('2: Title of Second Post')
-        self.check_for_row_in_list_table('1: Title of This Post')
+        self.check_for_row_in_list_table('id_post_list_table', '2: Title of Second Post')
+        self.check_for_row_in_list_table('id_post_list_table', '1: Title of This Post')
 
         # 지훈이는 게시글이 잘 작성 되었는지 확인하고 싶어졌다.
         # '1: Title of This Post' 게시글을 클릭한다.
@@ -110,6 +136,6 @@ class NewVisitorTest(LiveServerTestCase):
         create_post_button.click()
 
         # 게시글 목록 페이지가 뜬다.
-        self.assertRegex(self.browser.current_url, '.+/board')
+        self.assertRegex(self.browser.current_url, '.+/board/(\d+)')
 
         # TODO

@@ -7,6 +7,6 @@
 <body>
     <h2 id="id_post_title">{{ post.title }}</h2>
     <p id="id_post_content">{{ post.content }}</p>
-    <button id="id_back_to_post_list_button" onclick="window.location.href='{% url 'board:post_list' %}'">목록</button>
+    <button id="id_back_to_post_list_button" onclick="location.href='{% url 'board:post_list' board_id%}'">목록</button>
 </body>
 </html>
