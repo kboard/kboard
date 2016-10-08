@@ -4,14 +4,16 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 import sys, time
 
+from board.models import Board
+
 class NewVisitorTest(LiveServerTestCase):
-    
     def setUp(self):
         if sys.platform == 'darwin':
             self.browser = webdriver.Chrome('./chromedriver')
         else:
             self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
+        Board.objects.create(name='Default')
 
     def tearDown(self):
         self.browser.quit()

@@ -5,9 +5,12 @@ from django.template.loader import render_to_string
 import re
 
 from .views import new_post, post_list, view_post
-from .models import Post
+from .models import Post, Board
 
 class CreatePostPageTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        Board.objects.save(name='Default')
 
     def remove_csrf(self, origin):
         csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
