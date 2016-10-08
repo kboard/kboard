@@ -34,14 +34,15 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('Board List', header_text)
 
         # 게시판 목록에 'Default' 게시판이라고 씌여져 있다.
-        self.check_for_row_in_list_table('id_board_list', 'Default')
+        self.check_for_row_in_list_table('id_board_list_table', 'Default')
 
-        # 지훈이는 'Default'게시판에 들어간다.
-        default_board = self.browser.find_element_by_id('id_board_list')
+        # 지훈이는 첫 번째에 있는 'Default'게시판에 들어간다.
+        default_board = self.browser.find_element_by_css_selector('table#id_board_list_table a')
         default_board.click()
 
         # 게시판에 아무런 글이 없다.
-        self.assertRaises(NoSuchElementException, self.browser.find_element_by_tag_name('tr'))
+        with self.assertRaises(NoSuchElementException):
+            self.browser.find_element_by_tag_name('tr')
 
         # 글 쓰기 버튼을 누른다.
         create_post_button = self.browser.find_element_by_id('id_create_post_button')
