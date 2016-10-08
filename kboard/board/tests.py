@@ -75,7 +75,7 @@ class PostViewTest(TestCase):
 
     def test_uses_list_template(self):
         post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
-        response = self.client.get('/posts/%d/' % (post_.id), data={'board': self.default_board.id})
+        response = self.client.get('/posts/%d/' % (post_.id,), data={'board': self.default_board.id})
         self.assertTemplateUsed(response, 'view_post.html')
 
     def test_passes_correct_post_to_template(self):

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+
 from board.models import Post, Board
 
 

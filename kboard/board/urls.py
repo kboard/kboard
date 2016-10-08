@@ -1,6 +1,6 @@
 # Created by JHJ on 2016. 10. 5.
 
-from django.conf.urls import url, include
+from django.conf.urls import url
 
 from . import views
 
