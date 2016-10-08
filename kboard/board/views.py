@@ -20,3 +20,13 @@ def view_post(request, post_id):
     post_ = Post.objects.get(id = post_id)
 
     return render(request, 'view_post.html', {'post': post_})
+
+
+def board_list(request):
+    board_count = Board.objects.all().count()
+    if board_count == 0:
+        Board.objects.create(name='Default')
+
+    boards = Board.objects.all()
+
+    return render(request, 'board_list.html', {'boards': boards})
