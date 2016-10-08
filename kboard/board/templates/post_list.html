@@ -11,6 +11,6 @@
             <tr><td><a href="/posts/{{ forloop.counter }}">{{ forloop.counter }}: {{ post.title }}</a></td></tr>
         {% endfor %}
     </table>
-    <button type="button" id="id_create_post_button" onclick="window.location.href='/'">글쓰기</button>
+    <button type="button" id="id_create_post_button" onclick="location.href='{% url 'board:new_post' %}?board={{ board_id }}'">글쓰기</button>
 </body>
 </html>
