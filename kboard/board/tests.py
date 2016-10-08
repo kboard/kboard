@@ -18,13 +18,11 @@ class CreatePostPageTest(TestCase):
         csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
         return re.sub(csrf_regex, '', origin)
 
-    # def test_root_url_resolves_to_create_post_page_view(self):
-    #     found = resolve('/')
-    #     self.assertEqual(found.func, new_post)
-
     def test_new_post_page_returns_correct_html(self):
         request = HttpRequest()
-        response = new_post(request, self.default_board.id)
+        request.method = 'GET'
+        request.GET['board'] = self.default_board.id
+        response = new_post(request)
 
         expected_html = render_to_string('new_post.html', {'board': self.default_board})
         response_decoded = self.remove_csrf(response.content.decode())
@@ -55,7 +53,7 @@ class CreatePostPageTest(TestCase):
 
     def test_create_post_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
-        new_post(request, self.default_board.id)
+        post_list(request, self.default_board.id)
         self.assertEqual(Post.objects.count(), 0)
 
     def test_post_list_page_displays_all_list_titles(self):
@@ -77,7 +75,7 @@ class PostViewTest(TestCase):
 
     def test_uses_list_template(self):
         post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
-        response = self.client.get('/posts/%d/' % (post_.id,))
+        response = self.client.get('/posts/%d/' % (post_.id), data={'board': self.default_board.id})
         self.assertTemplateUsed(response, 'view_post.html')
 
     def test_passes_correct_post_to_template(self):
@@ -92,7 +90,7 @@ class PostViewTest(TestCase):
             content='correct post of content'
         )
 
-        response = self.client.get('/posts/%d/' % (correct_post.id,))
+        response = self.client.get('/posts/%d/' % (correct_post.id,), data={'board': self.default_board.id})
 
         self.assertEqual(response.context['post'], correct_post)
 
@@ -108,7 +106,7 @@ class PostViewTest(TestCase):
             content='correct post of content'
         )
 
-        response = self.client.get('/posts/%d/' % (correct_post.id,))
+        response = self.client.get('/posts/%d/' % (correct_post.id,), data={'board': self.default_board.id})
 
         self.assertContains(response, 'correct post of title')
         self.assertContains(response, 'correct post of content')

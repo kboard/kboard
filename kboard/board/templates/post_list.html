@@ -8,7 +8,7 @@
     <h2>Post list</h2>
     <table id="id_post_list_table">
         {% for post in posts %}
-            <tr><td><a href="/posts/{{ forloop.counter }}">{{ forloop.counter }}: {{ post.title }}</a></td></tr>
+            <tr><td><a href="{% url 'board:view_post' post.id %}?board={{ board_id }}">{{ forloop.counter }}: {{ post.title }}</a></td></tr>
         {% endfor %}
     </table>
     <button type="button" id="id_create_post_button" onclick="location.href='{% url 'board:new_post' %}?board={{ board_id }}'">글쓰기</button>

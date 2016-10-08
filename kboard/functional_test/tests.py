@@ -136,6 +136,6 @@ class NewVisitorTest(LiveServerTestCase):
         create_post_button.click()
 
         # 게시글 목록 페이지가 뜬다.
-        self.assertRegex(self.browser.current_url, '.+/board')
+        self.assertRegex(self.browser.current_url, '.+/board/(\d+)')
 
         # TODO

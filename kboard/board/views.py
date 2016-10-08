@@ -21,7 +21,7 @@ def post_list(request, board_id):
 def view_post(request, post_id):
     post_ = Post.objects.get(id=post_id)
 
-    return render(request, 'view_post.html', {'post': post_})
+    return render(request, 'view_post.html', {'post': post_, 'board_id': request.GET['board']})
 
 
 def board_list(request):
