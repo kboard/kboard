@@ -6,14 +6,15 @@ def new_post(request):
     return render(request, 'new_post.html')
 
 
-def post_list(request):
+def post_list(request, board_id):
     if request.method == 'POST':
-        Post.objects.create(title=request.POST['post_title_text'], content=request.POST['post_content_text'])
-        return redirect('/board')
+        board = Board.objects.get(id=board_id)
+        Post.objects.create(board=board, title=request.POST['post_title_text'], content=request.POST['post_content_text'])
+        return redirect('/board/'+str(board_id))
 
     posts = Post.objects.all()
 
-    return render(request, 'post_list.html', {'posts': posts})
+    return render(request, 'post_list.html', {'posts': posts, 'board_id': board_id})
 
 
 def view_post(request, post_id):
