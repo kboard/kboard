@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.core.paginator import Paginator
 
 class Board(models.Model):
     name = models.TextField(default='')
