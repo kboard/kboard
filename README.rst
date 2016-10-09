@@ -7,6 +7,10 @@ Continuous Integration (Travis CI)
       .. image:: https://api.travis-ci.org/kboard/kboard.svg?branch=master
             :alt: Build Status
                   :target: https://travis-ci.org/kboard/kboard
+      .. image:: https://coveralls.io/repos/github/kboard/kboard/badge.svg?branch=master
+      :target: https://coveralls.io/github/kboard/kboard?branch=master
+
+
 
 Developers
 -----
