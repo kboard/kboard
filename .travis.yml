@@ -4,12 +4,15 @@ python:
   - "3.5"
 
 # command to install dependencies
-install: "pip install -r requirements.txt"
+install:
+  - "pip install flake8"
+  - "pip install -r requirements.txt"
 
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
+  - "cd kboard && flake8 --exit-zero . && cd .."
 
 # command to run tests
 script:
