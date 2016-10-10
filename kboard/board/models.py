@@ -12,3 +12,7 @@ class Post(models.Model):
 
     class Meta:
         unique_together = ('board', 'title')
+
+class Comment(models.Model):
+    content = models.TextField(default='')
+    post = models.ForeignKey(Post, null=True)
