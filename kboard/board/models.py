@@ -10,8 +10,6 @@ class Post(models.Model):
     content = models.TextField(default='')
     board = models.ForeignKey(Board, null=True)
 
-    class Meta:
-        unique_together = ('board', 'title')
 
 class Comment(models.Model):
     content = models.TextField(default='')
