@@ -11,21 +11,28 @@
             <tr><td><a href="{% url 'board:view_post' post.id %}">{{ forloop.counter }}: {{ post.title }}</a></td></tr>
         {% endfor %}
     </table>
+
+    <!-- pagination -->
     <div class="pagination">
-        {% if posts.has_previous %}
-            <a href="?page={{ posts.previous_page_number }}">Previous</a>
-        {% endif %}
-        {% for page in posts.paginator.page_range %}
-            {% if posts.number == page %}
-                <strong id="current_page_num">{{ page }}</strong>
-            {% else %}
-                <a class="other_page_num" href="?page={{ page }}">{{ page }}</a>
-            {% endif %}
-        {% endfor %}
-        {% if posts.has_next %}
-            <a href="?page={{ posts.next_page_number }}">Next</a>
+        {% if pages_info.pre_page != -1 %}
+            <span id="pre_page_list"><a href="?page={{ pages_info.pre_page }}">이전</a></span>
+        {% else %}
+            <span id="pre_page_list">이전</span>
         {% endif %}
 
+        {% for page_num in pages_info.page_list %}
+            {% if page_num == pages_info.current_num %}
+                <strong id="current_page_num">{{ page_num }}</strong>
+            {% else %}
+                <a class="other_page_num" href="?page={{ page_num }}">{{ page_num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if pages_info.next_page != -1 %}
+            <span id="next_page_list"><a href="?page={{ pages_info.next_page }}">다음</a></span>
+        {% else %}
+            <span id="next_page_list">다음</span>
+        {% endif %}
     </div>
     <button type="button" id="id_create_post_button" onclick="location.href='{% url 'board:new_post' %}?board={{ board_id }}'">글쓰기</button>
 </body>
