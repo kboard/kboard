@@ -114,6 +114,32 @@ class PostViewTest(TestCase):
         self.assertNotContains(response, 'other post of content')
 
 
+class PostPaginationTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.default_board = Board.objects.create(name='Default')
+        super().setUpTestData()
+
+    def add_posts(self, post_count):
+        for post_counter in range(0, post_count):
+            request = HttpRequest()
+            request.method = 'POST'
+            request.POST['post_title_text'] = 'POST TITLE' + str(post_counter)
+            request.POST['post_content_text'] = 'POST CONTENT' + str(post_counter)
+            post_counter += 1
+            post_list(request, self.default_board.id)
+
+    def test_view_current_page_num(self):
+        PostPaginationTest.add_posts(1)
+        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        self.assertContains(response, '<strong id="current_page_num">1</strong>')
+
+    def test_view_current_page_num(self):
+        PostPaginationTest.add_posts(self, 11)
+        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        self.assertContains(response, '<a class="other_page_num" href="?page=2">2</a>')
+
+
 class PostModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):

@@ -11,6 +11,22 @@
             <tr><td><a href="{% url 'board:view_post' post.id %}?board={{ board_id }}">{{ forloop.counter }}: {{ post.title }}</a></td></tr>
         {% endfor %}
     </table>
+    <div class="pagination">
+        {% if posts.has_previous %}
+            <a href="?page={{ posts.previous_page_number }}">Previous</a>
+        {% endif %}
+        {% for page in posts.paginator.page_range %}
+            {% if posts.number == page %}
+                <strong id="current_page_num">{{ page }}</strong>
+            {% else %}
+                <a class="other_page_num" href="?page={{ page }}">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">Next</a>
+        {% endif %}
+
+    </div>
     <button type="button" id="id_create_post_button" onclick="location.href='{% url 'board:new_post' %}?board={{ board_id }}'">글쓰기</button>
 </body>
 </html>

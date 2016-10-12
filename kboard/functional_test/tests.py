@@ -154,12 +154,12 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertEqual(current_page_num, '1')
 
         # 11일 후 11개의 게시글이 추가됐다.
-        for day in range(1, 11):
+        for day in range(1, 12):
             create_post_button = self.browser.find_element_by_id('id_create_post_button')
             create_post_button.click()
 
             titlebox = self.browser.find_element_by_id('id_new_post_title')
-            titlebox.send_keys('day ' + day)
+            titlebox.send_keys('day ' + str(day))
 
             contentbox = self.browser.find_element_by_id('id_new_post_content')
             contentbox.send_keys('Hello')
@@ -176,24 +176,24 @@ class NewVisitorTest(LiveServerTestCase):
         pagination = self.browser.find_element_by_class_name('pagination')
         current_page_num = pagination.find_element_by_id('current_page_num').text
         self.assertEqual(current_page_num, '1')
-        page_list = pagination.find_elements_by_id('other_page_num')
+        page_list = pagination.find_elements_by_class_name('other_page_num')
         self.assertEqual(len(page_list), 1)
         self.assertEqual(page_list[0].text, '2')
 
         # 페이지 번호 2를 클릭하였더니 두 번째 페이지로 넘어간다.
         page_list[0].click()
-        self.assertRegex(self.browser.current_url, '.+board/(\d+)/?page=2)')
+        self.assertRegex(self.browser.current_url, '.+/board/(\d+)/\?page=2')
 
         # 게시글은 3개만 보여진다.
         table = self.browser.find_element_by_id('id_post_list_table')
-        rows = table.find_element_by_tag_name('tr')
+        rows = table.find_elements_by_tag_name('tr')
         self.assertEqual(len(rows), 3)
 
         # 현재 페이지 번호는 2로 표시된다.
         pagination = self.browser.find_element_by_class_name('pagination')
         current_page_num = pagination.find_element_by_id('current_page_num').text
         self.assertEqual(current_page_num, '2')
-        page_list = pagination.find_elements_by_id('other_page_num')
+        page_list = pagination.find_elements_by_class_name('other_page_num')
         self.assertEqual(len(page_list), 1)
         self.assertEqual(page_list[0].text, '1')
 
