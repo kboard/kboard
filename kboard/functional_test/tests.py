@@ -86,7 +86,7 @@ class NewVisitorTest(LiveServerTestCase):
         self.assertIn('Post list', self.browser.title)
         self.assertIn('Post list', header_text)
 
-        # 게시글 목록에 "Title of This Post"라고 씌여져 있다.
+        # 게시글 목록에 "1: Title of This Post"라고 씌여져 있다.
         self.check_for_row_in_list_table('id_post_list_table', '1: Title of This Post')
 
         # 게시글 목록 하단에 있는 '글쓰기' 버튼을 눌러서 새 글을 작성한다.
@@ -131,8 +131,20 @@ class NewVisitorTest(LiveServerTestCase):
         post_content = self.browser.find_element_by_id('id_post_content').text
         self.assertIn('Content of This Post', post_content)
 
-        # 게시글이 잘 작성된 것을 확인한 지훈이는
-        # 다시 게시글 목록을 보여주는 페이지로 돌아가기 위해 게시글 하단의 '목록' 버튼을 누른다.
+        # 지훈이는 게시글 내용 하단의 댓글 란에 'This is a comment'라고 입력한다.
+        comment = self.browser.find_element_by_id('id_new_comment')
+        comment.send_keys('This is a comment')
+
+        # '댓글 달기' 버튼을 누른다.
+        comment_submit = self.browser.find_element_by_id('id_new_comment_submit')
+        comment_submit.click()
+
+        # 댓글이 달리고, 'This is a comment'라는 댓글이 보인다.
+        comment_list = self.browser.find_element_by_id("id_comment_list")
+        comments = comment_list.find_elements_by_tag_name('li')
+        self.assertEqual(comments[0].text, 'This is a comment')
+
+        # 게시글과 댓글이 잘 작성된 것을 확인한 지훈이는 다시 게시글 목록을 보여주는 페이지로 돌아가기 위해 게시글 하단의 '목록' 버튼을 누른다.
         create_post_button = self.browser.find_element_by_id('id_back_to_post_list_button')
         create_post_button.click()
 
