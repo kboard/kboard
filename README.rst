@@ -12,6 +12,11 @@ Continuous Integration (Travis CI)
 
 
 
+Developing Process
+-----
+After clone, you need to run python ./dev/download_chromedriver.py to get chromedriver 
+
+
 Developers
 -----
 - Bae KwonHan <darjeeling@gmail.com>
