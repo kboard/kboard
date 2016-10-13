@@ -1,11 +1,9 @@
 from django.test import TestCase
-from django.core.urlresolvers import resolve
 from django.http import HttpRequest
-from django.template.loader import render_to_string
 import re
 
-from .views import new_post, post_list, view_post
-from .models import Post, Board, Comment
+from board.views import new_post, post_list
+from board.models import Post, Board, Comment
 
 
 class CreatePostPageTest(TestCase):
