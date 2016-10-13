@@ -1,5 +1,5 @@
 from selenium import webdriver
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 import sys, time
@@ -7,7 +7,8 @@ import sys, time
 from board.models import Board
 
 
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
+
     def setUp(self):
         if sys.platform == 'darwin':
             self.browser = webdriver.Chrome('./chromedriver')
@@ -64,17 +65,16 @@ class NewVisitorTest(LiveServerTestCase):
             'Insert Title'
         )
 
-        contentbox = self.browser.find_element_by_id('id_new_post_content')
-        self.assertEqual(
-            contentbox.get_attribute('placeholder'),
-            'Insert Content'
-        )
-
         # "Title of This Post"라고 제목 상자에 입력한다.
         titlebox.send_keys('Title of This Post')
 
+        iframe = self.browser.find_elements_by_tag_name('iframe')[0]
+        self.browser.switch_to.frame(iframe)
+        contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+
         # "Content of This Post"라고 본문 상자에 입력한다.
         contentbox.send_keys('Content of This Post')
+        self.browser.switch_to.default_content()
 
         # 하단의 등록 버튼을 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
         submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
@@ -98,8 +98,11 @@ class NewVisitorTest(LiveServerTestCase):
         titlebox.send_keys('Title of Second Post')
 
         # "Content of Second Post"라고 본문 상자에 입력한다
-        contentbox = self.browser.find_element_by_id('id_new_post_content')
+        iframe = self.browser.find_elements_by_tag_name('iframe')[0]
+        self.browser.switch_to.frame(iframe)
+        contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
         contentbox.send_keys('Content of Second Post')
+        self.browser.switch_to.default_content()
 
         # 하단의 등록 버든틍 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
         submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
@@ -173,8 +176,11 @@ class NewVisitorTest(LiveServerTestCase):
             titlebox = self.browser.find_element_by_id('id_new_post_title')
             titlebox.send_keys('day ' + str(day))
 
-            contentbox = self.browser.find_element_by_id('id_new_post_content')
+            iframe = self.browser.find_elements_by_tag_name('iframe')[0]
+            self.browser.switch_to.frame(iframe)
+            contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
             contentbox.send_keys('Hello')
+            self.browser.switch_to.default_content()
 
             submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
             submit_button.click()
@@ -188,6 +194,7 @@ class NewVisitorTest(LiveServerTestCase):
         pagination = self.browser.find_element_by_class_name('pagination')
         current_page_num = pagination.find_element_by_id('current_page_num').text
         self.assertEqual(current_page_num, '1')
+
         page_list = pagination.find_elements_by_class_name('other_page_num')
         self.assertEqual(len(page_list), 1)
         self.assertEqual(page_list[0].text, '2')
@@ -205,6 +212,7 @@ class NewVisitorTest(LiveServerTestCase):
         pagination = self.browser.find_element_by_class_name('pagination')
         current_page_num = pagination.find_element_by_id('current_page_num').text
         self.assertEqual(current_page_num, '2')
+
         page_list = pagination.find_elements_by_class_name('other_page_num')
         self.assertEqual(len(page_list), 1)
         self.assertEqual(page_list[0].text, '1')

@@ -24,9 +24,8 @@ class CreatePostPageTest(TestCase):
         request.GET['board'] = self.default_board.id
         response = new_post(request)
 
-        expected_html = render_to_string('new_post.html', {'board': self.default_board})
         response_decoded = self.remove_csrf(response.content.decode())
-        self.assertEqual(response_decoded, expected_html)
+        self.assertIn('settings_id_fields', response_decoded)
 
     def test_post_list_can_save_a_POST_request(self):
         request = HttpRequest()
