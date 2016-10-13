@@ -25,7 +25,6 @@
         {% if posts.has_next %}
             <a href="?page={{ posts.next_page_number }}">Next</a>
         {% endif %}
-
     </div>
     <button type="button" id="id_create_post_button" onclick="location.href='{% url 'board:new_post' %}?board={{ board_id }}'">글쓰기</button>
 </body>

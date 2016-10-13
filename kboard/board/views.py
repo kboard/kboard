@@ -2,17 +2,19 @@ from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from board.models import Post, Board, Comment
+from board.forms import PostForm
 
 
 def new_post(request):
     board = Board.objects.get(id=request.GET['board'])
-    return render(request, 'new_post.html', {'board': board})
+    form = PostForm()
+    return render(request, 'new_post.html', {'board': board, 'form': form})
 
 
 def post_list(request, board_id):
     if request.method == 'POST':
         board = Board.objects.get(id=board_id)
-        Post.objects.create(board=board, title=request.POST['post_title_text'], content=request.POST['post_content_text'])
+        Post.objects.create(board=board, title=request.POST['post_title_text'], content=request.POST.get('fields', ''))
         return redirect('/board/'+str(board_id))
 
     posts_all_list = Post.objects.all()
