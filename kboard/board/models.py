@@ -20,11 +20,6 @@ class Post(models.Model):
     board = models.ForeignKey(Board, null=True)
     is_delete = models.BooleanField(default=False)
 
-    class Meta:
-        index_together = [
-            ["title", "content"],
-        ]
-
 
 class SummerNote(summer_model.Attachment):
     summer_field = summer_fields.SummernoteTextField(default='')
