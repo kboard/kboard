@@ -66,6 +66,45 @@ class CreatePostPageTest(TestCase):
         self.assertIn('turtle2', response.content.decode())
 
 
+class DeletePostTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.default_board = Board.objects.create(name='Default')
+        super().setUpTestData()
+
+    def test_delete_only_post_selected_to_delete(self):
+        delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
+        other_post = Post.objects.create(board=self.default_board, title='other post', content='content')
+
+        self.assertEqual(delete_post.is_delete, False)
+        self.assertEqual(other_post.is_delete, False)
+
+        self.client.post('/board/%d/%d/delete' % (self.default_board.id, delete_post.id))
+
+        self.assertEqual(delete_post.is_delete, True)
+        self.assertEqual(other_post.is_delete, False)
+
+    def test_redirect_to_post_list_after_delete_post(self):
+        delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
+        response = self.client.post('/board/%d/%d/delete' % (self.default_board.id, delete_post.id))
+
+        self.assertRedirects(response, '/board/%d' % (self.default_board.id,))
+
+    def test_does_not_view_but_remain_in_DB_after_delete(self):
+        delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
+
+        viewed_list = Post.objects.filter(is_delete=False)
+        self.assertIn(delete_post, viewed_list)
+
+        self.client.post('/board/%d/%d/delete' % (self.default_board.id, delete_post.id))
+
+        viewed_list = Post.objects.filter(is_delete=False)
+        self.assertNotIn(delete_post, viewed_list)
+
+        all_list = Post.objects.all()
+        self.assertIn(delete_post, all_list)
+
+
 class PostViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -259,6 +298,17 @@ class PostModelTest(TestCase):
         self.assertEqual(first_saved_post.content, 'first post of content')
         self.assertEqual(second_saved_post.title, 'second post of title')
         self.assertEqual(second_saved_post.content, 'second post of content')
+
+    def test_is_delete_change_to_True_after_delete_post(self):
+        delete_post = Post()
+        delete_post.board = self.default_board
+        delete_post.title = 'post of title'
+        delete_post.content = 'post of content'
+        delete_post.save()
+
+        self.assertEqual(delete_post.is_delete, False)
+        self.client.post('/board/%d/%d/delete' % (self.default_board.id, delete_post.id))
+        self.assertEqual(delete_post.is_delete, True)
 
 
 class CommentModelTest(TestCase):
