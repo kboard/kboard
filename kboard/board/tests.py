@@ -11,7 +11,7 @@ from .models import Post, Board, Comment
 class CreatePostPageTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default')
+        cls.default_board = Board.objects.create(name='Default', slug='default')
         super().setUpTestData()
 
     def remove_csrf(self, origin):
@@ -21,8 +21,7 @@ class CreatePostPageTest(TestCase):
     def test_new_post_page_returns_correct_html(self):
         request = HttpRequest()
         request.method = 'GET'
-        request.GET['board'] = self.default_board.id
-        response = new_post(request)
+        response = new_post(request, board_slug=self.default_board.slug)
 
         response_decoded = self.remove_csrf(response.content.decode())
         self.assertIn('settings_id_fields', response_decoded)
@@ -33,7 +32,7 @@ class CreatePostPageTest(TestCase):
         request.POST['post_title_text'] = 'NEW POST TITLE'
         request.POST['post_content_text'] = 'NEW POST CONTENT'
 
-        response = post_list(request, self.default_board.id)
+        response = new_post(request, self.default_board.slug)
 
         self.assertEqual(Post.objects.count(), 1)
         first_new_post = Post.objects.first()
@@ -45,14 +44,14 @@ class CreatePostPageTest(TestCase):
         request.POST['post_title_text'] = 'NEW POST TITLE'
         request.POST['post_content_text'] = 'NEW POST CONTENT'
 
-        response = post_list(request, self.default_board.id)
+        response = new_post(request, self.default_board.slug)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/board/'+str(self.default_board.id))
+        self.assertEqual(response['location'], '/default/')
 
     def test_create_post_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
-        post_list(request, self.default_board.id)
+        new_post(request, self.default_board.slug)
         self.assertEqual(Post.objects.count(), 0)
 
     def test_post_list_page_displays_all_list_titles(self):
@@ -60,7 +59,7 @@ class CreatePostPageTest(TestCase):
         Post.objects.create(board=self.default_board, title='turtle2', content='slowslow')
 
         request = HttpRequest()
-        response = post_list(request, self.default_board)
+        response = post_list(request, self.default_board.slug)
 
         self.assertIn('turtle1', response.content.decode())
         self.assertIn('turtle2', response.content.decode())
@@ -69,12 +68,12 @@ class CreatePostPageTest(TestCase):
 class PostViewTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default')
+        cls.default_board = Board.objects.create(name='Default', slug='default')
         super().setUpTestData()
 
     def test_uses_list_template(self):
         post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
-        response = self.client.get('/posts/%d/' % (post_.id,), data={'board': self.default_board.id})
+        response = self.client.get('/default/%d/' % (post_.id,), data={'board': self.default_board.id})
         self.assertTemplateUsed(response, 'view_post.html')
 
     def test_passes_correct_post_to_template(self):
@@ -89,7 +88,7 @@ class PostViewTest(TestCase):
             content='correct post of content'
         )
 
-        response = self.client.get('/posts/%d/' % (correct_post.id,), data={'board': self.default_board.id})
+        response = self.client.get('/default/%d/' % (correct_post.id,), data={'board': self.default_board.id})
 
         self.assertEqual(response.context['post'], correct_post)
 
@@ -105,7 +104,7 @@ class PostViewTest(TestCase):
             content='correct post of content'
         )
 
-        response = self.client.get('/posts/%d/' % (correct_post.id,), data={'board': self.default_board.id})
+        response = self.client.get('/{}/{:d}/'.format(self.default_board.slug, correct_post.id))
 
         self.assertContains(response, 'correct post of title')
         self.assertContains(response, 'correct post of content')
@@ -116,7 +115,7 @@ class PostViewTest(TestCase):
 class PostPaginationTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default')
+        cls.default_board = Board.objects.create(name='Default', slug='default')
         super().setUpTestData()
 
     def add_posts(self, post_count):
@@ -126,23 +125,22 @@ class PostPaginationTest(TestCase):
             request.POST['post_title_text'] = 'POST TITLE' + str(post_counter)
             request.POST['post_content_text'] = 'POST CONTENT' + str(post_counter)
             post_counter += 1
-            post_list(request, self.default_board.id)
+            new_post(request, self.default_board.slug)
 
     def test_view_current_page_num(self):
-        PostPaginationTest.add_posts(1)
-        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        self.add_posts(1)
+        response = self.client.get('/default/')
         self.assertContains(response, '<strong id="current_page_num">1</strong>')
 
-    def test_view_current_page_num(self):
-        PostPaginationTest.add_posts(self, 11)
-        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        self.add_posts(10)
+        response = self.client.get('/default/')
         self.assertContains(response, '<a class="other_page_num" href="?page=2">2</a>')
 
 
 class PostModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default')
+        cls.default_board = Board.objects.create(name='Default', slug='default')
         super().setUpTestData()
 
     def test_saving_and_retrieving_post(self):
@@ -172,7 +170,7 @@ class PostModelTest(TestCase):
 class CommentModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default')
+        cls.default_board = Board.objects.create(name='Default', slug='default')
         cls.default_post = Post.objects.create(
             board=cls.default_board,
             title='some post title',
@@ -187,9 +185,8 @@ class CommentModelTest(TestCase):
         self.assertEqual(saved_posts.count(), 1)
 
     def test_can_pass_comment_POST_data(self):
-        self.client.post('/comment/new/', data={
-            'comment_content': 'This is a comment',
-            'post_id': self.default_post.id
+        self.client.post('/{}/{:d}/new/'.format(self.default_board.slug, self.default_post.id), data={
+            'comment_content': 'This is a comment'
         })
 
         saved_comments = Comment.objects.filter(post=self.default_post)
