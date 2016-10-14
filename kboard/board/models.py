@@ -18,6 +18,7 @@ class Post(models.Model):
     title = models.TextField(default='')
     content = models.TextField(default='')
     board = models.ForeignKey(Board, null=True)
+    is_delete = models.BooleanField(default=False)
 
     class Meta:
         index_together = [

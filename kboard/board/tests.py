@@ -79,16 +79,19 @@ class DeletePostTest(TestCase):
         self.assertEqual(delete_post.is_delete, False)
         self.assertEqual(other_post.is_delete, False)
 
-        self.client.post('/board/%d/%d/delete' % (self.default_board.id, delete_post.id))
+        self.client.post('/board/%d/%d/delete/' % (self.default_board.id, delete_post.id))
+
+        delete_post = Post.objects.get(id=delete_post.id)
+        other_post = Post.objects.get(id=other_post.id)
 
         self.assertEqual(delete_post.is_delete, True)
         self.assertEqual(other_post.is_delete, False)
 
     def test_redirect_to_post_list_after_delete_post(self):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
-        response = self.client.post('/board/%d/%d/delete' % (self.default_board.id, delete_post.id))
+        response = self.client.post('/board/%d/%d/delete/' % (self.default_board.id, delete_post.id))
 
-        self.assertRedirects(response, '/board/%d' % (self.default_board.id,))
+        self.assertRedirects(response, '/board/%d/' % (self.default_board.id,))
 
     def test_does_not_view_but_remain_in_DB_after_delete(self):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
@@ -96,7 +99,7 @@ class DeletePostTest(TestCase):
         viewed_list = Post.objects.filter(is_delete=False)
         self.assertIn(delete_post, viewed_list)
 
-        self.client.post('/board/%d/%d/delete' % (self.default_board.id, delete_post.id))
+        self.client.post('/board/%d/%d/delete/' % (self.default_board.id, delete_post.id))
 
         viewed_list = Post.objects.filter(is_delete=False)
         self.assertNotIn(delete_post, viewed_list)
@@ -307,7 +310,9 @@ class PostModelTest(TestCase):
         delete_post.save()
 
         self.assertEqual(delete_post.is_delete, False)
-        self.client.post('/board/%d/%d/delete' % (self.default_board.id, delete_post.id))
+        self.client.post('/board/%d/%d/delete/' % (self.default_board.id, delete_post.id))
+
+        delete_post = Post.objects.get(id=delete_post.id)
         self.assertEqual(delete_post.is_delete, True)
 
 
