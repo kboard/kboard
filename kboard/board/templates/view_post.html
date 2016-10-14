@@ -17,14 +17,13 @@
         {% endfor %}
     </ul>
 
-    <form method="POST" action="{% url 'board:new_comment'%}">
+    <form method="POST" action="{% url 'board:new_comment' board_slug post.id %}">
         {% csrf_token %}
-        <input type="hidden" name="post_id" value="{{ post.id }}"/>
         <input type="text" id="id_new_comment" name="comment_content" placeholder="Write comment..."/>
         <button type="submit" id="id_new_comment_submit">댓글 달기</button>
     </form>
 
 
-    <button id="id_back_to_post_list_button" onclick="location.href='{% url 'board:post_list' board_id%}'">목록</button>
+    <button id="id_back_to_post_list_button" onclick="location.href='{% url 'board:post_list' board_slug %}'">목록</button>
 </body>
 </html>

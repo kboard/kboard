@@ -6,10 +6,10 @@
 </head>
 <body>
     <h2>Create Post</h2>
-    <form method="post" action="{% url 'board:post_list' board.id %}">
+    <form method="post" action="{% url 'board:new_post' board.slug %}">
         {% csrf_token %}
         <input id="id_new_post_title" name="post_title_text" placeholder="Insert Title"/><br/>
-        {{ form|safe }}
+        {{ form | safe }}
         <br/>
         <button type="submit">등록</button>
     </form>
