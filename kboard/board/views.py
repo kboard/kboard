@@ -30,7 +30,28 @@ def post_list(request, board_id):
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts = paginator.page(paginator.num_pages)
 
-    return render(request, 'post_list.html', {'posts': posts, 'board_id': board_id})
+    # page list
+    page_list_count = 10
+    first_page_in_list = (int((posts.number - 1) / page_list_count)) * page_list_count + 1
+    end_page_in_list = (int((posts.number - 1) / page_list_count) + 1) * page_list_count
+    page_list = []
+    for page_num in range(first_page_in_list, end_page_in_list+1):
+        if page_num > posts.paginator.num_pages:
+            break
+        page_list.append(page_num)
+
+    pre_page = -1
+    next_page = -1
+
+    if posts.number > page_list_count:
+        pre_page = first_page_in_list - 1
+
+    if end_page_in_list < posts.paginator.num_pages:
+        next_page = end_page_in_list + 1
+
+    pages_info = {'pre_page': pre_page, 'page_list': page_list, 'current_num': posts.number, 'next_page': next_page}
+
+    return render(request, 'post_list.html', {'posts': posts, 'board_id': board_id, 'pages_info': pages_info})
 
 
 def view_post(request, post_id):
