@@ -8,6 +8,7 @@ class Board(models.Model):
     def get_absolute_url(self):
         return reverse('board:post_list', args=[self.id])
 
+    slug = models.TextField(default='', unique=True)
     name = models.TextField(default='')
 
 
