@@ -224,4 +224,59 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertEqual(len(page_list), 1)
         self.assertEqual(page_list[0].text, '1')
 
+        # 게시글 삭제
+        # 지훈이는 'django' 대한 게시글과 'spring'에 대한 게시글을 작성한다.
+        create_post_button = self.browser.find_element_by_id('id_create_post_button')
+        create_post_button.click()
+
+        titlebox = self.browser.find_element_by_id('id_new_post_title')
+        titlebox.send_keys('django')
+
+        iframe = self.browser.find_elements_by_tag_name('iframe')[0]
+        self.browser.switch_to.frame(iframe)
+        contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+        contentbox.send_keys('Hello django')
+        self.browser.switch_to.default_content()
+
+        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
+        submit_button.click()
+
+        create_post_button = self.browser.find_element_by_id('id_create_post_button')
+        create_post_button.click()
+
+        titlebox = self.browser.find_element_by_id('id_new_post_title')
+        titlebox.send_keys('spring')
+
+        iframe = self.browser.find_elements_by_tag_name('iframe')[0]
+        self.browser.switch_to.frame(iframe)
+        contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+        contentbox.send_keys('Hello spring')
+        self.browser.switch_to.default_content()
+
+        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
+        submit_button.click()
+
+        # 나중에 보니 'spring' 게시글이 마음에 들지 않아서 삭제를 한다.
+        # 'spring' 게시글을 눌러서 게시글 페이지로 이동한 후 '삭제' 버튼을 누른다.
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        row = rows[0].find_element_by_tag_name('td')
+        row.find_element_by_tag_name('a').click()
+
+        delete_post_button = self.browser.find_element_by_id('id_delete_post_button')
+        delete_post_button.click()
+
+        # 'spring' 게시글이 잘 삭제되어서 목록에 보이지 않는다.
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        title_list = ''
+        for row in rows:
+            title_list += row.text
+
+        self.assertNotIn('spring', title_list)
+
+        # 'django' 게시글은 삭제되지 않고 잘 남아있다.
+        self.assertIn('django', title_list)
+
         # TODO
+
