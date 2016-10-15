@@ -81,5 +81,6 @@ def delete_post(request, board_id, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
         post.is_delete = True
-        post.save()
+        post.save(update_fields=['is_delete'])
+
         return redirect('/board/' + str(board_id) + '/')
