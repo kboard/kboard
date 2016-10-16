@@ -1,5 +1,6 @@
 from django.test import TestCase
 from board.models import Post, Board, Comment
+from django.core.urlresolvers import reverse
 
 
 class PostModelTest(TestCase):
