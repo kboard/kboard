@@ -108,7 +108,7 @@ class DeletePostTest(TestCase):
 
     def test_can_not_access_with_GET(self):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
-        response = self.client.get('/board/%d/%d/delete/' % (self.default_board.id, delete_post.id))
+        response = self.client.get(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
 
         self.assertEqual(response.status_code, 405)
 

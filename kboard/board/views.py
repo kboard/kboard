@@ -79,12 +79,8 @@ def new_comment(request, board_slug, post_id):
         return redirect(post)
 
 
-<<<<<<< HEAD
-def delete_post(request, board_slug, post_id):
-=======
 @require_POST
-def delete_post(request, board_id, post_id):
->>>>>>> 75f895f0cb86792fbbb8825349734a7ef46971f7
+def delete_post(request, board_slug, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
         post.is_delete = True
