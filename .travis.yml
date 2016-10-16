@@ -19,4 +19,5 @@ script:
  - cd kboard && coverage run --source=board manage.py test board/tests
  - python manage.py test functional_test/
 after_success:
-  coveralls
+ - coveralls
+ - cd docs; make html

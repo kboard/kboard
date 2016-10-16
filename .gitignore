@@ -64,5 +64,13 @@ target/
 # .DS_Store
 *.DS_Store
 
+# ignore dev/files
+dev/files
+
 # Ignore Pycharm
 .idea/
+
+# Ignore builds
+docs/_build
+build
+dist
