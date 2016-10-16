@@ -81,8 +81,8 @@ class DeletePostTest(TestCase):
 
         self.client.post('/board/%d/%d/delete/' % (self.default_board.id, delete_post.id))
 
-        delete_post = Post.objects.get(id=delete_post.id)
-        other_post = Post.objects.get(id=other_post.id)
+        delete_post.refresh_from_db()
+        other_post.refresh_from_db()
 
         self.assertEqual(delete_post.is_delete, True)
         self.assertEqual(other_post.is_delete, False)
@@ -312,7 +312,8 @@ class PostModelTest(TestCase):
         self.assertEqual(delete_post.is_delete, False)
         self.client.post('/board/%d/%d/delete/' % (self.default_board.id, delete_post.id))
 
-        delete_post = Post.objects.get(id=delete_post.id)
+        delete_post.refresh_from_db()
+
         self.assertEqual(delete_post.is_delete, True)
 
 
