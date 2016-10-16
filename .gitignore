@@ -67,6 +67,12 @@ target/
 # ignore dev/files
 dev/files
 
+# ignore bower components
+components/
+
+# collectstatic
+static/
+
 # Ignore Pycharm
 .idea/
 
