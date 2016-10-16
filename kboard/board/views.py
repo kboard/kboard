@@ -72,6 +72,7 @@ def board_list(request):
     return render(request, 'board_list.html', {'boards': boards})
 
 
+@require_POST
 def new_comment(request, board_slug, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)

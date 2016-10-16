@@ -160,6 +160,24 @@ class PostViewTest(TestCase):
         self.assertNotContains(response, 'other post of content')
 
 
+class NewCommentTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+        cls.default_board = Board.objects.create(name='Default', slug='default')
+        cls.default_post = Post.objects.create(
+            board=cls.default_board,
+            title='some post title',
+            content='some post content'
+        )
+        super().setUpTestData()
+
+    def test_can_not_access_with_GET(self):
+        response = self.client.get(reverse('board:new_comment', args=[self.default_board.slug, self.default_post.id]),
+                                   data={'comment_content': 'This is a comment'})
+
+        self.assertEqual(response.status_code, 405)
+
+
 # test setting : page_list_count = 10
 class PostPaginationTest(TestCase):
     POST_COUNT_IN_PAGE = 10
