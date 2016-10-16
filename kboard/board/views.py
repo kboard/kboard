@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.http import require_POST
 
 from board.models import Post, Board, Comment
 from board.forms import PostForm
@@ -77,6 +78,7 @@ def new_comment(request):
         return redirect(post)
 
 
+@require_POST
 def delete_post(request, board_id, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
