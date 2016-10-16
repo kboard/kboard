@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django_summernote import models as summer_model
 from django_summernote import fields as summer_fields
@@ -20,6 +21,7 @@ class Post(models.Model):
     content = models.TextField(default='')
     board = models.ForeignKey(Board, null=True)
     is_delete = models.BooleanField(default=False)
+    create_time = models.DateTimeField(default=timezone.now())
 
 
 class SummerNote(summer_model.Attachment):
