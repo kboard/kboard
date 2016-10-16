@@ -66,3 +66,8 @@ target/
 
 # Ignore Pycharm
 .idea/
+
+# Ignore builds
+docs/_build
+build
+dist
