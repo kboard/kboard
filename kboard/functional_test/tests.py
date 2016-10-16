@@ -2,7 +2,7 @@ from selenium import webdriver
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
-import sys, time
+import sys, time, os
 
 from board.models import Board
 
@@ -11,7 +11,14 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         if sys.platform == 'darwin':
-            self.browser = webdriver.Chrome('./chromedriver')
+            project_root = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+            repo_root = os.path.dirname(project_root)
+            sys.path.append(os.path.join(repo_root,'dev'))
+            from download_chromedriver import get_chromedriver_path
+            chrome_path = get_chromedriver_path()
+            if chrome_path is False:
+                raise SystemExit
+            self.browser = webdriver.Chrome(chrome_path)
         else:
             self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
@@ -216,5 +223,66 @@ class NewVisitorTest(StaticLiveServerTestCase):
         page_list = pagination.find_elements_by_class_name('other_page_num')
         self.assertEqual(len(page_list), 1)
         self.assertEqual(page_list[0].text, '1')
+
+    def test_delete_post(self):
+        self.browser.get(self.live_server_url)
+        default_board = self.browser.find_element_by_css_selector('table#id_board_list_table a')
+        default_board.click()
+
+        # 지훈이는 'django' 대한 게시글과 'spring'에 대한 게시글을 작성한다.
+        create_post_button = self.browser.find_element_by_id('id_create_post_button')
+        create_post_button.click()
+
+        titlebox = self.browser.find_element_by_id('id_new_post_title')
+        titlebox.send_keys('django')
+
+        iframe = self.browser.find_elements_by_tag_name('iframe')[0]
+        self.browser.switch_to.frame(iframe)
+        contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+        contentbox.send_keys('Hello django')
+        self.browser.switch_to.default_content()
+
+        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
+        submit_button.click()
+
+        create_post_button = self.browser.find_element_by_id('id_create_post_button')
+        create_post_button.click()
+
+        titlebox = self.browser.find_element_by_id('id_new_post_title')
+        titlebox.send_keys('spring')
+
+        iframe = self.browser.find_elements_by_tag_name('iframe')[0]
+        self.browser.switch_to.frame(iframe)
+        contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+        contentbox.send_keys('Hello spring')
+        self.browser.switch_to.default_content()
+
+        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
+        submit_button.click()
+
+        # 나중에 보니 'spring' 게시글이 마음에 들지 않아서 삭제를 한다.
+        # 'spring' 게시글을 눌러서 게시글 페이지로 이동한 후 '삭제' 버튼을 누른다.
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        for row in rows:
+            if 'spring' in row.text:
+                break
+
+        row.find_element_by_tag_name('a').click()
+
+        delete_post_button = self.browser.find_element_by_id('id_delete_post_button')
+        delete_post_button.click()
+
+        # 'spring' 게시글이 잘 삭제 돼서 목록에 보이지 않는다.
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        title_list = ''
+        for row in rows:
+            title_list += row.text
+
+        self.assertNotRegex(title_list, '.+spring')
+
+        # 'django' 게시글은 삭제되지 않고 잘 남아있다.
+        self.assertRegex(title_list, '.+django')
 
         # TODO
