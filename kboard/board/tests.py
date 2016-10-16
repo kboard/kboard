@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+from django.core.urlresolvers import reverse
+
 import re
 
 from .views import new_post, post_list, view_post
@@ -47,7 +49,7 @@ class CreatePostPageTest(TestCase):
         response = new_post(request, self.default_board.slug)
 
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/default/')
+        self.assertEqual(response['location'], reverse('board:post_list', args=[self.default_board.slug]))
 
     def test_create_post_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
@@ -68,7 +70,7 @@ class CreatePostPageTest(TestCase):
 class DeletePostTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default')
+        cls.default_board = Board.objects.create(name='Default', slug='default')
         super().setUpTestData()
 
     def test_delete_only_post_selected_to_delete(self):
@@ -78,7 +80,7 @@ class DeletePostTest(TestCase):
         self.assertEqual(delete_post.is_delete, False)
         self.assertEqual(other_post.is_delete, False)
 
-        self.client.post('/board/%d/%d/delete/' % (self.default_board.id, delete_post.id))
+        self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
 
         delete_post = Post.objects.get(id=delete_post.id)
         other_post = Post.objects.get(id=other_post.id)
@@ -88,9 +90,9 @@ class DeletePostTest(TestCase):
 
     def test_redirect_to_post_list_after_delete_post(self):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
-        response = self.client.post('/board/%d/%d/delete/' % (self.default_board.id, delete_post.id))
+        response = self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
 
-        self.assertRedirects(response, '/board/%d/' % (self.default_board.id,))
+        self.assertRedirects(response, reverse('board:post_list', args=[self.default_board.slug]))
 
     def test_does_not_view_but_remain_in_DB_after_delete(self):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
@@ -98,7 +100,7 @@ class DeletePostTest(TestCase):
         viewed_list = Post.objects.filter(is_delete=False)
         self.assertIn(delete_post, viewed_list)
 
-        self.client.post('/board/%d/%d/delete/' % (self.default_board.id, delete_post.id))
+        self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
 
         viewed_list = Post.objects.filter(is_delete=False)
         self.assertNotIn(delete_post, viewed_list)
@@ -115,7 +117,7 @@ class PostViewTest(TestCase):
 
     def test_uses_list_template(self):
         post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
-        response = self.client.get('/default/%d/' % (post_.id,), data={'board': self.default_board.id})
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, post_.id]))
         self.assertTemplateUsed(response, 'view_post.html')
 
     def test_passes_correct_post_to_template(self):
@@ -130,7 +132,7 @@ class PostViewTest(TestCase):
             content='correct post of content'
         )
 
-        response = self.client.get('/default/%d/' % (correct_post.id,), data={'board': self.default_board.id})
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, correct_post.id]))
 
         self.assertEqual(response.context['post'], correct_post)
 
@@ -146,7 +148,7 @@ class PostViewTest(TestCase):
             content='correct post of content'
         )
 
-        response = self.client.get('/{}/{:d}/'.format(self.default_board.slug, correct_post.id))
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, correct_post.id]))
 
         self.assertContains(response, 'correct post of title')
         self.assertContains(response, 'correct post of content')
@@ -182,66 +184,66 @@ class PostPaginationTest(TestCase):
 
     def test_pre_and_next_button_is_not_clicked_if_page_count_less_than_11(self):
         PostPaginationTest.add_pages(self, 1)
-        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
         self.assertContains(response, '<span id="pre_page_list">이전</span>')
         self.assertContains(response, '<span id="next_page_list">다음</span>')
 
         PostPaginationTest.add_pages(self, 8)
-        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
         self.assertContains(response, '<span id="pre_page_list">이전</span>')
         self.assertContains(response, '<span id="next_page_list">다음</span>')
 
     def test_next_button_is_clicked_if_next_page_list_exist(self):
         PostPaginationTest.add_pages(self, 11)
-        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
         self.assertContains(response, '<span id="pre_page_list">이전</span>')
         self.assertContains(response, '<span id="next_page_list"><a href="?page=11">다음</a></span>')
 
     def test_pre_button_is_clicked_if_pre_page_list_exist(self):
         PostPaginationTest.add_pages(self, 11)
-        response = self.client.get('/board/%d/?page=11' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug])+'?page=11')
         self.assertContains(response, '<span id="pre_page_list"><a href="?page=10">이전</a></span>')
         self.assertContains(response, '<span id="next_page_list">다음</span>')
 
     # page count = 1
     def test_view_current_page_in_page_count_1(self):
         PostPaginationTest.add_pages(self, 1)
-        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
         self.assertContains(response, '<strong id="current_page_num">1</strong>')
 
     def test_does_not_view_other_page_in_page_count_1(self):
         PostPaginationTest.add_pages(self, 1)
-        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
         self.assertNotContains(response, '<a class="other_page_num" href="?page=2">2</a>')
 
     def test_view_default_page_1_for_post_count_1_when_start_board(self):
         PostPaginationTest.add_pages(self, 1)
-        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
         self.assertContains(response, '<strong id="current_page_num">1</strong>')
 
     # page count = 2
     def test_view_default_page_list_for_page_count_2_when_start_board(self):
         PostPaginationTest.add_pages(self, 2)
-        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
         self.assertContains(response, '<strong id="current_page_num">1</strong>')
 
     def test_view_page_list_in_page_count_2(self):
         PostPaginationTest.add_pages(self, 2)
-        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
         self.assertContains(response, '<strong id="current_page_num">1</strong>')
         self.assertContains(response, '<a class="other_page_num" href="?page=2">2</a>')
         self.assertNotContains(response, '<a class="other_page_num" href="?page=3">3</a>')
 
     def test_change_page_with_click_page_1(self):
         PostPaginationTest.add_pages(self, 2)
-        response = self.client.get('/board/%d/?page=1' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug])+'?page=1')
         self.assertContains(response, 'POST TITLE PAGE1 POST1')
         self.assertContains(response, '<strong id="current_page_num">1</strong>')
         self.assertContains(response, '<a class="other_page_num" href="?page=2">2</a>')
 
     def test_change_page_with_click_page_2(self):
         PostPaginationTest.add_pages(self, 2)
-        response = self.client.get('/board/%d/?page=2' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug])+'?page=2')
         self.assertContains(response, 'POST TITLE PAGE2 POST1')
         self.assertContains(response, '<a class="other_page_num" href="?page=1">1</a>')
         self.assertContains(response, '<strong id="current_page_num">2</strong>')
@@ -249,7 +251,7 @@ class PostPaginationTest(TestCase):
     # page count = 10
     def test_view_page_list_in_page_count_10(self):
         PostPaginationTest.add_pages(self, 10)
-        response = self.client.get('/board/%d/?page=10' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug])+'?page=10')
         self.assertContains(response, 'POST TITLE PAGE10 POST1')
         self.assertContains(response, '<a class="other_page_num" href="?page=9">9</a>')
         self.assertContains(response, '<strong id="current_page_num">10</strong>')
@@ -258,12 +260,12 @@ class PostPaginationTest(TestCase):
     # page count = 13
     def test_view_default_page_list_for_page_count_13_when_start_board(self):
         PostPaginationTest.add_pages(self, 13)
-        response = self.client.get('/board/%d/' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
         self.assertContains(response, '<strong id="current_page_num">1</strong>')
 
     def test_view_page_list_in_page_count_13(self):
         PostPaginationTest.add_pages(self, 13)
-        response = self.client.get('/board/%d/?page=13' % (self.default_board.id,))
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug])+'?page=13')
         self.assertContains(response, 'POST TITLE PAGE13 POST1')
         self.assertNotContains(response, '<a class="other_page_num" href="?page=10">10</a>')
         self.assertContains(response, '<a class="other_page_num" href="?page=11">11</a>')
@@ -309,7 +311,7 @@ class PostModelTest(TestCase):
         delete_post.save()
 
         self.assertEqual(delete_post.is_delete, False)
-        self.client.post('/board/%d/%d/delete/' % (self.default_board.id, delete_post.id))
+        self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
 
         delete_post = Post.objects.get(id=delete_post.id)
         self.assertEqual(delete_post.is_delete, True)
@@ -333,7 +335,7 @@ class CommentModelTest(TestCase):
         self.assertEqual(saved_posts.count(), 1)
 
     def test_can_pass_comment_POST_data(self):
-        self.client.post('/{}/{:d}/new/'.format(self.default_board.slug, self.default_post.id), data={
+        self.client.post(reverse('board:new_comment',args=[self.default_board.slug, self.default_post.id]), data={
             'comment_content': 'This is a comment'
         })
 

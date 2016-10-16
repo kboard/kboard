@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 
 from board.models import Post, Board, Comment
 from board.forms import PostForm
@@ -9,7 +10,7 @@ def new_post(request, board_slug):
     if request.method == 'POST':
         board = Board.objects.get(slug=board_slug)
         Post.objects.create(board=board, title=request.POST['post_title_text'], content=request.POST.get('fields', ''))
-        return redirect('/{}/'.format(board_slug))
+        return redirect(reverse('board:post_list', args=[board_slug]))
 
     board = Board.objects.get(slug=board_slug)
     form = PostForm()
@@ -17,7 +18,7 @@ def new_post(request, board_slug):
 
 
 def post_list(request, board_slug):
-    posts_all_list = Post.objects.all()
+    posts_all_list = Post.objects.filter(is_delete=False)
     paginator = Paginator(posts_all_list, 10)  # Show 10 contacts per page
 
     page = request.GET.get('page')
@@ -51,7 +52,7 @@ def post_list(request, board_slug):
 
     pages_info = {'pre_page': pre_page, 'page_list': page_list, 'current_num': posts.number, 'next_page': next_page}
 
-    return render(request, 'post_list.html', {'posts': posts, 'board_id': board_slug, 'pages_info': pages_info})
+    return render(request, 'post_list.html', {'posts': posts, 'board_slug': board_slug, 'pages_info': pages_info})
 
 
 def view_post(request, board_slug, post_id):
@@ -77,10 +78,10 @@ def new_comment(request, board_slug, post_id):
         return redirect(post)
 
 
-def delete_post(request, board_id, post_id):
+def delete_post(request, board_slug, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
         post.is_delete = True
         post.save(update_fields=['is_delete'])
 
-        return redirect('/board/' + str(board_id) + '/')
+        return redirect(reverse('board:post_list', args=[board_slug]))

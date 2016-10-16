@@ -25,7 +25,7 @@
 
     <button id="id_back_to_post_list_button" onclick="location.href='{% url 'board:post_list' board_slug %}'">목록</button>
 
-    <form method="POST" action="{% url 'board:delete_post' board_id post.id %}">
+    <form method="POST" action="{% url 'board:delete_post' board_slug post.id %}">
         {% csrf_token %}
         <button id="id_delete_post_button" type="submit">삭제</button>
     </form>
