@@ -30,7 +30,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
     def check_for_row_in_list_table(self, id, row_text):
         table = self.browser.find_element_by_id(id)
         rows = table.find_elements_by_tag_name('tr')
-        self.assertIn(row_text, [row.text for row in rows])
+        self.assertIn(row_text, str([row.text for row in rows]))
 
     def test_new_visitor(self):
         # 지훈이는 멋진 게시판 앱이 나왔다는 소식을 듣고
