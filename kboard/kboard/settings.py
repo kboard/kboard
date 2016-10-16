@@ -39,6 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'board',
     'django_summernote',
+    'djangobower'
+]
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'djangobower.finders.BowerFinder'
 ]
 
 MIDDLEWARE = [
@@ -101,6 +108,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Bower installed apps
+BOWER_INSTALLED_APPS = [
+    'jquery'
+]
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -119,8 +131,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, '../static')
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, '../components')
 
 MEDIA_URL='/media/'
 
