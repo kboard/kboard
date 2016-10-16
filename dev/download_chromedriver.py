@@ -26,14 +26,16 @@ def get_chromedriver_latest_version():
 
 
 def download(version='LATEST'):
+    destination_file_path = os.path.join(DESTINATION_DIR, MAC_DRIVER_NAME)
+    destination_unzip_path = os.path.join(DESTINATION_DIR, 'chromedriver')
+    if os.path.exists(destination_unzip_path):
+        return "{} driver exists".format(destination_unzip_path)
     if version == 'LATEST':
         download_version = get_chromedriver_latest_version()
     else:
         download_version = version
     latest_path = "%s/%s/%s" % (DOWNLOAD_URL,
                                 download_version, MAC_DRIVER_NAME)
-    destination_file_path = os.path.join(DESTINATION_DIR, MAC_DRIVER_NAME)
-    destination_unzip_path = os.path.join(DESTINATION_DIR, 'chromedriver')
     with open(destination_file_path, 'wb') as f:
         for chunk in requests.get(latest_path, stream=True).iter_content(chunk_size=1024):
             if chunk:
