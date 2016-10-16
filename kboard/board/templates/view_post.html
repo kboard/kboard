@@ -7,7 +7,10 @@
 <body>
     <!-- post -->
     <h2 id="id_post_title">{{ post.title }}</h2>
-    <div id="id_post_content">{{ post.content|safe }}</div>
+
+    <div id="id_post_content">
+        <p>{{ post.content|safe }}</p>
+    </div>
 
 
     <!-- comment -->
@@ -17,17 +20,15 @@
         {% endfor %}
     </ul>
 
-    <form method="POST" action="{% url 'board:new_comment'%}">
+    <form method="POST" action="{% url 'board:new_comment' board_slug post.id %}">
         {% csrf_token %}
-        <input type="hidden" name="post_id" value="{{ post.id }}"/>
         <input type="text" id="id_new_comment" name="comment_content" placeholder="Write comment..."/>
         <button type="submit" id="id_new_comment_submit">댓글 달기</button>
     </form>
 
+    <button id="id_back_to_post_list_button" onclick="location.href='{% url 'board:post_list' board_slug %}'">목록</button>
 
-    <button id="id_back_to_post_list_button" onclick="location.href='{% url 'board:post_list' board_id %}'">목록</button>
-
-    <form method="POST" action="{% url 'board:delete_post' board_id post.id %}">
+    <form method="POST" action="{% url 'board:delete_post' board_slug post.id %}">
         {% csrf_token %}
         <button id="id_delete_post_button" type="submit">삭제</button>
     </form>

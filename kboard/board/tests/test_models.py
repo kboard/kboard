@@ -1,11 +1,12 @@
 from django.test import TestCase
 from board.models import Post, Board, Comment
+from django.core.urlresolvers import reverse
 
 
 class PostModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default')
+        cls.default_board = Board.objects.create(name='Default', slug='default')
         super().setUpTestData()
 
     def test_saving_and_retrieving_post(self):
@@ -31,11 +32,25 @@ class PostModelTest(TestCase):
         self.assertEqual(second_saved_post.title, 'second post of title')
         self.assertEqual(second_saved_post.content, 'second post of content')
 
+    def test_is_delete_change_to_True_after_delete_post(self):
+        delete_post = Post()
+        delete_post.board = self.default_board
+        delete_post.title = 'post of title'
+        delete_post.content = 'post of content'
+        delete_post.save()
+
+        self.assertEqual(delete_post.is_delete, False)
+        self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
+
+        delete_post.refresh_from_db()
+
+        self.assertEqual(delete_post.is_delete, True)
+
 
 class CommentModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default')
+        cls.default_board = Board.objects.create(name='Default', slug='default')
         cls.default_post = Post.objects.create(
             board=cls.default_board,
             title='some post title',
@@ -50,9 +65,8 @@ class CommentModelTest(TestCase):
         self.assertEqual(saved_posts.count(), 1)
 
     def test_can_pass_comment_POST_data(self):
-        self.client.post('/comment/new/', data={
-            'comment_content': 'This is a comment',
-            'post_id': self.default_post.id
+        self.client.post(reverse('board:new_comment',args=[self.default_board.slug, self.default_post.id]), data={
+            'comment_content': 'This is a comment'
         })
 
         saved_comments = Comment.objects.filter(post=self.default_post)

@@ -1,23 +1,24 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 from django.views.decorators.http import require_POST
 
 from board.models import Post, Board, Comment
 from board.forms import PostForm
 
 
-def new_post(request):
-    board = Board.objects.get(id=request.GET['board'])
+def new_post(request, board_slug):
+    if request.method == 'POST':
+        board = Board.objects.get(slug=board_slug)
+        Post.objects.create(board=board, title=request.POST['post_title_text'], content=request.POST.get('fields', ''))
+        return redirect(reverse('board:post_list', args=[board_slug]))
+
+    board = Board.objects.get(slug=board_slug)
     form = PostForm()
     return render(request, 'new_post.html', {'board': board, 'form': form})
 
 
-def post_list(request, board_id):
-    if request.method == 'POST':
-        board = Board.objects.get(id=board_id)
-        Post.objects.create(board=board, title=request.POST['post_title_text'], content=request.POST.get('fields', ''))
-        return redirect('/board/'+str(board_id))
-
+def post_list(request, board_slug):
     posts_all_list = Post.objects.filter(is_delete=False)
     paginator = Paginator(posts_all_list, 10)  # Show 10 contacts per page
 
@@ -52,37 +53,37 @@ def post_list(request, board_id):
 
     pages_info = {'pre_page': pre_page, 'page_list': page_list, 'current_num': posts.number, 'next_page': next_page}
 
-    return render(request, 'post_list.html', {'posts': posts, 'board_id': board_id, 'pages_info': pages_info})
+    return render(request, 'post_list.html', {'posts': posts, 'board_slug': board_slug, 'pages_info': pages_info})
 
 
-def view_post(request, post_id):
+def view_post(request, board_slug, post_id):
     post = Post.objects.get(id=post_id)
 
-    return render(request, 'view_post.html', {'post': post, 'board_id': post.board.id})
+    return render(request, 'view_post.html', {'post': post, 'board_slug': board_slug})
 
 
 def board_list(request):
     board_count = Board.objects.all().count()
     if board_count == 0:
-        Board.objects.create(name='Default')
+        Board.objects.create(name='Default', slug='default')
 
     boards = Board.objects.all()
 
     return render(request, 'board_list.html', {'boards': boards})
 
 
-def new_comment(request):
+def new_comment(request, board_slug, post_id):
     if request.method == 'POST':
-        post = Post.objects.get(id=request.POST['post_id'])
+        post = Post.objects.get(id=post_id)
         Comment.objects.create(post=post, content=request.POST['comment_content'])
         return redirect(post)
 
 
 @require_POST
-def delete_post(request, board_id, post_id):
+def delete_post(request, board_slug, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
         post.is_delete = True
         post.save(update_fields=['is_delete'])
 
-        return redirect('/board/' + str(board_id) + '/')
+        return redirect(reverse('board:post_list', args=[board_slug]))

@@ -8,12 +8,13 @@ class Board(models.Model):
     def get_absolute_url(self):
         return reverse('board:post_list', args=[self.id])
 
+    slug = models.TextField(default='', unique=True)
     name = models.TextField(default='')
 
 
 class Post(models.Model):
     def get_absolute_url(self):
-        return reverse('board:view_post', args=[self.id])
+        return reverse('board:view_post', args=[self.board.slug, self.id])
 
     title = models.TextField(default='')
     content = models.TextField(default='')

@@ -6,10 +6,10 @@ from . import views
 
 app_name = 'board'
 urlpatterns = [
-    url(r'^posts/new/$', views.new_post, name='new_post'),
-    url(r'^posts/(\d+)/$', views.view_post, name='view_post'),
-    url(r'^comment/new/$', views.new_comment, name='new_comment'),
-    url(r'^board/(\d+)/$', views.post_list, name='post_list'),
-    url(r'^board/(\d+)/(\d+)/delete/$', views.delete_post, name='delete_post'),
-    url(r'^$', views.board_list, name='board_list')
+    url(r'^$', views.board_list, name='board_list'),
+    url(r'^(?P<board_slug>[-\w]+)/$', views.post_list, name='post_list'),
+    url(r'^(?P<board_slug>[-\w]+)/new/$', views.new_post, name='new_post'),
+    url(r'^(?P<board_slug>[-\w]+)/(?P<post_id>\d+)/delete/$', views.delete_post, name='delete_post'),
+    url(r'^(?P<board_slug>[-\w]+)/(?P<post_id>\d+)/$', views.view_post, name='view_post'),
+    url(r'^(?P<board_slug>[-\w]+)/(?P<post_id>\d+)/comment/new/$', views.new_comment, name='new_comment'),
 ]

@@ -22,7 +22,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         else:
             self.browser = webdriver.Firefox()
         self.browser.implicitly_wait(3)
-        Board.objects.create(name='Default')
+        Board.objects.create(name='Default', slug='default')
 
     def tearDown(self):
         self.browser.quit()
@@ -58,7 +58,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         create_post_button.click()
 
         # 글 쓰기 페이지로 이동한다.
-        self.assertRegex(self.browser.current_url, '.+/posts/new/')
+        self.assertRegex(self.browser.current_url, '.+/default/new/')
 
         # 웹 페이지 타이틀과 헤더가 'Create Post'를 표시하고 있다.
         header_text = self.browser.find_element_by_tag_name('h2').text
@@ -86,7 +86,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # 하단의 등록 버튼을 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
         submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
         submit_button.click()
-        self.assertRegex(self.browser.current_url, '.+/board')
+        self.assertRegex(self.browser.current_url, '.+/default/')
 
         # 게시글 목록 페이지의 타이틀에 'Post list'라고 씌여져 있다.
         header_text = self.browser.find_element_by_tag_name('h2').text
@@ -114,7 +114,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # 하단의 등록 버든틍 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
         submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
         submit_button.click()
-        self.assertRegex(self.browser.current_url, '.+/board')
+        self.assertRegex(self.browser.current_url, '.+/default/')
 
         # 게시글 목록에 두 개의 게시글 제목이 보인다.
         self.check_for_row_in_list_table('id_post_list_table', '2: Title of Second Post')
@@ -128,7 +128,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         row.find_element_by_tag_name('a').click()
 
         # 게시글에 대한 자세한 내용을 보여주는 새로운 창이 뜬다.
-        self.assertRegex(self.browser.current_url, '.+/posts/(\d+)/')
+        self.assertRegex(self.browser.current_url, '.+/default/(\d+)/')
 
         # 게시글 페이지의 타이틀에는 'View Post'라고 씌여져 있다.
         self.assertIn('View Post', self.browser.title)
@@ -159,7 +159,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         create_post_button.click()
 
         # 게시글 목록 페이지가 뜬다.
-        self.assertRegex(self.browser.current_url, '.+/board/(\d+)')
+        self.assertRegex(self.browser.current_url, '.+/default/$')
 
         # 지훈이는 게시판에 11일 동안 매일 일기를 쓰기로 결심한다.
 
@@ -208,7 +208,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
         # 페이지 번호 2를 클릭하였더니 두 번째 페이지로 넘어간다.
         page_list[0].click()
-        self.assertRegex(self.browser.current_url, '.+/board/(\d+)/\?page=2')
+        self.assertRegex(self.browser.current_url, '.+/default/\?page=2')
 
         # 게시글은 3개만 보여진다.
         table = self.browser.find_element_by_id('id_post_list_table')
