@@ -35,5 +35,6 @@
         {% endif %}
     </div>
     <button type="button" id="id_create_post_button" onclick="location.href='{% url 'board:new_post' board_slug %}'">글쓰기</button>
+    <button type="button" id="board_list_button" onclick="location.href='{% url 'board:board_list' %}'">게시판 목록</button>
 </body>
 </html>
