@@ -32,7 +32,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, "".join([row.text for row in rows]))
 
-    def test_new_visitor(self):
+    def test_dafault_page(self):
         # 지훈이는 멋진 게시판 앱이 나왔다는 소식을 듣고
         # 해당 웹 사이트를 확인하러 간다.
         self.browser.get(self.live_server_url)
@@ -53,7 +53,11 @@ class NewVisitorTest(StaticLiveServerTestCase):
         with self.assertRaises(NoSuchElementException):
             self.browser.find_element_by_tag_name('tr')
 
-        # 글 쓰기 버튼을 누른다.
+    def test_write_post_and_confirm_post_view(self):
+        self.browser.get(self.live_server_url)
+        self.browser.find_element_by_css_selector('table#id_board_list_table a').click()
+
+        # 지훈이는 새 게시글을 작성하기 위해 글 쓰기 버튼을 누른다.
         create_post_button = self.browser.find_element_by_id('id_create_post_button')
         create_post_button.click()
 
@@ -65,7 +69,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertIn('Create Post', self.browser.title)
         self.assertIn('Create Post', header_text)
 
-        # 그는 새 게시글을 작성한다.
+        # 제목을 입력하는 상자에 'Insert Title'라고 씌여 있다.
         titlebox = self.browser.find_element_by_id('id_new_post_title')
         self.assertEqual(
             titlebox.get_attribute('placeholder'),
@@ -75,6 +79,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # "Title of This Post"라고 제목 상자에 입력한다.
         titlebox.send_keys('Title of This Post')
 
+        # 게시글 내용을 입력하기 위해 contentbox를 가져오는 작업
         iframe = self.browser.find_elements_by_tag_name('iframe')[0]
         self.browser.switch_to.frame(iframe)
         contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
@@ -161,9 +166,29 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # 게시글 목록 페이지가 뜬다.
         self.assertRegex(self.browser.current_url, '.+/default/$')
 
-        # 지훈이는 게시판에 11일 동안 매일 일기를 쓰기로 결심한다.
+    def test_pagination_post_list(self):
+        self.browser.get(self.live_server_url)
+        self.browser.find_element_by_css_selector('table#id_board_list_table a').click()
+
+        # 지훈이는 게시판에 13일 동안 매일 일기를 쓰기로 결심한다.
 
         # 하단에 게시글의 페이지 번호가 표시된다. ( 페이지 당 게시글의 수는 10개이다. )
+
+        # 2일 후 2개의 게시글이 추가됐다.
+        for day in range(1, 3):
+            self.browser.find_element_by_id('id_create_post_button').click()
+
+            titlebox = self.browser.find_element_by_id('id_new_post_title')
+            titlebox.send_keys('day ' + str(day))
+
+            iframe = self.browser.find_elements_by_tag_name('iframe')[0]
+            self.browser.switch_to.frame(iframe)
+            contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+            contentbox.send_keys('Hello')
+            self.browser.switch_to.default_content()
+
+            submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
+            submit_button.click()
 
         # 현재 2개의 게시글이 존재하고
         table = self.browser.find_element_by_id('id_post_list_table')
@@ -176,9 +201,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.assertEqual(current_page_num, '1')
 
         # 11일 후 11개의 게시글이 추가됐다.
-        for day in range(1, 12):
-            create_post_button = self.browser.find_element_by_id('id_create_post_button')
-            create_post_button.click()
+        for day in range(3, 14):
+            self.browser.find_element_by_id('id_create_post_button').click()
 
             titlebox = self.browser.find_element_by_id('id_new_post_title')
             titlebox.send_keys('day ' + str(day))
