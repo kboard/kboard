@@ -53,6 +53,18 @@ class NewVisitorTest(StaticLiveServerTestCase):
         with self.assertRaises(NoSuchElementException):
             self.browser.find_element_by_tag_name('tr')
 
+        # 지훈이는 다른 게시판이 있나 보려고 게시판 목록 버튼을 눌러 게시판 목록 페이지로 돌아간다.
+        board_list_button = self.browser.find_element_by_id('board_list_button')
+        board_list_button.click()
+
+        self.assertRegex(self.browser.current_url, '.+/$')
+
+        self.check_for_row_in_list_table('id_board_list_table', 'Default')
+
+        # Default 게시판 밖에 없어서 글을 쓰려고 게시판을 누른다.
+        default_board = self.browser.find_element_by_css_selector('table#id_board_list_table a')
+        default_board.click()
+
         # 글 쓰기 버튼을 누른다.
         create_post_button = self.browser.find_element_by_id('id_create_post_button')
         create_post_button.click()
