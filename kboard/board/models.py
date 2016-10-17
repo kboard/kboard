@@ -21,7 +21,7 @@ class Post(models.Model):
     content = models.TextField(default='')
     board = models.ForeignKey(Board, null=True)
     is_delete = models.BooleanField(default=False)
-    create_time = models.DateTimeField(default=timezone.now())
+    create_time = models.DateTimeField(auto_now_add=True)
 
 
 class SummerNote(summer_model.Attachment):
