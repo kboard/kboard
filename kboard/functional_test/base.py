@@ -25,3 +25,21 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def tearDown(self):
         self.browser.quit()
+
+    def move_to_default_board(self):
+        default_board = self.browser.find_element_by_css_selector('table#id_board_list_table a')
+        default_board.click()
+
+    def click_create_post_button(self):
+        create_post_button = self.browser.find_element_by_id('id_create_post_button')
+        create_post_button.click()
+
+    def click_submit_button(self):
+        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
+        submit_button.click()
+
+    # 게시글의 내용을 입력하기 위해 contentbox를 가져오는 작업
+    def get_contentbox(self):
+        iframe = self.browser.find_elements_by_tag_name('iframe')[0]
+        self.browser.switch_to.frame(iframe)
+        return self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')

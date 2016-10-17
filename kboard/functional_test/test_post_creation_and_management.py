@@ -23,8 +23,7 @@ class NewVisitorTest(FunctionalTest):
         self.check_for_row_in_list_table('id_board_list_table', 'Default')
 
         # 지훈이는 첫 번째에 있는 'Default'게시판에 들어간다.
-        default_board = self.browser.find_element_by_css_selector('table#id_board_list_table a')
-        default_board.click()
+        self.move_to_default_board()
 
         # 게시판에 아무런 글이 없다.
         with self.assertRaises(NoSuchElementException):
@@ -32,11 +31,10 @@ class NewVisitorTest(FunctionalTest):
 
     def test_write_post_and_confirm_post_view(self):
         self.browser.get(self.live_server_url)
-        self.browser.find_element_by_css_selector('table#id_board_list_table a').click()
+        self.move_to_default_board()
 
         # 지훈이는 새 게시글을 작성하기 위해 글 쓰기 버튼을 누른다.
-        create_post_button = self.browser.find_element_by_id('id_create_post_button')
-        create_post_button.click()
+        self.click_create_post_button()
 
         # 글 쓰기 페이지로 이동한다.
         self.assertRegex(self.browser.current_url, '.+/default/new/')
@@ -56,18 +54,14 @@ class NewVisitorTest(FunctionalTest):
         # "Title of This Post"라고 제목 상자에 입력한다.
         titlebox.send_keys('Title of This Post')
 
-        # 게시글 내용을 입력하기 위해 contentbox를 가져오는 작업
-        iframe = self.browser.find_elements_by_tag_name('iframe')[0]
-        self.browser.switch_to.frame(iframe)
-        contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+        contentbox = self.get_contentbox()
 
         # "Content of This Post"라고 본문 상자에 입력한다.
         contentbox.send_keys('Content of This Post')
         self.browser.switch_to.default_content()
 
         # 하단의 등록 버튼을 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
-        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
-        submit_button.click()
+        self.click_submit_button()
         self.assertRegex(self.browser.current_url, '.+/default/')
 
         # 게시글 목록 페이지의 타이틀에 'Post list'라고 씌여져 있다.
@@ -79,23 +73,19 @@ class NewVisitorTest(FunctionalTest):
         self.check_for_row_in_list_table('id_post_list_table', '1: Title of This Post')
 
         # 게시글 목록 하단에 있는 '글쓰기' 버튼을 눌러서 새 글을 작성한다.
-        create_post_button = self.browser.find_element_by_id('id_create_post_button')
-        create_post_button.click()
+        self.click_create_post_button()
 
         # "Title of Second Post"라고 제목 상자에 입력한다.
         titlebox = self.browser.find_element_by_id('id_new_post_title')
         titlebox.send_keys('Title of Second Post')
 
         # "Content of Second Post"라고 본문 상자에 입력한다
-        iframe = self.browser.find_elements_by_tag_name('iframe')[0]
-        self.browser.switch_to.frame(iframe)
-        contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+        contentbox = self.get_contentbox()
         contentbox.send_keys('Content of Second Post')
         self.browser.switch_to.default_content()
 
         # 하단의 등록 버든틍 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
-        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
-        submit_button.click()
+        self.click_submit_button()
         self.assertRegex(self.browser.current_url, '.+/default/')
 
         # 게시글 목록에 두 개의 게시글 제목이 보인다.
@@ -145,7 +135,7 @@ class NewVisitorTest(FunctionalTest):
 
     def test_pagination_post_list(self):
         self.browser.get(self.live_server_url)
-        self.browser.find_element_by_css_selector('table#id_board_list_table a').click()
+        self.move_to_default_board()
 
         # 지훈이는 게시판에 13일 동안 매일 일기를 쓰기로 결심한다.
 
@@ -153,19 +143,16 @@ class NewVisitorTest(FunctionalTest):
 
         # 2일 후 2개의 게시글이 추가됐다.
         for day in range(1, 3):
-            self.browser.find_element_by_id('id_create_post_button').click()
+            self.click_create_post_button()
 
             titlebox = self.browser.find_element_by_id('id_new_post_title')
             titlebox.send_keys('day ' + str(day))
 
-            iframe = self.browser.find_elements_by_tag_name('iframe')[0]
-            self.browser.switch_to.frame(iframe)
-            contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+            contentbox = self.get_contentbox()
             contentbox.send_keys('Hello')
             self.browser.switch_to.default_content()
 
-            submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
-            submit_button.click()
+            self.click_submit_button()
 
         # 현재 2개의 게시글이 존재하고
         table = self.browser.find_element_by_id('id_post_list_table')
@@ -179,19 +166,16 @@ class NewVisitorTest(FunctionalTest):
 
         # 11일 후 11개의 게시글이 추가됐다.
         for day in range(3, 14):
-            self.browser.find_element_by_id('id_create_post_button').click()
+            self.click_create_post_button()
 
             titlebox = self.browser.find_element_by_id('id_new_post_title')
             titlebox.send_keys('day ' + str(day))
 
-            iframe = self.browser.find_elements_by_tag_name('iframe')[0]
-            self.browser.switch_to.frame(iframe)
-            contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+            contentbox = self.get_contentbox()
             contentbox.send_keys('Hello')
             self.browser.switch_to.default_content()
 
-            submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
-            submit_button.click()
+            self.click_submit_button()
 
         # 게시글은 10개만 보여진다.
         table = self.browser.find_element_by_id('id_post_list_table')
@@ -227,39 +211,30 @@ class NewVisitorTest(FunctionalTest):
 
     def test_delete_post(self):
         self.browser.get(self.live_server_url)
-        default_board = self.browser.find_element_by_css_selector('table#id_board_list_table a')
-        default_board.click()
+        self.move_to_default_board()
 
         # 지훈이는 'django' 대한 게시글과 'spring'에 대한 게시글을 작성한다.
-        create_post_button = self.browser.find_element_by_id('id_create_post_button')
-        create_post_button.click()
+        self.click_create_post_button()
 
         titlebox = self.browser.find_element_by_id('id_new_post_title')
         titlebox.send_keys('django')
 
-        iframe = self.browser.find_elements_by_tag_name('iframe')[0]
-        self.browser.switch_to.frame(iframe)
-        contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+        contentbox = self.get_contentbox()
         contentbox.send_keys('Hello django')
         self.browser.switch_to.default_content()
 
-        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
-        submit_button.click()
+        self.click_submit_button()
 
-        create_post_button = self.browser.find_element_by_id('id_create_post_button')
-        create_post_button.click()
+        self.click_create_post_button()
 
         titlebox = self.browser.find_element_by_id('id_new_post_title')
         titlebox.send_keys('spring')
 
-        iframe = self.browser.find_elements_by_tag_name('iframe')[0]
-        self.browser.switch_to.frame(iframe)
-        contentbox = self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+        contentbox = self.get_contentbox()
         contentbox.send_keys('Hello spring')
         self.browser.switch_to.default_content()
 
-        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
-        submit_button.click()
+        self.click_submit_button()
 
         # 나중에 보니 'spring' 게시글이 마음에 들지 않아서 삭제를 한다.
         # 'spring' 게시글을 눌러서 게시글 페이지로 이동한 후 '삭제' 버튼을 누른다.
