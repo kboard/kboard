@@ -290,9 +290,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         rows = table.find_elements_by_tag_name('tr')
         for row in rows:
             if 'spring' in row.text:
+                row.find_element_by_tag_name('a').click()
                 break
-
-        row.find_element_by_tag_name('a').click()
 
         delete_post_button = self.browser.find_element_by_id('id_delete_post_button')
         delete_post_button.click()
