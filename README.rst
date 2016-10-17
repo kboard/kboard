@@ -14,7 +14,8 @@ Continuous Integration (Travis CI)
 
 Developing Process
 -----
-After clone, you need to run python ./dev/download_chromedriver.py to get chromedriver 
+After clone, you need to run ``python ./dev/download_chromedriver.py`` to get chromedriver.
+To install bower dependencies, run ``python ./kboard/manage.py bower install``.
 
 
 Developers
