@@ -1,6 +1,6 @@
-from django.test import TestCase
+from .base import BoardAppTest
 from board.forms import PostForm
 
 
-class PostFormTest(TestCase):
+class PostFormTest(BoardAppTest):
     pass
