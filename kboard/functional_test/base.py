@@ -43,3 +43,4 @@ class FunctionalTest(StaticLiveServerTestCase):
         iframe = self.browser.find_elements_by_tag_name('iframe')[0]
         self.browser.switch_to.frame(iframe)
         return self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+
