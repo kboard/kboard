@@ -7,27 +7,8 @@ class DeletePostTest(FunctionalTest):
         self.move_to_default_board()
 
         # 지훈이는 'django' 대한 게시글과 'spring'에 대한 게시글을 작성한다.
-        self.click_create_post_button()
-
-        titlebox = self.browser.find_element_by_id('id_new_post_title')
-        titlebox.send_keys('django')
-
-        contentbox = self.get_contentbox()
-        contentbox.send_keys('Hello django')
-        self.browser.switch_to.default_content()
-
-        self.click_submit_button()
-
-        self.click_create_post_button()
-
-        titlebox = self.browser.find_element_by_id('id_new_post_title')
-        titlebox.send_keys('spring')
-
-        contentbox = self.get_contentbox()
-        contentbox.send_keys('Hello spring')
-        self.browser.switch_to.default_content()
-
-        self.click_submit_button()
+        self.add_post('django', 'Hello django')
+        self.add_post('spring', 'Hello spring')
 
         # 나중에 보니 'spring' 게시글이 마음에 들지 않아서 삭제를 한다.
         # 'spring' 게시글을 눌러서 게시글 페이지로 이동한 후 '삭제' 버튼을 누른다.

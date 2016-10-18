@@ -44,3 +44,14 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.switch_to.frame(iframe)
         return self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
 
+    def add_post(self, title, content):
+        self.click_create_post_button()
+
+        titlebox = self.browser.find_element_by_id('id_new_post_title')
+        titlebox.send_keys(title)
+
+        contentbox = self.get_contentbox()
+        contentbox.send_keys(content)
+        self.browser.switch_to.default_content()
+
+        self.click_submit_button()

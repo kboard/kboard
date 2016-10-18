@@ -12,16 +12,7 @@ class PaginationTest(FunctionalTest):
 
         # 2일 후 2개의 게시글이 추가됐다.
         for day in range(1, 3):
-            self.click_create_post_button()
-
-            titlebox = self.browser.find_element_by_id('id_new_post_title')
-            titlebox.send_keys('day ' + str(day))
-
-            contentbox = self.get_contentbox()
-            contentbox.send_keys('Hello')
-            self.browser.switch_to.default_content()
-
-            self.click_submit_button()
+            self.add_post('day ' + str(day), 'Hello')
 
         # 현재 2개의 게시글이 존재하고
         table = self.browser.find_element_by_id('id_post_list_table')
@@ -35,16 +26,7 @@ class PaginationTest(FunctionalTest):
 
         # 11일 후 11개의 게시글이 추가됐다.
         for day in range(3, 14):
-            self.click_create_post_button()
-
-            titlebox = self.browser.find_element_by_id('id_new_post_title')
-            titlebox.send_keys('day ' + str(day))
-
-            contentbox = self.get_contentbox()
-            contentbox.send_keys('Hello')
-            self.browser.switch_to.default_content()
-
-            self.click_submit_button()
+            self.add_post('day ' + str(day), 'Hello')
 
         # 게시글은 10개만 보여진다.
         table = self.browser.find_element_by_id('id_post_list_table')
