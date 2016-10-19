@@ -1,14 +1,10 @@
-from django.test import TestCase
-from board.models import Post, Board, Comment
 from django.core.urlresolvers import reverse
 
+from .base import BoardAppTest
+from board.models import Post, Board, Comment
 
-class PostModelTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default', slug='default')
-        super().setUpTestData()
 
+class PostModelTest(BoardAppTest):
     def test_saving_and_retrieving_post(self):
         first_post = Post()
         first_post.board = self.default_board
@@ -47,16 +43,15 @@ class PostModelTest(TestCase):
         self.assertEqual(delete_post.is_delete, True)
 
 
-class CommentModelTest(TestCase):
+class CommentModelTest(BoardAppTest):
     @classmethod
     def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default', slug='default')
+        super().setUpTestData()
         cls.default_post = Post.objects.create(
             board=cls.default_board,
             title='some post title',
             content='some post content'
         )
-        super().setUpTestData()
 
     def test_can_save_a_comment_in_a_particular_post(self):
         Comment.objects.create(post=self.default_post, content='This is a comment')
