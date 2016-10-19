@@ -39,13 +39,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'board',
     'django_summernote',
-    'djangobower'
+    'djangobower',
+    'pipeline'
 ]
 
 STATICFILES_FINDERS = [
-    'django.contrib.staticfiles.finders.FileSystemFinder',
+    # 'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'djangobower.finders.BowerFinder'
+    'djangobower.finders.BowerFinder',
+    'pipeline.finders.PipelineFinder'
 ]
 
 MIDDLEWARE = [
@@ -108,11 +110,32 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Bower installed apps
+# Bower settings
 BOWER_INSTALLED_APPS = [
-    'jquery'
+    'jquery',
+    'react',
+    'react-bootstrap'
 ]
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, '../')
 
+# Summernote settings
+
+SUMMERNOTE_CONFIG = {}
+
+# pipeline settings
+PIPELINE = {
+    # e.g.
+    #
+    # 'JS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
+    # 'JAVASCRIPT': {
+    #     'stats': {
+    #         'source_filenames': [
+    #             'js/hello.js'
+    #         ],
+    #         'output_filename': 'js/stats.js',
+    #     }
+    # }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
@@ -133,12 +156,11 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, '../static')
-BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, '../components')
+STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
 
-MEDIA_URL='/media/'
+STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
-
-# Summernote
-
-SUMMERNOTE_CONFIG = {}
+MEDIA_URL = '/media/'

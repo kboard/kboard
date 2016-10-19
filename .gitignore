@@ -68,7 +68,7 @@ target/
 dev/files
 
 # ignore bower components
-components/
+bower_components/
 
 # collectstatic
 static/

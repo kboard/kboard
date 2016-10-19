@@ -22,3 +22,5 @@ six==1.10.0
 traitlets==4.2.2
 wcwidth==0.1.7
 django-bower==5.2.0
+django-pipeline==1.6.9
+PyReact==0.6.0
