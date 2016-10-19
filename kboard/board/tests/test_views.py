@@ -271,3 +271,119 @@ class PostPaginationTest(BoardAppTest):
         self.assertNotContains(response, '<a class="other_page_num" href="?page=14">14</a>')
 
 
+# test setting : comment_list_count = 10
+class CommentPaginationTest(BoardAppTest):
+    POST_COUNT_IN_PAGE = 5
+
+    def add_pages(self, page_count, post):
+        for page_counter in range(1, page_count+1):
+            for comment_counter in range(1, CommentPaginationTest.POST_COUNT_IN_PAGE+1):
+                comment = Comment()
+                comment.post = post
+                comment.content = 'PAGE' + str(page_count - page_counter + 1) + \
+                                  ' COMMENT' + str(CommentPaginationTest.POST_COUNT_IN_PAGE - comment_counter + 1)
+                comment.save()
+
+    def test_pre_and_next_button_is_not_clicked_if_page_count_less_than_11(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 1, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
+        self.assertContains(response, '<span id="pre_page_list">이전</span>')
+        self.assertContains(response, '<span id="next_page_list">다음</span>')
+
+        CommentPaginationTest.add_pages(self, 8, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
+        self.assertContains(response, '<span id="pre_page_list">이전</span>')
+        self.assertContains(response, '<span id="next_page_list">다음</span>')
+
+    def test_next_button_is_clicked_if_next_page_list_exist(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 11, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
+        self.assertContains(response, '<span id="pre_page_list">이전</span>')
+        self.assertContains(response, '<span id="next_page_list"><a href="?page=11">다음</a></span>')
+
+    def test_pre_button_is_clicked_if_pre_page_list_exist(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 11, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id])+'?page=11')
+        self.assertContains(response, '<span id="pre_page_list"><a href="?page=10">이전</a></span>')
+        self.assertContains(response, '<span id="next_page_list">다음</span>')
+
+    # page count = 1
+    def test_view_current_page_in_page_count_1(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 1, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
+        self.assertContains(response, '<strong id="current_page_num">1</strong>')
+
+    def test_does_not_view_other_page_in_page_count_1(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 1, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
+        self.assertNotContains(response, '<a class="other_page_num" href="?page=2">2</a>')
+
+    def test_view_default_page_1_for_post_count_1_when_start_board(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 1, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
+        self.assertContains(response, '<strong id="current_page_num">1</strong>')
+
+    # page count = 2
+    def test_view_default_page_list_for_page_count_2_when_start_board(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 2, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
+        self.assertContains(response, '<strong id="current_page_num">1</strong>')
+
+    def test_view_page_list_in_page_count_2(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 2, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
+        self.assertContains(response, '<strong id="current_page_num">1</strong>')
+        self.assertContains(response, '<a class="other_page_num" href="?page=2">2</a>')
+        self.assertNotContains(response, '<a class="other_page_num" href="?page=3">3</a>')
+
+    def test_change_page_with_click_page_1(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 2, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id])+'?page=1')
+        self.assertContains(response, 'PAGE1 COMMENT1')
+        self.assertContains(response, '<strong id="current_page_num">1</strong>')
+        self.assertContains(response, '<a class="other_page_num" href="?page=2">2</a>')
+
+    def test_change_page_with_click_page_2(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 2, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id])+'?page=2')
+        self.assertContains(response, 'PAGE2 COMMENT1')
+        self.assertContains(response, '<a class="other_page_num" href="?page=1">1</a>')
+        self.assertContains(response, '<strong id="current_page_num">2</strong>')
+
+    # page count = 10
+    def test_view_page_list_in_page_count_10(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 10, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id])+'?page=10')
+        self.assertContains(response, 'PAGE10 COMMENT1')
+        self.assertContains(response, '<a class="other_page_num" href="?page=9">9</a>')
+        self.assertContains(response, '<strong id="current_page_num">10</strong>')
+        self.assertNotContains(response, '<a class="other_page_num" href="?page=11">11</a>')
+
+    # page count = 13
+    def test_view_default_page_list_for_page_count_13_when_start_board(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 13, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
+        self.assertContains(response, '<strong id="current_page_num">1</strong>')
+
+    def test_view_page_list_in_page_count_13(self):
+        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
+        CommentPaginationTest.add_pages(self, 13, default_post)
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id])+'?page=13')
+        self.assertContains(response, 'PAGE13 COMMENT1')
+        self.assertNotContains(response, '<a class="other_page_num" href="?page=10">10</a>')
+        self.assertContains(response, '<a class="other_page_num" href="?page=11">11</a>')
+        self.assertContains(response, '<a class="other_page_num" href="?page=12">12</a>')
+        self.assertContains(response, '<strong id="current_page_num">13</strong>')
+        self.assertNotContains(response, '<a class="other_page_num" href="?page=14">14</a>')
