@@ -58,8 +58,43 @@ def post_list(request, board_slug):
 
 def view_post(request, board_slug, post_id):
     post = Post.objects.get(id=post_id)
+    comments_all_list = Comment.objects.filter(post=post).order_by('-pk')
 
-    return render(request, 'view_post.html', {'post': post, 'board_slug': board_slug})
+    paginator = Paginator(comments_all_list, 5)  # Show 10 contacts per page
+
+    page = request.GET.get('page')
+    try:
+        comments = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        comments = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        comments = paginator.page(paginator.num_pages)
+
+    # page list
+    page_list_count = 10
+    first_page_in_list = (int((comments.number - 1) / page_list_count)) * page_list_count + 1
+    end_page_in_list = (int((comments.number - 1) / page_list_count) + 1) * page_list_count
+    page_list = []
+    for page_num in range(first_page_in_list, end_page_in_list+1):
+        if page_num > comments.paginator.num_pages:
+            break
+        page_list.append(page_num)
+
+    pre_page = -1
+    next_page = -1
+
+    if comments.number > page_list_count:
+        pre_page = first_page_in_list - 1
+
+    if end_page_in_list < comments.paginator.num_pages:
+        next_page = end_page_in_list + 1
+
+    comment_pages_info = {'pre_page': pre_page, 'page_list': page_list, 'current_num': comments.number, 'next_page': next_page}
+
+    return render(request, 'view_post.html',
+                  {'post': post, 'board_slug': board_slug, 'comments': comments, 'pages_info': comment_pages_info})
 
 
 def board_list(request):
