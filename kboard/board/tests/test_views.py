@@ -1,23 +1,12 @@
-from django.test import TestCase
 from django.http import HttpRequest
 from django.core.urlresolvers import reverse
 
-import re
-
+from .base import BoardAppTest
 from board.views import new_post, post_list
 from board.models import Post, Board, Comment
 
 
-class CreatePostPageTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default', slug='default')
-        super().setUpTestData()
-
-    def remove_csrf(self, origin):
-        csrf_regex = r'<input[^>]+csrfmiddlewaretoken[^>]+>'
-        return re.sub(csrf_regex, '', origin)
-
+class CreatePostPageTest(BoardAppTest):
     def test_new_post_page_returns_correct_html(self):
         request = HttpRequest()
         request.method = 'GET'
@@ -65,12 +54,7 @@ class CreatePostPageTest(TestCase):
         self.assertIn('turtle2', response.content.decode())
 
 
-class DeletePostTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default', slug='default')
-        super().setUpTestData()
-
+class DeletePostTest(BoardAppTest):
     def test_delete_only_post_selected_to_delete(self):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
         other_post = Post.objects.create(board=self.default_board, title='other post', content='content')
@@ -113,12 +97,7 @@ class DeletePostTest(TestCase):
         self.assertEqual(response.status_code, 405)
 
 
-class PostViewTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default', slug='default')
-        super().setUpTestData()
-
+class PostViewTest(BoardAppTest):
     def test_uses_list_template(self):
         post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
         response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, post_.id]))
@@ -160,32 +139,28 @@ class PostViewTest(TestCase):
         self.assertNotContains(response, 'other post of content')
 
 
-class NewCommentTest(TestCase):
+class NewCommentTest(BoardAppTest):
     @classmethod
     def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default', slug='default')
+        super().setUpTestData()
         cls.default_post = Post.objects.create(
             board=cls.default_board,
             title='some post title',
             content='some post content'
         )
-        super().setUpTestData()
 
     def test_can_not_access_with_GET(self):
-        response = self.client.get(reverse('board:new_comment', args=[self.default_board.slug, self.default_post.id]),
-                                   data={'comment_content': 'This is a comment'})
+        response = self.client.get(
+            reverse('board:new_comment', args=[self.default_board.slug, self.default_post.id]),
+            data={'comment_content': 'This is a comment'}
+        )
 
         self.assertEqual(response.status_code, 405)
 
 
 # test setting : page_list_count = 10
-class PostPaginationTest(TestCase):
+class PostPaginationTest(BoardAppTest):
     POST_COUNT_IN_PAGE = 10
-
-    @classmethod
-    def setUpTestData(cls):
-        cls.default_board = Board.objects.create(name='Default', slug='default')
-        super().setUpTestData()
 
     def add_posts(self, post_count):
         for post_counter in range(0, post_count):
