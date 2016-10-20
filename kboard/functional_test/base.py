@@ -42,7 +42,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     def get_contentbox(self):
         iframe = self.browser.find_elements_by_tag_name('iframe')[0]
         self.browser.switch_to.frame(iframe)
-        return self.browser.find_element_by_xpath('//div[contains(@class, "note-editable")]')
+        return self.browser.find_element_by_class_name('note-editable')
 
     def add_post(self, title, content):
         self.click_create_post_button()

@@ -1,60 +1,60 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>View Post</title>
-</head>
-<body>
-    <!-- post -->
-    <h2 id="id_post_title">{{ post.title }}</h2>
-    <p>{{ post.create_time }}</p>
+{% extends 'base.html' %}
 
-    <div id="id_post_content">
-        <p>{{ post.content|safe }}</p>
+{% block title %}View Post{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-sm-5">
+        <h2>View Post</h2>
+        <div class="panel panel-default post-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ post.title }} - {{ post.create_time|date:"Y-m-d H:i:s" }}</h3>
+            </div>
+            <div class="panel-body" >
+                {{ post.content|safe }}
+            </div>
+        </div>
+
+
+        <!-- comment -->
+        <h2>comment</h2>
+        <div class="list-group comment-list" id="id_comment_list">
+            {% for comment in comments %}
+                <a href="#" class="list-group-item">
+                    <h4 class="list-group-item-heading">{{ comment.content }}</h4>
+                    <!-- <p class="list-group-item-text">...</p> -->
+                </a>
+            {% endfor %}
+        </div>
+
+        <!-- pagination -->
+        {% include 'pagination.html' %}
+
+        <div class="row">
+            <form method="POST" action="{% url 'board:new_comment' board_slug post.id %}">
+                {% csrf_token %}
+                <div class="col-sm-9">
+                    <input type="text" id="id_new_comment" name="comment_content" class="form-control"
+                           placeholder="Write comment..."/>
+                </div>
+                <div class="col-sm-3">
+                    <button type="submit" id="id_new_comment_submit" class="form-control btn btn-primary">댓글 달기</button>
+                </div>
+            </form>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-sm-6">
+                <button id="id_back_to_post_list_button" class="form-control btn btn-default"
+                        onclick="location.href='{% url 'board:post_list' board_slug %}'">목록</button>
+            </div>
+            <div class="col-sm-6">
+                <form method="POST" action="{% url 'board:delete_post' board_slug post.id %}">
+                    {% csrf_token %}
+                    <button id="id_delete_post_button" type="submit" class="form-control btn btn-danger">삭제</button>
+                </form>
+            </div>
+        </div>
     </div>
-
-
-    <!-- comment -->
-    <ul id="id_comment_list">
-        {% for comment in comments %}
-            <li>{{ comment.content }}</li>
-        {% endfor %}
-    </ul>
-
-    <!-- pagination -->
-    <div class="pagination">
-        {% if pages_info.pre_page != -1 %}
-            <span id="pre_page_list"><a href="?page={{ pages_info.pre_page }}">이전</a></span>
-        {% else %}
-            <span id="pre_page_list">이전</span>
-        {% endif %}
-
-        {% for page_num in pages_info.page_list %}
-            {% if page_num == pages_info.current_num %}
-                <strong id="current_page_num">{{ page_num }}</strong>
-            {% else %}
-                <a class="other_page_num" href="?page={{ page_num }}">{{ page_num }}</a>
-            {% endif %}
-        {% endfor %}
-
-        {% if pages_info.next_page != -1 %}
-            <span id="next_page_list"><a href="?page={{ pages_info.next_page }}">다음</a></span>
-        {% else %}
-            <span id="next_page_list">다음</span>
-        {% endif %}
-    </div>
-
-    <form method="POST" action="{% url 'board:new_comment' board_slug post.id %}">
-        {% csrf_token %}
-        <input type="text" id="id_new_comment" name="comment_content" placeholder="Write comment..."/>
-        <button type="submit" id="id_new_comment_submit">댓글 달기</button>
-    </form>
-
-    <button id="id_back_to_post_list_button" onclick="location.href='{% url 'board:post_list' board_slug %}'">목록</button>
-
-    <form method="POST" action="{% url 'board:delete_post' board_slug post.id %}">
-        {% csrf_token %}
-        <button id="id_delete_post_button" type="submit">삭제</button>
-    </form>
-</body>
-</html>
+</div>
+{% endblock %}
