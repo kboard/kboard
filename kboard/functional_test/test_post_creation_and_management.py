@@ -106,10 +106,11 @@ class NewVisitorTest(FunctionalTest):
         self.check_for_row_in_list_table('id_post_list_table', 'Title of This Post')
 
         # 지훈이는 게시글이 잘 작성 되었는지 확인하고 싶어졌다.
-        # '1: Title of This Post' 게시글을 클릭한다.
+        # 'Title of This Post' 게시글을 클릭한다.
         table = self.browser.find_element_by_id('id_post_list_table')
+
         rows = table.find_elements_by_css_selector('tbody > tr > td > a')
-        rows[0].click()
+        rows[1].click()
 
         # 게시글에 대한 자세한 내용을 보여주는 새로운 창이 뜬다.
         self.assertRegex(self.browser.current_url, '.+/default/(\d+)/')

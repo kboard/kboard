@@ -166,8 +166,8 @@ class PostPaginationTest(BoardAppTest):
         for post_counter in range(0, post_count):
             post = Post()
             post.board = self.default_board
-            post.title = 'POST TITLE ' + str(post_counter)
-            post.content = 'POST CONTENT ' + str(post_counter)
+            post.title = 'POST TITLE ' + str(PostPaginationTest.POST_COUNT_IN_PAGE - post_counter + 1)
+            post.content = 'POST CONTENT ' + str(PostPaginationTest.POST_COUNT_IN_PAGE - post_counter + 1)
             post.save()
 
     def add_pages(self, page_count):
@@ -175,8 +175,8 @@ class PostPaginationTest(BoardAppTest):
             for post_counter in range(1, PostPaginationTest.POST_COUNT_IN_PAGE+1):
                 post = Post()
                 post.board = self.default_board
-                post.title = 'POST TITLE ' + 'PAGE' + str(page_counter) + ' POST' + str(post_counter)
-                post.content = 'POST CONTENT ' + 'PAGE' + str(page_counter) + ' POST' + str(post_counter)
+                post.title = 'POST TITLE ' + 'PAGE' + str(page_count - page_counter + 1) + ' POST' + str(PostPaginationTest.POST_COUNT_IN_PAGE - post_counter + 1)
+                post.content = 'POST CONTENT ' + 'PAGE' + str(page_count - page_counter + 1) + ' POST' + str(PostPaginationTest.POST_COUNT_IN_PAGE - post_counter + 1)
                 post.save()
 
     def get_pagination_html(self, disabled, flag, href_page=-1):

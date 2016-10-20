@@ -19,7 +19,7 @@ def new_post(request, board_slug):
 
 
 def post_list(request, board_slug):
-    posts_all_list = Post.objects.filter(is_delete=False)
+    posts_all_list = Post.objects.filter(is_delete=False).order_by('-id')
     paginator = Paginator(posts_all_list, 10)  # Show 10 contacts per page
 
     page = request.GET.get('page')
