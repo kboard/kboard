@@ -38,12 +38,12 @@ class PaginationTest(FunctionalTest):
         current_page_num = pagination.find_element_by_id('current_page_num').text
         self.assertEqual(current_page_num, '1')
 
-        page_list = pagination.find_elements_by_class_name('other_page_num')
-        self.assertEqual(len(page_list), 1)
-        self.assertEqual(page_list[0].text, '2')
+        other_page_list = pagination.find_elements_by_class_name('other_page_num')
+        self.assertEqual(len(other_page_list), 1)
+        self.assertEqual(other_page_list[0].text, '2')
 
         # 페이지 번호 2를 클릭하였더니 두 번째 페이지로 넘어간다.
-        page_list[0].click()
+        other_page_list[0].click()
         self.assertRegex(self.browser.current_url, '.+/default/\?page=2')
 
         # 게시글은 3개만 보여진다.
@@ -56,9 +56,9 @@ class PaginationTest(FunctionalTest):
         current_page_num = pagination.find_element_by_id('current_page_num').text
         self.assertEqual(current_page_num, '2')
 
-        page_list = pagination.find_elements_by_class_name('other_page_num')
-        self.assertEqual(len(page_list), 1)
-        self.assertEqual(page_list[0].text, '1')
+        other_page_list = pagination.find_elements_by_class_name('other_page_num')
+        self.assertEqual(len(other_page_list), 1)
+        self.assertEqual(other_page_list[0].text, '1')
 
     def test_pagination_comment(self):
         self.browser.get(self.live_server_url)
