@@ -17,11 +17,10 @@ class PaginationTest(FunctionalTest):
         # 현재 2개의 게시글이 존재하고
         table = self.browser.find_element_by_id('id_post_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertEqual(len(rows), 2)
+        self.assertEqual(len(rows) - 1, 2)
 
         # 페이지 번호가 1로 표시된다
-        pagination = self.browser.find_element_by_class_name('pagination')
-        current_page_num = pagination.find_element_by_id('current_page_num').text
+        current_page_num = self.browser.find_element_by_css_selector('.current-page-num > a').text
         self.assertEqual(current_page_num, '1')
 
         # 11일 후 11개의 게시글이 추가됐다.
@@ -31,34 +30,32 @@ class PaginationTest(FunctionalTest):
         # 게시글은 10개만 보여진다.
         table = self.browser.find_element_by_id('id_post_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertEqual(len(rows), 10)
+        self.assertEqual(len(rows) - 1, 10)
 
         # 현재 페이지 번호는 그대로 1이고 페이지 번호 2가 추가된다
-        pagination = self.browser.find_element_by_class_name('pagination')
-        current_page_num = pagination.find_element_by_id('current_page_num').text
+        current_page_num = self.browser.find_element_by_css_selector('.current-page-num > a').text
         self.assertEqual(current_page_num, '1')
 
-        page_list = pagination.find_elements_by_class_name('other_page_num')
+        page_list = self.browser.find_elements_by_class_name('other-page-num')
         self.assertEqual(len(page_list), 1)
         self.assertEqual(page_list[0].text, '2')
 
         # 페이지 번호 2를 클릭하였더니 두 번째 페이지로 넘어간다.
-        page_list[0].click()
+        page_list[0].find_element_by_tag_name('a').click()
         self.assertRegex(self.browser.current_url, '.+/default/\?page=2')
 
         # 게시글은 3개만 보여진다.
         table = self.browser.find_element_by_id('id_post_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertEqual(len(rows), 3)
+        self.assertEqual(len(rows) - 1, 3)
 
         # 현재 페이지 번호는 2로 표시된다.
-        pagination = self.browser.find_element_by_class_name('pagination')
-        current_page_num = pagination.find_element_by_id('current_page_num').text
+        current_page_num = self.browser.find_element_by_css_selector('.current-page-num > a').text
         self.assertEqual(current_page_num, '2')
 
-        page_list = pagination.find_elements_by_class_name('other_page_num')
+        page_list = self.browser.find_elements_by_class_name('other-page-num')
         self.assertEqual(len(page_list), 1)
-        self.assertEqual(page_list[0].text, '1')
+        self.assertEqual(page_list[0].find_element_by_tag_name('a').text, '1')
 
     def test_pagination_comment(self):
         self.browser.get(self.live_server_url)
@@ -68,8 +65,8 @@ class PaginationTest(FunctionalTest):
         # 추가한 게시글로 이동
         table = self.browser.find_element_by_id('id_post_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        row = rows[0].find_element_by_tag_name('td')
-        row.find_element_by_tag_name('a').click()
+        row = rows[1].find_elements_by_tag_name('td')
+        row[1].find_element_by_tag_name('a').click()
 
         # 지훈이는 게시판에 댓글을 여러개 달아보려고 한다.
 
@@ -86,15 +83,14 @@ class PaginationTest(FunctionalTest):
 
         # 현재 2개의 댓글이 존재하고
         comment_list = self.browser.find_element_by_id("id_comment_list")
-        comments = comment_list.find_elements_by_tag_name('li')
+        comments = comment_list.find_elements_by_tag_name('a')
         self.assertEqual(len(comments), 2)
 
         # 가장 최신 댓글인 'comment 2'가 맨 위에 보인다.
         self.assertEqual(comments[0].text, 'comment 2')
 
         # 페이지 번호는 1로 표시된다
-        pagination = self.browser.find_element_by_class_name('pagination')
-        current_page_num = pagination.find_element_by_id('current_page_num').text
+        current_page_num = self.browser.find_element_by_css_selector('.current-page-num > a').text
         self.assertEqual(current_page_num, '1')
 
         # 5개의 댓글을 추가한다.
@@ -107,7 +103,7 @@ class PaginationTest(FunctionalTest):
 
         # 댓글은 5개만 보여진다.
         comment_list = self.browser.find_element_by_id("id_comment_list")
-        comments = comment_list.find_elements_by_tag_name('li')
+        comments = comment_list.find_elements_by_tag_name('a')
         self.assertEqual(len(comments), 5)
 
         # 가장 최신 댓글인 'comment 7'이 맨 위에 보인다.
@@ -117,20 +113,19 @@ class PaginationTest(FunctionalTest):
         self.assertEqual(comments[4].text, 'comment 3')
 
         # 현재 페이지 번호는 그대로 1이고 페이지 번호 2가 추가된다
-        pagination = self.browser.find_element_by_class_name('pagination')
-        current_page_num = pagination.find_element_by_id('current_page_num').text
+        current_page_num = self.browser.find_element_by_css_selector('.current-page-num > a').text
         self.assertEqual(current_page_num, '1')
 
-        other_page_list = pagination.find_elements_by_class_name('other_page_num')
+        other_page_list = self.browser.find_elements_by_class_name('other-page-num')
         self.assertEqual(len(other_page_list), 1)
         self.assertEqual(other_page_list[0].text, '2')
 
         # 페이지 번호 2를 클릭하였더니
-        other_page_list[0].click()
+        other_page_list[0].find_element_by_tag_name('a').click()
 
         # 게시글은 2개만 보여진다.
         comment_list = self.browser.find_element_by_id("id_comment_list")
-        comments = comment_list.find_elements_by_tag_name('li')
+        comments = comment_list.find_elements_by_tag_name('a')
         self.assertEqual(len(comments), 2)
 
         # 두번 째 페이지의 첫 번째 댓글인 'comment 2'가 맨 위에 보인다.
@@ -140,10 +135,9 @@ class PaginationTest(FunctionalTest):
         self.assertEqual(comments[len(comments)-1].text, 'comment 1')
 
         # 현재 페이지 번호는 2로 표시된다.
-        pagination = self.browser.find_element_by_class_name('pagination')
-        current_page_num = pagination.find_element_by_id('current_page_num').text
+        current_page_num = self.browser.find_element_by_css_selector('.current-page-num > a').text
         self.assertEqual(current_page_num, '2')
 
-        other_page_list = pagination.find_elements_by_class_name('other_page_num')
+        other_page_list = self.browser.find_elements_by_class_name('other-page-num')
         self.assertEqual(len(other_page_list), 1)
         self.assertEqual(other_page_list[0].text, '1')

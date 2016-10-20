@@ -9,7 +9,7 @@ class NewVisitorTest(FunctionalTest):
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, "".join([row.text for row in rows]))
 
-    def test_dafault_page(self):
+    def test_default_page(self):
         # 지훈이는 멋진 게시판 앱이 나왔다는 소식을 듣고
         # 해당 웹 사이트를 확인하러 간다.
         self.browser.get(self.live_server_url)
@@ -26,8 +26,9 @@ class NewVisitorTest(FunctionalTest):
         self.move_to_default_board()
 
         # 게시판에 아무런 글이 없다.
+        tbody = self.browser.find_element_by_tag_name('tbody')
         with self.assertRaises(NoSuchElementException):
-            self.browser.find_element_by_tag_name('tr')
+            tbody.find_element_by_tag_name('tr')
 
         # 지훈이는 다른 게시판이 있나 보려고 게시판 목록 버튼을 눌러 게시판 목록 페이지로 돌아간다.
         board_list_button = self.browser.find_element_by_id('board_list_button')
@@ -82,7 +83,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn('Post list', header_text)
 
         # 게시글 목록에 "1: Title of This Post"라고 씌여져 있다.
-        self.check_for_row_in_list_table('id_post_list_table', '1: Title of This Post')
+        self.check_for_row_in_list_table('id_post_list_table', 'Title of This Post')
 
         # 게시글 목록 하단에 있는 '글쓰기' 버튼을 눌러서 새 글을 작성한다.
         self.click_create_post_button()
@@ -101,15 +102,14 @@ class NewVisitorTest(FunctionalTest):
         self.assertRegex(self.browser.current_url, '.+/default/')
 
         # 게시글 목록에 두 개의 게시글 제목이 보인다.
-        self.check_for_row_in_list_table('id_post_list_table', '2: Title of Second Post')
-        self.check_for_row_in_list_table('id_post_list_table', '1: Title of This Post')
+        self.check_for_row_in_list_table('id_post_list_table', 'Title of Second Post')
+        self.check_for_row_in_list_table('id_post_list_table', 'Title of This Post')
 
         # 지훈이는 게시글이 잘 작성 되었는지 확인하고 싶어졌다.
         # '1: Title of This Post' 게시글을 클릭한다.
         table = self.browser.find_element_by_id('id_post_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        row = rows[0].find_element_by_tag_name('td')
-        row.find_element_by_tag_name('a').click()
+        rows = table.find_elements_by_css_selector('tbody > tr > td > a')
+        rows[0].click()
 
         # 게시글에 대한 자세한 내용을 보여주는 새로운 창이 뜬다.
         self.assertRegex(self.browser.current_url, '.+/default/(\d+)/')
@@ -117,12 +117,12 @@ class NewVisitorTest(FunctionalTest):
         # 게시글 페이지의 타이틀에는 'View Post'라고 씌여져 있다.
         self.assertIn('View Post', self.browser.title)
 
-        # 게시글의 제목에는 '1: Title of This Post'이 표시되고
-        post_title = self.browser.find_element_by_id('id_post_title').text
+        # 게시글의 제목에는 'Title of This Post'이 표시되고
+        post_title = self.browser.find_element_by_css_selector('.post-panel .panel-title').text
         self.assertIn('Title of This Post', post_title)
 
         # 게시글의 내용에는 'Content of This Post'이 표시된다.
-        post_content = self.browser.find_element_by_id('id_post_content').text
+        post_content = self.browser.find_element_by_css_selector('.post-panel .panel-body').text
         self.assertIn('Content of This Post', post_content)
 
         # 지훈이는 게시글 내용 하단의 댓글 란에 'This is a comment'라고 입력한다.
@@ -135,7 +135,7 @@ class NewVisitorTest(FunctionalTest):
 
         # 댓글이 달리고, 'This is a comment'라는 댓글이 보인다.
         comment_list = self.browser.find_element_by_id("id_comment_list")
-        comments = comment_list.find_elements_by_tag_name('li')
+        comments = comment_list.find_elements_by_css_selector('a > h4')
         self.assertEqual(comments[0].text, 'This is a comment')
 
         # 게시글과 댓글이 잘 작성된 것을 확인한 지훈이는 다시 게시글 목록을 보여주는 페이지로 돌아가기 위해 게시글 하단의 '목록' 버튼을 누른다.
