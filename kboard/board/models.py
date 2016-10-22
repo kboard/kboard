@@ -7,7 +7,7 @@ from django_summernote import fields as summer_fields
 
 class Board(models.Model):
     def get_absolute_url(self):
-        return reverse('board:post_list', args=[self.id])
+        return reverse('board:post_list', args=[self.slug])
 
     slug = models.TextField(default='', unique=True)
     name = models.TextField(default='')
@@ -31,3 +31,4 @@ class SummerNote(summer_model.Attachment):
 class Comment(models.Model):
     content = models.TextField(default='')
     post = models.ForeignKey(Post, null=True)
+    is_delete = models.BooleanField(default=False)
