@@ -1,8 +1,9 @@
-from django.db import models
-from django.utils import timezone
 from django.core.urlresolvers import reverse
-from django_summernote import models as summer_model
+from django.db import models
 from django_summernote import fields as summer_fields
+from django_summernote import models as summer_model
+
+from core.models import TimeStampedModel
 
 
 class Board(models.Model):
@@ -13,7 +14,7 @@ class Board(models.Model):
     name = models.TextField(default='')
 
 
-class Post(models.Model):
+class Post(TimeStampedModel):
     def get_absolute_url(self):
         return reverse('board:view_post', args=[self.board.slug, self.id])
 
@@ -21,14 +22,12 @@ class Post(models.Model):
     content = models.TextField(default='')
     board = models.ForeignKey(Board, null=True)
     is_delete = models.BooleanField(default=False)
-    create_time = models.DateTimeField(auto_now_add=True)
 
 
 class SummerNote(summer_model.Attachment):
     summer_field = summer_fields.SummernoteTextField(default='')
 
 
-class Comment(models.Model):
+class Comment(TimeStampedModel):
     content = models.TextField(default='')
     post = models.ForeignKey(Post, null=True)
-    create_time = models.DateTimeField(auto_now_add=True)
