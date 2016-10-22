@@ -18,14 +18,15 @@
 
         <!-- comment -->
         <h2>comment</h2>
-        <div class="list-group comment-list" id="id_comment_list">
-            {% for comment in comments %}
-                <a href="#" class="list-group-item">
-                    <h4 class="list-group-item-heading">{{ comment.content }}</h4>
-                    <!-- <p class="list-group-item-text">...</p> -->
-                </a>
-            {% endfor %}
-        </div>
+        <table id="id_comment_list" class="table table-condensed">
+            <tbody>
+                {% for comment in comments %}
+                    <tr>
+                        <td><a href="">{{ comment.content }}</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
         <!-- pagination -->
         {% include 'pagination.html' %}

@@ -136,7 +136,7 @@ class NewVisitorTest(FunctionalTest):
 
         # 댓글이 달리고, 'This is a comment'라는 댓글이 보인다.
         comment_list = self.browser.find_element_by_id("id_comment_list")
-        comments = comment_list.find_elements_by_css_selector('a > h4')
+        comments = comment_list.find_elements_by_tag_name('a')
         self.assertEqual(comments[0].text, 'This is a comment')
 
         # 게시글과 댓글이 잘 작성된 것을 확인한 지훈이는 다시 게시글 목록을 보여주는 페이지로 돌아가기 위해 게시글 하단의 '목록' 버튼을 누른다.
