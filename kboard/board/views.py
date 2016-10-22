@@ -58,7 +58,7 @@ def post_list(request, board_slug):
 
 def view_post(request, board_slug, post_id):
     post = Post.objects.get(id=post_id)
-    comments_all_list = Comment.objects.filter(post=post).order_by('-pk')
+    comments_all_list = Comment.objects.filter(post=post, is_delete=False).order_by('-id')
 
     paginator = Paginator(comments_all_list, 5)  # Show 10 contacts per page
 
@@ -112,6 +112,17 @@ def new_comment(request, board_slug, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
         Comment.objects.create(post=post, content=request.POST['comment_content'])
+        return redirect(post)
+
+
+@require_POST
+def delete_comment(request, post_id):
+    if request.method == 'POST':
+        post = Post.objects.get(id=post_id)
+        comment = Comment.objects.get(post=post, id=request.POST.get('comment_id'))
+        comment.is_delete = True
+        comment.save()
+
         return redirect(post)
 
 
