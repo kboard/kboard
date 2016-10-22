@@ -71,7 +71,7 @@ dev/files
 bower_components/
 
 # collectstatic
-static/
+/static/
 
 # Ignore Pycharm
 .idea/
