@@ -53,11 +53,20 @@ class CommentModelTest(BoardAppTest):
             content='some post content'
         )
 
-    def test_can_save_a_comment_in_a_particular_post(self):
-        Comment.objects.create(post=self.default_post, content='This is a comment')
-        saved_posts = Comment.objects.filter(post=self.default_post)
+    def test_can_save_and_delete_a_comment_in_a_particular_post(self):
+        comment = Comment.objects.create(post=self.default_post, content='This is a comment')
+        saved_comments = Comment.objects.filter(post=self.default_post)
 
-        self.assertEqual(saved_posts.count(), 1)
+        self.assertEqual(saved_comments.count(), 1)
+
+        comment.is_delete = True
+        saved_comments = Comment.objects.filter(post=self.default_post)
+
+        self.assertEqual(saved_comments.count(), 1)
+
+        deleted_comments = Comment.objects.filter(post=self.default_post, is_delete=True)
+
+        self.assertEqual(deleted_comments.count(), 0)
 
     def test_can_pass_comment_POST_data(self):
         self.client.post(reverse('board:new_comment',args=[self.default_board.slug, self.default_post.id]), data={
@@ -97,3 +106,4 @@ class CommentModelTest(BoardAppTest):
         second_saved_comment = saved_comments[1]
         self.assertEqual(first_saved_comment.content, 'This is a first comment')
         self.assertEqual(second_saved_comment.content, 'This is a second comment')
+
