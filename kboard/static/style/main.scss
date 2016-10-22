@@ -1,0 +1,12 @@
+body {
+  div.row {
+    table.table {
+      td {
+        &.remove-item {
+          width: 15px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
