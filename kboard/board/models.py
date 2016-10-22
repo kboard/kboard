@@ -31,3 +31,4 @@ class SummerNote(summer_model.Attachment):
 class Comment(models.Model):
     content = models.TextField(default='')
     post = models.ForeignKey(Post, null=True)
+    create_time = models.DateTimeField(auto_now_add=True)
