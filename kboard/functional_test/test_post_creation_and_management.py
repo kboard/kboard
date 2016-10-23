@@ -139,6 +139,10 @@ class NewVisitorTest(FunctionalTest):
         comments = comment_list.find_elements_by_tag_name('a')
         self.assertEqual(comments[0].text, 'This is a comment')
 
+        # 댓글에는 작성된 시간이 표시된다.
+        comment_date = comment_list.find_element_by_class_name('comment-date')
+        self.assertRegex(comment_date.text, '\d{4}-[01]\d-[0-3]\d [0-2]\d:[0-5]\d:[0-5]\d')
+
         # 게시글과 댓글이 잘 작성된 것을 확인한 지훈이는 다시 게시글 목록을 보여주는 페이지로 돌아가기 위해 게시글 하단의 '목록' 버튼을 누른다.
         create_post_button = self.browser.find_element_by_id('id_back_to_post_list_button')
         create_post_button.click()
