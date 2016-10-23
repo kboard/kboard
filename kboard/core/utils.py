@@ -1,12 +1,12 @@
 
 
-def get_page_info(objs, page_size=10):
+def get_pages_nav_info(objs, nav_chunk_size=10):
+    """ this function return navigation bar info of paginated objects """
     # page list
-    page_list_count = page_size
     first_page_in_list = (
-        int((objs.number - 1) / page_list_count)) * page_list_count + 1
+        int((objs.number - 1) / nav_chunk_size)) * nav_chunk_size + 1
     end_page_in_list = (
-        int((objs.number - 1) / page_list_count) + 1) * page_list_count
+        int((objs.number - 1) / nav_chunk_size) + 1) * nav_chunk_size
     page_list = []
     for page_num in range(first_page_in_list, end_page_in_list + 1):
         if page_num > objs.paginator.num_pages:
@@ -16,7 +16,7 @@ def get_page_info(objs, page_size=10):
     pre_page = -1
     next_page = -1
 
-    if objs.number > page_list_count:
+    if objs.number > nav_chunk_size:
         pre_page = first_page_in_list - 1
 
     if end_page_in_list < objs.paginator.num_pages:
