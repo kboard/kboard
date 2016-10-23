@@ -23,6 +23,7 @@
                 {% for comment in comments %}
                     <tr>
                         <td><a href="">{{ comment.content }}</a></td>
+                        <td class="comment-date">{{ comment.create_time|date:"Y-m-d H:i:s" }}</td>
                         <td class="remove-item remove-comment" comment-id="{{ comment.id }}">
                             <i class="glyphicon glyphicon-remove"></i>
                         </td>

@@ -139,6 +139,11 @@ class NewVisitorTest(FunctionalTest):
         comments = comment_list.find_elements_by_tag_name('a')
         self.assertEqual(comments[0].text, 'This is a comment')
 
+        # 댓글에는 작성된 시간이 표시된다.
+        comment_date = comment_list.find_element_by_class_name('comment-date')
+        self.assertRegex(comment_date.text, '\d{4}-[01]\d-[0-3]\d [0-2]\d:[0-5]\d:[0-5]\d')
+
+        # 게시글과 댓글이 잘 작성된 것을 확인한 지훈이는 다시 게시글 목록을 보여주는 페이지로 돌아가기 위해 게시글 하단의 '목록' 버튼을 누른다.
         # 댓글이 마음에 들지 않아 다시 삭제하려고 한다. 댓글 우측에 x 버튼을 누른다.
         remove_comment_button = self.browser.find_element_by_css_selector("#id_comment_list .remove-comment")
         remove_comment_button.click()
