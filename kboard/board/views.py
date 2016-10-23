@@ -5,6 +5,7 @@ from django.views.decorators.http import require_POST
 
 from board.models import Post, Board, Comment
 from board.forms import PostForm
+from core.utils import get_pages_nav_info
 
 
 def new_post(request, board_slug):
@@ -32,26 +33,7 @@ def post_list(request, board_slug):
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts = paginator.page(paginator.num_pages)
 
-    # page list
-    page_list_count = 10
-    first_page_in_list = (int((posts.number - 1) / page_list_count)) * page_list_count + 1
-    end_page_in_list = (int((posts.number - 1) / page_list_count) + 1) * page_list_count
-    page_list = []
-    for page_num in range(first_page_in_list, end_page_in_list+1):
-        if page_num > posts.paginator.num_pages:
-            break
-        page_list.append(page_num)
-
-    pre_page = -1
-    next_page = -1
-
-    if posts.number > page_list_count:
-        pre_page = first_page_in_list - 1
-
-    if end_page_in_list < posts.paginator.num_pages:
-        next_page = end_page_in_list + 1
-
-    pages_info = {'pre_page': pre_page, 'page_list': page_list, 'current_num': posts.number, 'next_page': next_page}
+    pages_info = get_pages_nav_info(posts, nav_chunk_size=10)
 
     return render(request, 'post_list.html', {'posts': posts, 'board_slug': board_slug, 'pages_info': pages_info})
 
