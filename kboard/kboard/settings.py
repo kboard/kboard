@@ -126,7 +126,7 @@ SUMMERNOTE_CONFIG = {}
 PIPELINE = {
     'PIPELINE_ENABLED': False,
     'COMPILERS': {
-        'pipeline.compilers.sass.SASSCompiler',
+        'libsasscompiler.LibSassCompiler',
     },
     'JAVASCRIPT': {
         'main': {
