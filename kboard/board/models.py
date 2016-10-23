@@ -22,6 +22,8 @@ class Post(TimeStampedModel):
     content = models.TextField(default='')
     board = models.ForeignKey(Board, null=True)
     is_delete = models.BooleanField(default=False)
+    create_time = models.DateTimeField(auto_now_add=True)
+    page_view_count = models.IntegerField(default=0)
 
 
 class SummerNote(summer_model.Attachment):

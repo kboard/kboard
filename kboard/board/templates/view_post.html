@@ -9,6 +9,7 @@
         <div class="panel panel-default post-panel">
             <div class="panel-heading">
                 <h3 class="panel-title">{{ post.title }} - {{ post.create_time|date:"Y-m-d H:i:s" }}</h3>
+                <h4>조회수: {{ post.page_view_count }}</h4>
             </div>
             <div class="panel-body" >
                 {{ post.content|safe }}
