@@ -149,10 +149,53 @@ class NewCommentTest(BoardAppTest):
             content='some post content'
         )
 
-    def test_can_not_access_with_GET(self):
+    def test_can_create_comment(self):
+        self.client.post(
+            reverse('board:new_comment', args=[self.default_board.slug, self.default_post.id]),
+            data={'comment_content': 'This is a comment'}
+        )
+
+        self.assertEqual(Comment.objects.count(), 1)
+
+    def test_can_not_access_with_GET_on_new_comment(self):
         response = self.client.get(
             reverse('board:new_comment', args=[self.default_board.slug, self.default_post.id]),
             data={'comment_content': 'This is a comment'}
+        )
+
+        self.assertEqual(response.status_code, 405)
+
+
+class DeleteCommentTest(BoardAppTest):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.default_post = Post.objects.create(
+            board=cls.default_board,
+            title='some post title',
+            content='some post content'
+        )
+
+    def test_can_delete_comment(self):
+        comment = Comment.objects.create(
+            post=self.default_post,
+            content='This is a comment'
+        )
+        response = self.client.post(
+            reverse('board:delete_comment', args=[self.default_post.id]),
+            data={'comment_id': comment.id}
+        )
+
+        self.assertEqual(Comment.objects.count(), 1)
+
+    def test_can_not_access_with_GET_on_delete_comment(self):
+        comment = Comment.objects.create(
+            post=self.default_post,
+            content='This is a comment'
+        )
+        response = self.client.get(
+            reverse('board:delete_comment', args=[self.default_post.id]),
+            data={'comment_id': comment.id}
         )
 
         self.assertEqual(response.status_code, 405)

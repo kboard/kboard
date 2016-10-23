@@ -24,10 +24,18 @@
                     <tr>
                         <td><a href="">{{ comment.content }}</a></td>
                         <td class="comment-date">{{ comment.create_time|date:"Y-m-d H:i:s" }}</td>
+                        <td class="remove-item remove-comment" comment-id="{{ comment.id }}">
+                            <i class="glyphicon glyphicon-remove"></i>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
+
+        <form method="POST" action="{% url 'board:delete_comment' post.id %}" id="comment_delete_form">
+            {% csrf_token %}
+            <input type="hidden" name="comment_id"/>
+        </form>
 
         <!-- pagination -->
         {% include 'pagination.html' %}

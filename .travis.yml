@@ -7,11 +7,15 @@ python:
 install:
   - "pip install flake8"
   - "pip install -r requirements.txt"
+  - "npm install -g bower"
+  - "\\curl -L https://get.rvm.io | bash -s stable"
+  - "gem install sass"
 
 before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3 # give xvfb some time to start
+  - "cd kboard && python manage.py bower install && cd .."
   - "cd kboard && flake8 --exit-zero . && cd .."
 
 # command to run tests

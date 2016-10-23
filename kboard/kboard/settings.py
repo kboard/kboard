@@ -44,9 +44,8 @@ INSTALLED_APPS = [
 ]
 
 STATICFILES_FINDERS = [
-    # 'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'djangobower.finders.BowerFinder',
     'pipeline.finders.PipelineFinder'
 ]
 
@@ -125,17 +124,26 @@ SUMMERNOTE_CONFIG = {}
 
 # pipeline settings
 PIPELINE = {
-    # e.g.
-    #
-    # 'JS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
-    # 'JAVASCRIPT': {
-    #     'stats': {
-    #         'source_filenames': [
-    #             'js/hello.js'
-    #         ],
-    #         'output_filename': 'js/stats.js',
-    #     }
-    # }
+    'PIPELINE_ENABLED': False,
+    'COMPILERS': {
+        'pipeline.compilers.sass.SASSCompiler',
+    },
+    'JAVASCRIPT': {
+        'main': {
+            'source_filenames': [
+              'js/*.js'
+            ],
+            'output_filename': 'js/vendor.js'
+        },
+    },
+    'STYLESHEETS': {
+        'main': {
+            'source_filenames': [
+              'style/*.scss'
+            ],
+            'output_filename': 'style/main.css'
+        },
+    },
 }
 
 # Internationalization
@@ -157,11 +165,12 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
+STATIC_ROOT = os.path.join(BASE_DIR, '../static')
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BOWER_COMPONENTS_ROOT, 'bower_components'),
 ]
 
 MEDIA_URL = '/media/'
