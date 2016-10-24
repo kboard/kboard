@@ -33,9 +33,9 @@ def post_list(request, board_slug):
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts = paginator.page(paginator.num_pages)
 
-    pages_info = get_pages_nav_info(posts, nav_chunk_size=10)
+    pages_nav_info = get_pages_nav_info(posts, nav_chunk_size=10)
 
-    return render(request, 'post_list.html', {'posts': posts, 'board_slug': board_slug, 'pages_info': pages_info})
+    return render(request, 'post_list.html', {'posts': posts, 'board_slug': board_slug, 'pages_nav_info': pages_nav_info})
 
 
 def view_post(request, board_slug, post_id):
@@ -54,10 +54,10 @@ def view_post(request, board_slug, post_id):
         # If page is out of range (e.g. 9999), deliver last page of results.
         comments = paginator.page(paginator.num_pages)
 
-    pages_info = get_pages_nav_info(comments, nav_chunk_size=10)
+    pages_nav_info = get_pages_nav_info(comments, nav_chunk_size=10)
 
     return render(request, 'view_post.html',
-                  {'post': post, 'board_slug': board_slug, 'comments': comments, 'pages_info': pages_info})
+                  {'post': post, 'board_slug': board_slug, 'comments': comments, 'pages_nav_info': pages_nav_info})
 
 
 def board_list(request):

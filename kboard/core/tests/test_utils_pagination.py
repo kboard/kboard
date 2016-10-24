@@ -14,10 +14,10 @@ class TestUtilsPagiation(TestCase):
         paginator = Paginator(object_list, PAGE_SIZE)
         objs = paginator.page(TEST_LOAD_PAGE)
         page_nav_info = get_pages_nav_info(objs, nav_chunk_size=NAV_PAGE_CHUNK_SIZE)
-        check_elements = ('pre_page', 'page_list', 'current_num', 'next_page')
+        check_elements = ('pre_nav_page', 'page_list', 'current_num', 'next_nav_page')
         for check_element in check_elements:
             self.assertIn(check_element, page_nav_info)
-        self.assertEqual(5, page_nav_info['pre_page'])
+        self.assertEqual(5, page_nav_info['pre_nav_page'])
         self.assertEqual([6,7,8,9,10], page_nav_info['page_list'])
         self.assertEqual(10, page_nav_info['current_num'])
-        self.assertEqual(11, page_nav_info['next_page'])
+        self.assertEqual(11, page_nav_info['next_nav_page'])
