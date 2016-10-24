@@ -40,10 +40,11 @@ def post_list(request, board_slug):
 
 
 def view_post(request, board_slug, post_id):
-    post = Post.objects.get(id=post_id)
-    comments_all_list = Comment.objects.filter(post=post, is_delete=False).order_by('-id')
     non_sliced_query_set = Post.objects.filter(pk__in=post_id)
     non_sliced_query_set.update(page_view_count=F('page_view_count') + 1)
+
+    post = Post.objects.get(id=post_id)
+    comments_all_list = Comment.objects.filter(post=post, is_delete=False).order_by('-id')
     paginator = Paginator(comments_all_list, 5)  # Show 10 contacts per page
 
     page = request.GET.get('page')
