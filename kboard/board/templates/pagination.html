@@ -7,10 +7,10 @@
         {% endif %}
 
         {% for page_num in pages_nav_info.page_list %}
-            {% if page_num == pages_nav_info.current_num %}
+            {% if page_num == pages_nav_info.current_page_num %}
                 <li class="disabled current-page-num"><a>{{ page_num }}</a></li>
             {% else %}
-                <li class="other-page-num"><a href="?page={{page_num}}">{{ page_num }}</a></li>
+                <li class="other-page-num"><a href="?page={{ page_num }}">{{ page_num }}</a></li>
             {% endif %}
         {% endfor %}
 
