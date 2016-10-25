@@ -1,21 +1,21 @@
 <nav aria-label="Page navigation">
     <ul class="pagination">
-        {% if pages_info.pre_page != -1 %}
-            <li><a href="?page={{ pages_info.pre_page }}"><span>이전</span></a></li>
+        {% if pages_nav_info.pre_nav_page != -1 %}
+            <li><a href="?page={{ pages_nav_info.pre_nav_page }}"><span>이전</span></a></li>
         {% else %}
             <li class="disabled"><a><span>이전</span></a></li>
         {% endif %}
 
-        {% for page_num in pages_info.page_list %}
-            {% if page_num == pages_info.current_num %}
+        {% for page_num in pages_nav_info.page_list %}
+            {% if page_num == pages_nav_info.current_num %}
                 <li class="disabled current-page-num"><a>{{ page_num }}</a></li>
             {% else %}
                 <li class="other-page-num"><a href="?page={{page_num}}">{{ page_num }}</a></li>
             {% endif %}
         {% endfor %}
 
-        {% if pages_info.next_page != -1 %}
-            <li><a href="?page={{ pages_info.next_page }}"><span>다음</span></a></li>
+        {% if pages_nav_info.next_nav_page != -1 %}
+            <li><a href="?page={{ pages_nav_info.next_nav_page }}"><span>다음</span></a></li>
         {% else %}
             <li class="disabled"><a><span>다음</span></a></li>
         {% endif %}
