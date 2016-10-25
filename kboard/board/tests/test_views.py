@@ -103,6 +103,11 @@ class PostViewTest(BoardAppTest):
         response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, post_.id]))
         self.assertTemplateUsed(response, 'view_post.html')
 
+    def test_use_pagination_template(self):
+        post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, post_.id]))
+        self.assertTemplateUsed(response, 'pagination.html')
+
     def test_passes_correct_post_to_template(self):
         other_post = Post.objects.create(
             board=self.default_board,
