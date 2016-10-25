@@ -54,6 +54,16 @@ class CreatePostPageTest(BoardAppTest):
         self.assertIn('turtle2', response.content.decode())
 
 
+class PostListViewTest(BoardAppTest):
+    def test_use_post_list_template(self):
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
+        self.assertTemplateUsed(response, 'post_list.html')
+
+    def test_use_pagination_template(self):
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
+        self.assertTemplateUsed(response, 'pagination.html')
+
+
 class DeletePostTest(BoardAppTest):
     def test_delete_only_post_selected_to_delete(self):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
