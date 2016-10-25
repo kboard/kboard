@@ -242,17 +242,17 @@ class PostPaginationTest(BoardAppTest):
             if disabled:
                 return '<li class="disabled"><a><span>이전</span></a></li>'
             else:
-                return '<li><a href="?page='+str(href_page)+'"><span>이전</span></a></li>'
+                return '<li><a href="?page='+str(href_page)+'&query="><span>이전</span></a></li>'
         elif flag == 'next':
             if disabled:
                 return '<li class="disabled"><a><span>다음</span></a></li>'
             else:
-                return '<li><a href="?page='+str(href_page)+'"><span>다음</span></a></li>'
+                return '<li><a href="?page='+str(href_page)+'&query="><span>다음</span></a></li>'
         elif isinstance(flag, int):
             if disabled:
                 return '<li class="disabled current-page-num"><a>'+str(flag)+'</a></li>'
             else:
-                return '<li class="other-page-num"><a href="?page='+str(flag)+'">'+str(flag)+'</a></li>'
+                return '<li class="other-page-num"><a href="?page='+str(flag)+'&query=">'+str(flag)+'</a></li>'
 
     def test_pre_and_next_button_is_not_clicked_if_page_count_less_than_11(self):
         PostPaginationTest.add_pages(self, 1)
@@ -364,17 +364,17 @@ class CommentPaginationTest(BoardAppTest):
             if disabled:
                 return '<li class="disabled"><a><span>이전</span></a></li>'
             else:
-                return '<li><a href="?page='+str(href_page)+'"><span>이전</span></a></li>'
+                return '<li><a href="?page='+str(href_page)+'&query="><span>이전</span></a></li>'
         elif flag == 'next':
             if disabled:
                 return '<li class="disabled"><a><span>다음</span></a></li>'
             else:
-                return '<li><a href="?page='+str(href_page)+'"><span>다음</span></a></li>'
+                return '<li><a href="?page='+str(href_page)+'&query="><span>다음</span></a></li>'
         elif isinstance(flag, int):
             if disabled:
                 return '<li class="disabled current-page-num"><a>'+str(flag)+'</a></li>'
             else:
-                return '<li class="other-page-num"><a href="?page='+str(flag)+'">'+str(flag)+'</a></li>'
+                return '<li class="other-page-num"><a href="?page='+str(flag)+'&query=">'+str(flag)+'</a></li>'
 
     def test_pre_and_next_button_is_not_clicked_if_page_count_less_than_11(self):
         default_post = Post.objects.create(title='title', content='content', board=self.default_board)
