@@ -39,12 +39,12 @@ class PostModelTest(BoardAppTest):
         delete_post.content = 'post of content'
         delete_post.save()
 
-        self.assertEqual(delete_post.is_delete, False)
+        self.assertEqual(delete_post.is_deleted, False)
         self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
 
         delete_post.refresh_from_db()
 
-        self.assertEqual(delete_post.is_delete, True)
+        self.assertEqual(delete_post.is_deleted, True)
 
     def test_can_search_by_keyword(self):
         repeat = 5
@@ -76,12 +76,12 @@ class CommentModelTest(BoardAppTest):
 
         self.assertEqual(saved_comments.count(), 1)
 
-        comment.is_delete = True
+        comment.is_deleted = True
         saved_comments = Comment.objects.filter(post=self.default_post)
 
         self.assertEqual(saved_comments.count(), 1)
 
-        deleted_comments = Comment.objects.filter(post=self.default_post, is_delete=True)
+        deleted_comments = Comment.objects.filter(post=self.default_post, is_deleted=True)
 
         self.assertEqual(deleted_comments.count(), 0)
 
@@ -131,4 +131,4 @@ class CommentModelTest(BoardAppTest):
         comment_.save()
         time_after_create = datetime.now(timezone.utc)
 
-        self.assertGreater(timedelta(minutes=1), time_after_create - comment_.create_time)
+        self.assertGreater(timedelta(minutes=1), time_after_create - comment_.created_time)
