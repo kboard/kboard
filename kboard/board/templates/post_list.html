@@ -17,7 +17,7 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td><a href="{% url 'board:view_post' board_slug post.id %}">{{ post.title }}</a></td>
-                    <td>{{ post.create_time|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ post.created_time|date:"Y-m-d H:i:s" }}</td>
                 </tr>
             {% endfor %}
         </tbody>

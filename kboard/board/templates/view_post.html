@@ -7,7 +7,7 @@
     <h2>View Post</h2>
     <div class="panel panel-default post-panel">
         <div class="panel-heading">
-            <h3 class="panel-title">{{ post.title }} - {{ post.create_time|date:"Y-m-d H:i:s" }}</h3>
+            <h3 class="panel-title">{{ post.title }} - {{ post.created_time|date:"Y-m-d H:i:s" }}</h3>
             <h4 id="id_page_view_count">조회수: {{ post.page_view_count }}</h4>
         </div>
         <div class="panel-body" >
@@ -23,7 +23,7 @@
             {% for comment in comments %}
                 <tr>
                     <td><a href="">{{ comment.content }}</a></td>
-                    <td class="comment-date">{{ comment.create_time|date:"Y-m-d H:i:s" }}</td>
+                    <td class="comment-date">{{ comment.created_time|date:"Y-m-d H:i:s" }}</td>
                     <td class="remove-item remove-comment" comment-id="{{ comment.id }}">
                         <i class="glyphicon glyphicon-remove"></i>
                     </td>
