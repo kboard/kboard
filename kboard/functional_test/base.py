@@ -38,6 +38,11 @@ class FunctionalTest(StaticLiveServerTestCase):
         submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
         submit_button.click()
 
+    def check_for_row_in_list_table(self, id, row_text):
+        table = self.browser.find_element_by_id(id)
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, "".join([row.text for row in rows]))
+
     # 게시글의 내용을 입력하기 위해 contentbox를 가져오는 작업
     def get_contentbox(self):
         iframe = self.browser.find_elements_by_tag_name('iframe')[0]

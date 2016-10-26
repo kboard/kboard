@@ -46,6 +46,19 @@ class PostModelTest(BoardAppTest):
 
         self.assertEqual(delete_post.is_delete, True)
 
+    def test_can_search_by_keyword(self):
+        repeat = 5
+        for i in range(repeat):
+            Post.objects.create(
+                board=self.default_board,
+                title='Hi, ' + str(i),
+                content='content'
+            )
+
+        self.assertEqual(Post.objects.search('Hi').count(), repeat)
+        self.assertEqual(Post.objects.search('1').count(), 1)
+        self.assertEqual(Post.objects.search('2').count(), 1)
+
 
 class CommentModelTest(BoardAppTest):
     @classmethod
