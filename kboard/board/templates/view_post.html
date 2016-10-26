@@ -39,7 +39,7 @@
         </form>
 
         <!-- pagination -->
-        {% include 'pagination.html' %}
+        {% include 'pagination.html' with pages_nav_info=pages_nav_info query="" %}
 
         <div class="row">
             <form method="POST" action="{% url 'board:new_comment' board_slug post.id %}">

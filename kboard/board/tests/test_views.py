@@ -15,7 +15,7 @@ class CreatePostPageTest(BoardAppTest):
         response_decoded = self.remove_csrf(response.content.decode())
         self.assertIn('settings_id_fields', response_decoded)
 
-    def test_post_list_can_save_a_POST_request(self):
+    def test_new_post_can_save_a_POST_request(self):
         request = HttpRequest()
         request.method = 'POST'
         request.POST['post_title_text'] = 'NEW POST TITLE'
@@ -43,6 +43,8 @@ class CreatePostPageTest(BoardAppTest):
         new_post(request, self.default_board.slug)
         self.assertEqual(Post.objects.count(), 0)
 
+
+class PostListTest(BoardAppTest):
     def test_post_list_page_displays_all_list_titles(self):
         Post.objects.create(board=self.default_board, title='turtle1', content='slow')
         Post.objects.create(board=self.default_board, title='turtle2', content='slowslow')
@@ -52,6 +54,19 @@ class CreatePostPageTest(BoardAppTest):
 
         self.assertIn('turtle1', response.content.decode())
         self.assertIn('turtle2', response.content.decode())
+
+    def test_post_list_page_displays_searched_post(self):
+        repeat = 5
+        for i in range(repeat):
+            Post.objects.create(
+                board=self.default_board,
+                title='Hi, ' + str(i),
+                content='content'
+            )
+
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]), data={'query': 1})
+        self.assertContains(response, 'Hi, 1')
+        self.assertNotContains(response, 'Hi, 0')
 
 
 class DeletePostTest(BoardAppTest):
@@ -227,17 +242,17 @@ class PostPaginationTest(BoardAppTest):
             if disabled:
                 return '<li class="disabled"><a><span>이전</span></a></li>'
             else:
-                return '<li><a href="?page='+str(href_page)+'"><span>이전</span></a></li>'
+                return '<li><a href="?page='+str(href_page)+'&query="><span>이전</span></a></li>'
         elif flag == 'next':
             if disabled:
                 return '<li class="disabled"><a><span>다음</span></a></li>'
             else:
-                return '<li><a href="?page='+str(href_page)+'"><span>다음</span></a></li>'
+                return '<li><a href="?page='+str(href_page)+'&query="><span>다음</span></a></li>'
         elif isinstance(flag, int):
             if disabled:
                 return '<li class="disabled current-page-num"><a>'+str(flag)+'</a></li>'
             else:
-                return '<li class="other-page-num"><a href="?page='+str(flag)+'">'+str(flag)+'</a></li>'
+                return '<li class="other-page-num"><a href="?page='+str(flag)+'&query=">'+str(flag)+'</a></li>'
 
     def test_pre_and_next_button_is_not_clicked_if_page_count_less_than_11(self):
         PostPaginationTest.add_pages(self, 1)
@@ -349,17 +364,17 @@ class CommentPaginationTest(BoardAppTest):
             if disabled:
                 return '<li class="disabled"><a><span>이전</span></a></li>'
             else:
-                return '<li><a href="?page='+str(href_page)+'"><span>이전</span></a></li>'
+                return '<li><a href="?page='+str(href_page)+'&query="><span>이전</span></a></li>'
         elif flag == 'next':
             if disabled:
                 return '<li class="disabled"><a><span>다음</span></a></li>'
             else:
-                return '<li><a href="?page='+str(href_page)+'"><span>다음</span></a></li>'
+                return '<li><a href="?page='+str(href_page)+'&query="><span>다음</span></a></li>'
         elif isinstance(flag, int):
             if disabled:
                 return '<li class="disabled current-page-num"><a>'+str(flag)+'</a></li>'
             else:
-                return '<li class="other-page-num"><a href="?page='+str(flag)+'">'+str(flag)+'</a></li>'
+                return '<li class="other-page-num"><a href="?page='+str(flag)+'&query=">'+str(flag)+'</a></li>'
 
     def test_pre_and_next_button_is_not_clicked_if_page_count_less_than_11(self):
         default_post = Post.objects.create(title='title', content='content', board=self.default_board)
