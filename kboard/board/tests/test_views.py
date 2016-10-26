@@ -88,16 +88,16 @@ class DeletePostTest(BoardAppTest):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
         other_post = Post.objects.create(board=self.default_board, title='other post', content='content')
 
-        self.assertEqual(delete_post.is_delete, False)
-        self.assertEqual(other_post.is_delete, False)
+        self.assertEqual(delete_post.is_deleted, False)
+        self.assertEqual(other_post.is_deleted, False)
 
         self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
 
         delete_post.refresh_from_db()
         other_post.refresh_from_db()
 
-        self.assertEqual(delete_post.is_delete, True)
-        self.assertEqual(other_post.is_delete, False)
+        self.assertEqual(delete_post.is_deleted, True)
+        self.assertEqual(other_post.is_deleted, False)
 
     def test_redirect_to_post_list_after_delete_post(self):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
@@ -108,12 +108,12 @@ class DeletePostTest(BoardAppTest):
     def test_does_not_view_but_remain_in_DB_after_delete(self):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
 
-        viewed_list = Post.objects.filter(is_delete=False)
+        viewed_list = Post.objects.filter(is_deleted=False)
         self.assertIn(delete_post, viewed_list)
 
         self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
 
-        viewed_list = Post.objects.filter(is_delete=False)
+        viewed_list = Post.objects.filter(is_deleted=False)
         self.assertNotIn(delete_post, viewed_list)
 
         all_list = Post.objects.all()
