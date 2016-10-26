@@ -3,7 +3,7 @@ from django.db import models
 from django_summernote import fields as summer_fields
 from django_summernote import models as summer_model
 
-from core.models import TimeStampedModel
+from core.models import TimeStampedModel, PostManager
 
 
 class Board(models.Model):
@@ -17,6 +17,8 @@ class Board(models.Model):
 class Post(TimeStampedModel):
     def get_absolute_url(self):
         return reverse('board:view_post', args=[self.board.slug, self.id])
+
+    objects = PostManager()
 
     title = models.TextField(default='')
     content = models.TextField(default='')

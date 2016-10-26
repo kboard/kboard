@@ -4,11 +4,6 @@ from .base import FunctionalTest
 
 
 class NewVisitorTest(FunctionalTest):
-    def check_for_row_in_list_table(self, id, row_text):
-        table = self.browser.find_element_by_id(id)
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn(row_text, "".join([row.text for row in rows]))
-
     def test_default_page(self):
         # 지훈이는 멋진 게시판 앱이 나왔다는 소식을 듣고
         # 해당 웹 사이트를 확인하러 간다.

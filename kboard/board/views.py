@@ -21,9 +21,15 @@ def new_post(request, board_slug):
 
 
 def post_list(request, board_slug):
-    posts_all_list = Post.objects.filter(is_delete=False).order_by('-id')
-    paginator = Paginator(posts_all_list, 10)  # Show 10 contacts per page
+    # search
+    query = request.GET.get('query', '')
+    if query:
+        posts = Post.objects.filter(is_delete=False).order_by('-id').search(query)
+    else:
+        posts = Post.objects.filter(is_delete=False).order_by('-id')
 
+    # pagination
+    paginator = Paginator(posts, 10)  # Show 10 contacts per page
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -36,7 +42,12 @@ def post_list(request, board_slug):
 
     pages_nav_info = get_pages_nav_info(posts, nav_chunk_size=10)
 
-    return render(request, 'post_list.html', {'posts': posts, 'board_slug': board_slug, 'pages_nav_info': pages_nav_info})
+    return render(request, 'post_list.html', {
+        'posts': posts,
+        'board_slug': board_slug,
+        'pages_nav_info': pages_nav_info,
+        'query': query
+    })
 
 
 def view_post(request, board_slug, post_id):
@@ -45,8 +56,8 @@ def view_post(request, board_slug, post_id):
 
     post = Post.objects.get(id=post_id)
     comments_all_list = Comment.objects.filter(post=post, is_delete=False).order_by('-id')
-    paginator = Paginator(comments_all_list, 5)  # Show 10 contacts per page
 
+    paginator = Paginator(comments_all_list, 5)  # Show 5 contacts per page
     page = request.GET.get('page')
     try:
         comments = paginator.page(page)
