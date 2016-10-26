@@ -23,24 +23,23 @@ class TestUtilsPagiation(TestCase):
         self.assertEqual(10, page_nav_info['current_page_num'])
         self.assertEqual(11, page_nav_info['next_nav_page'])
 
-    def test_pre_and_next_nav_pages_are_not_exist_if_page_count_less_than_nav_page_chunck_size(self):
+    def test_test_pages_nav_info_when_page_count_less_than_nav_page_chunck_size(self):
         page_nav_info = TestUtilsPagiation.get_pages_nav_info(PAGE_SIZE=5, NAV_PAGE_CHUNK_SIZE=5, TEST_LOAD_PAGE=3,
                                                               OBJS_SIZE=17)
 
         self.assertEqual(-1, page_nav_info['pre_nav_page'])
+        self.assertEqual([1, 2, 3, 4], page_nav_info['page_list'])
+        self.assertEqual(3, page_nav_info['current_page_num'])
         self.assertEqual(-1, page_nav_info['next_nav_page'])
 
-    def test_pre_nav_page_exist(self):
-        page_nav_info = TestUtilsPagiation.get_pages_nav_info(PAGE_SIZE=5, NAV_PAGE_CHUNK_SIZE=5, TEST_LOAD_PAGE=6,
-                                                              OBJS_SIZE=31)
+    def test_last_pages_nav_info(self):
+        page_nav_info = TestUtilsPagiation.get_pages_nav_info(PAGE_SIZE=5, NAV_PAGE_CHUNK_SIZE=5, TEST_LOAD_PAGE=8,
+                                                              OBJS_SIZE=38)
 
         self.assertEqual(5, page_nav_info['pre_nav_page'])
-
-    def test_next_nav_page_exist(self):
-        page_nav_info = TestUtilsPagiation.get_pages_nav_info(PAGE_SIZE=5, NAV_PAGE_CHUNK_SIZE=5, TEST_LOAD_PAGE=1,
-                                                              OBJS_SIZE=31)
-
-        self.assertEqual(6, page_nav_info['next_nav_page'])
+        self.assertEqual([6, 7, 8], page_nav_info['page_list'])
+        self.assertEqual(8, page_nav_info['current_page_num'])
+        self.assertEqual(-1, page_nav_info['next_nav_page'])
 
     def test_page_size_1_case(self):
         page_nav_info = TestUtilsPagiation.get_pages_nav_info(PAGE_SIZE=1, NAV_PAGE_CHUNK_SIZE=5, TEST_LOAD_PAGE=8,
