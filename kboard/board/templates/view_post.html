@@ -3,68 +3,66 @@
 {% block title %}View Post{% endblock %}
 
 {% block body %}
-<div class="row">
-    <div class="col-sm-5">
-        <h2>View Post</h2>
-        <div class="panel panel-default post-panel">
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ post.title }} - {{ post.create_time|date:"Y-m-d H:i:s" }}</h3>
-                <h4 id="id_page_view_count">조회수: {{ post.page_view_count }}</h4>
-            </div>
-            <div class="panel-body" >
-                {{ post.content|safe }}
-            </div>
+<div class="col-sm-5">
+    <h2>View Post</h2>
+    <div class="panel panel-default post-panel">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ post.title }} - {{ post.create_time|date:"Y-m-d H:i:s" }}</h3>
+            <h4 id="id_page_view_count">조회수: {{ post.page_view_count }}</h4>
         </div>
+        <div class="panel-body" >
+            {{ post.content|safe }}
+        </div>
+    </div>
 
 
-        <!-- comment -->
-        <h2>comment</h2>
-        <table id="id_comment_list" class="table table-condensed">
-            <tbody>
-                {% for comment in comments %}
-                    <tr>
-                        <td><a href="">{{ comment.content }}</a></td>
-                        <td class="comment-date">{{ comment.create_time|date:"Y-m-d H:i:s" }}</td>
-                        <td class="remove-item remove-comment" comment-id="{{ comment.id }}">
-                            <i class="glyphicon glyphicon-remove"></i>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <!-- comment -->
+    <h2>comment</h2>
+    <table id="id_comment_list" class="table table-condensed">
+        <tbody>
+            {% for comment in comments %}
+                <tr>
+                    <td><a href="">{{ comment.content }}</a></td>
+                    <td class="comment-date">{{ comment.create_time|date:"Y-m-d H:i:s" }}</td>
+                    <td class="remove-item remove-comment" comment-id="{{ comment.id }}">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-        <form method="POST" action="{% url 'board:delete_comment' post.id %}" id="comment_delete_form">
+    <form method="POST" action="{% url 'board:delete_comment' post.id %}" id="comment_delete_form">
+        {% csrf_token %}
+        <input type="hidden" name="comment_id"/>
+    </form>
+
+    <!-- pagination -->
+    {% include 'pagination.html' %}
+
+    <div class="row">
+        <form method="POST" action="{% url 'board:new_comment' board_slug post.id %}">
             {% csrf_token %}
-            <input type="hidden" name="comment_id"/>
+            <div class="col-sm-9">
+                <input type="text" id="id_new_comment" name="comment_content" class="form-control"
+                       placeholder="Write comment..."/>
+            </div>
+            <div class="col-sm-3">
+                <button type="submit" id="id_new_comment_submit" class="form-control btn btn-primary">댓글 달기</button>
+            </div>
         </form>
-
-        <!-- pagination -->
-        {% include 'pagination.html' %}
-
-        <div class="row">
-            <form method="POST" action="{% url 'board:new_comment' board_slug post.id %}">
-                {% csrf_token %}
-                <div class="col-sm-9">
-                    <input type="text" id="id_new_comment" name="comment_content" class="form-control"
-                           placeholder="Write comment..."/>
-                </div>
-                <div class="col-sm-3">
-                    <button type="submit" id="id_new_comment_submit" class="form-control btn btn-primary">댓글 달기</button>
-                </div>
-            </form>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-6">
+            <button id="id_back_to_post_list_button" class="form-control btn btn-default"
+                    onclick="location.href='{% url 'board:post_list' board_slug %}'">목록</button>
         </div>
-        <br/>
-        <div class="row">
-            <div class="col-sm-6">
-                <button id="id_back_to_post_list_button" class="form-control btn btn-default"
-                        onclick="location.href='{% url 'board:post_list' board_slug %}'">목록</button>
-            </div>
-            <div class="col-sm-6">
-                <form method="POST" action="{% url 'board:delete_post' board_slug post.id %}">
-                    {% csrf_token %}
-                    <button id="id_delete_post_button" type="submit" class="form-control btn btn-danger">삭제</button>
-                </form>
-            </div>
+        <div class="col-sm-6">
+            <form method="POST" action="{% url 'board:delete_post' board_slug post.id %}">
+                {% csrf_token %}
+                <button id="id_delete_post_button" type="submit" class="form-control btn btn-danger">삭제</button>
+            </form>
         </div>
     </div>
 </div>

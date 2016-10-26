@@ -3,14 +3,12 @@
 {% block title %}Board List{% endblock %}
 
 {% block body %}
-<div class="row">
-    <div class="col-sm-12">
-        <h2>Board List</h2>
-        <table id="id_board_list_table" class="table table-condensed">
-            {% for board in boards %}
-                <tr><td><a href="{% url 'board:post_list' board.slug %}">{{ board.name }}</a></td></tr>
-            {% endfor %}
-        </table>
-    </div>
+<div class="col-sm-5">
+    <h2>Board List</h2>
+    <table id="id_board_list_table" class="table table-condensed">
+        {% for board in boards %}
+            <tr><td><a href="{% url 'board:post_list' board.slug %}">{{ board.name }}</a></td></tr>
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}
