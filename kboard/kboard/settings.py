@@ -174,3 +174,9 @@ STATICFILES_DIRS = [
 ]
 
 MEDIA_URL = '/media/'
+
+
+# Registration
+# https://django-registration.readthedocs.io/en/2.1.2/index.html
+
+ACCOUNT_ACTIVATION_DAYS = 7
