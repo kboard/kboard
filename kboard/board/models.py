@@ -23,7 +23,7 @@ class Post(TimeStampedModel):
     title = models.TextField(default='')
     content = models.TextField(default='')
     board = models.ForeignKey(Board, null=True)
-    is_delete = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
     page_view_count = models.IntegerField(default=0)
 
 
@@ -34,4 +34,4 @@ class SummerNote(summer_model.Attachment):
 class Comment(TimeStampedModel):
     content = models.TextField(default='')
     post = models.ForeignKey(Post, null=True)
-    is_delete = models.BooleanField(default=False)
+    is_deleted = models.BooleanField(default=False)
