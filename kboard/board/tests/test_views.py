@@ -112,19 +112,20 @@ class DeletePostTest(BoardAppTest):
 
 
 class PostViewTest(BoardAppTest):
-    def test_uses_list_template(self):
+    def get_response_for_some_post_view(self):
         post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
-        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, post_.id]))
+        return self.client.get(reverse('board:view_post', args=[self.default_board.slug, post_.id]))
+
+    def test_uses_list_template(self):
+        response = PostViewTest.get_response_for_some_post_view(self)
         self.assertTemplateUsed(response, 'view_post.html')
 
     def test_use_pagination_template(self):
-        post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
-        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, post_.id]))
+        response = PostViewTest.get_response_for_some_post_view(self)
         self.assertTemplateUsed(response, 'pagination.html')
 
     def test_view_default_page_list_when_post_open(self):
-        post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
-        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, post_.id]))
+        response = PostViewTest.get_response_for_some_post_view(self)
         self.assertContains(response, '<li class="disabled current-page-num"><a>'+str(1)+'</a></li>')
 
     def test_passes_correct_post_to_template(self):
