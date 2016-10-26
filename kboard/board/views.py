@@ -21,12 +21,13 @@ def new_post(request, board_slug):
 
 
 def post_list(request, board_slug):
+    board = Board.objects.get(slug=board_slug)
     # search
     query = request.GET.get('query', '')
     if query:
-        posts = Post.objects.filter(is_delete=False).order_by('-id').search(query)
+        posts = Post.objects.get_from_board(board).remain().search(query).order_by('-id')
     else:
-        posts = Post.objects.filter(is_delete=False).order_by('-id')
+        posts = Post.objects.get_from_board(board).remain().order_by('-id')
 
     # pagination
     paginator = Paginator(posts, 10)  # Show 10 contacts per page
@@ -51,11 +52,11 @@ def post_list(request, board_slug):
 
 
 def view_post(request, board_slug, post_id):
-    non_sliced_query_set = Post.objects.filter(pk__in=post_id)
+    non_sliced_query_set = Post.objects.filter(id=post_id)
     non_sliced_query_set.update(page_view_count=F('page_view_count') + 1)
 
     post = Post.objects.get(id=post_id)
-    comments_all_list = Comment.objects.filter(post=post, is_delete=False).order_by('-id')
+    comments_all_list = Comment.objects.filter(post=post, is_deleted=False).order_by('-id')
 
     paginator = Paginator(comments_all_list, 5)  # Show 5 contacts per page
     page = request.GET.get('page')
@@ -97,7 +98,7 @@ def delete_comment(request, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
         comment = Comment.objects.get(post=post, id=request.POST.get('comment_id'))
-        comment.is_delete = True
+        comment.is_deleted = True
         comment.save()
 
         return redirect(post)
@@ -107,7 +108,7 @@ def delete_comment(request, post_id):
 def delete_post(request, board_slug, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
-        post.is_delete = True
-        post.save(update_fields=['is_delete'])
+        post.is_deleted = True
+        post.save(update_fields=['is_deleted'])
 
         return redirect(reverse('board:post_list', args=[board_slug]))
