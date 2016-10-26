@@ -3,16 +3,21 @@
 {% block title %}Create Post{% endblock %}
 
 {% block body %}
-<div class="row">
-    <div class="col-sm-6">
-        <h2>Create Post</h2>
-        <form method="post" action="{% url 'board:new_post' board.slug %}">
-            {% csrf_token %}
+<div class="col-sm-7">
+    <h2>Create Post</h2>
+    <form method="post" action="{% url 'board:new_post' board.slug %}">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-sm-12">
             <input id="id_new_post_title" class="form-control" name="post_title_text" placeholder="Insert Title"/><br/>
             {{ form | safe }}
-            <br/>
-            <button type="submit" class="form-control btn btn-primary">등록</button>
-        </form>
+        </div>
     </div>
+    <div class="row">
+        <div class="col-sm-3 col-sm-offset-9">
+            <button type="submit" class="form-control btn btn-primary">등록</button>
+        </div>
+    </div>
+    </form>
 </div>
 {% endblock %}

@@ -3,48 +3,45 @@
 {% block title %}Post list{% endblock %}
 
 {% block body %}
-<div class="row">
-    <div class="col-sm-5">
-        <h2>Post list</h2>
-        <table id="id_post_list_table" class="table table-condensed">
-            <thead>
+<<<<<<< HEAD
+<div class="col-sm-5">
+    <h2>Post list</h2>
+    <table id="id_post_list_table" class="table table-condensed">
+        <thead>
+            <th>#</th>
+            <th>제목</th>
+            <th>날짜</th>
+        </thead>
+        <tbody>
+            {% for post in posts %}
                 <tr>
-                    <th>#</th>
-                    <th>제목</th>
-                    <th>날짜</th>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'board:view_post' board_slug post.id %}">{{ post.title }}</a></td>
+                    <td>{{ post.create_time|date:"Y-m-d H:i:s" }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for post in posts %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td><a href="{% url 'board:view_post' board_slug post.id %}">{{ post.title }}</a></td>
-                        <td>{{ post.create_time|date:"Y-m-d H:i:s" }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+            {% endfor %}
+        </tbody>
+    </table>
 
-        <!-- pagination -->
-        {% include 'pagination.html' with pages_nav_info=pages_nav_info query=query%}
-        <div class="row">
-            <div class="col-sm-7">
-                <form class="form-inline" method="GET">
-                    <input type="text" class="form-control input-search" name="query"
-                           placeholder="검색어 입력" value="{{query}}">
-                    <button type="submit" class="btn btn-default btn-search">
-                        <i class="glyphicon glyphicon-search"></i>
-                    </button>
-                </form>
-            </div>
-            <div class="col-sm-2">
-                <button type="button" id="id_create_post_button" class="form-control btn btn-primary"
-                        onclick="location.href='{% url 'board:new_post' board_slug %}'">글쓰기</button>
-            </div>
-            <div class="col-sm-3">
-                <button type="button" id="board_list_button" class="form-control btn btn-default"
-                        onclick="location.href='{% url 'board:board_list' %}'">게시판 목록</button>
-            </div>
+    <!-- pagination -->
+    {% include 'pagination.html' %}
+    <div class="row">
+        <div class="col-sm-6">
+            <form class="form-inline" method="GET">
+                <input type="text" class="form-control input-search" name="query"
+                       placeholder="검색어 입력" value="{{query}}">
+                <button type="submit" class="btn btn-default btn-search">
+                    <i class="glyphicon glyphicon-search"></i>
+                </button>
+            </form>
+        </div>
+        <div class="col-sm-3">
+            <button type="button" id="id_create_post_button" class="form-control btn btn-primary"
+                    onclick="location.href='{% url 'board:new_post' board_slug %}'">글쓰기</button>
+        </div>
+        <div class="col-sm-3">
+            <button type="button" id="board_list_button" class="form-control btn btn-default"
+                    onclick="location.href='{% url 'board:board_list' %}'">게시판 목록</button>
         </div>
     </div>
 </div>

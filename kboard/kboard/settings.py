@@ -111,10 +111,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Bower settings
 BOWER_INSTALLED_APPS = [
-    'jquery',
+    'jquery#^2.2',
     'react',
     'react-bootstrap',
-    'bootstrap'
+    'bootswatch-dist#simplex'
 ]
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, '../')
 
