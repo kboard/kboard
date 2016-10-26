@@ -63,6 +63,10 @@ class PostListViewTest(BoardAppTest):
         response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
         self.assertTemplateUsed(response, 'pagination.html')
 
+    def test_view_default_page_list_when_board_open(self):
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
+        self.assertContains(response, '<li class="disabled current-page-num"><a>'+str(1)+'</a></li>')
+
 
 class DeletePostTest(BoardAppTest):
     def test_delete_only_post_selected_to_delete(self):
@@ -117,6 +121,11 @@ class PostViewTest(BoardAppTest):
         post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
         response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, post_.id]))
         self.assertTemplateUsed(response, 'pagination.html')
+
+    def test_view_default_page_list_when_post_open(self):
+        post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
+        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, post_.id]))
+        self.assertContains(response, '<li class="disabled current-page-num"><a>'+str(1)+'</a></li>')
 
     def test_passes_correct_post_to_template(self):
         other_post = Post.objects.create(
@@ -214,145 +223,3 @@ class DeleteCommentTest(BoardAppTest):
         )
 
         self.assertEqual(response.status_code, 405)
-
-
-# test setting : page_list_count = 10
-class PostPaginationTest(BoardAppTest):
-    POST_COUNT_IN_PAGE = 10
-
-    def add_posts(self, post_count):
-        for post_counter in range(0, post_count):
-            post = Post()
-            post.board = self.default_board
-            post.title = 'POST TITLE ' + str(PostPaginationTest.POST_COUNT_IN_PAGE - post_counter + 1)
-            post.content = 'POST CONTENT ' + str(PostPaginationTest.POST_COUNT_IN_PAGE - post_counter + 1)
-            post.save()
-
-    def add_pages(self, page_count):
-        for page_counter in range(1, page_count+1):
-            for post_counter in range(1, PostPaginationTest.POST_COUNT_IN_PAGE+1):
-                post = Post()
-                post.board = self.default_board
-                post.title = 'POST TITLE ' + 'PAGE' + str(page_count - page_counter + 1) + ' POST' + str(PostPaginationTest.POST_COUNT_IN_PAGE - post_counter + 1)
-                post.content = 'POST CONTENT ' + 'PAGE' + str(page_count - page_counter + 1) + ' POST' + str(PostPaginationTest.POST_COUNT_IN_PAGE - post_counter + 1)
-                post.save()
-
-    def get_pagination_html(self, disabled, flag, href_page=-1):
-        if flag == 'previous':
-            if disabled:
-                return '<li class="disabled"><a><span>이전</span></a></li>'
-            else:
-                return '<li><a href="?page='+str(href_page)+'"><span>이전</span></a></li>'
-        elif flag == 'next':
-            if disabled:
-                return '<li class="disabled"><a><span>다음</span></a></li>'
-            else:
-                return '<li><a href="?page='+str(href_page)+'"><span>다음</span></a></li>'
-        elif isinstance(flag, int):
-            if disabled:
-                return '<li class="disabled current-page-num"><a>'+str(flag)+'</a></li>'
-            else:
-                return '<li class="other-page-num"><a href="?page='+str(flag)+'">'+str(flag)+'</a></li>'
-
-    # page count = 1
-
-    def test_view_default_page_1_for_post_count_1_when_start_board(self):
-        PostPaginationTest.add_pages(self, 1)
-        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
-        self.assertContains(response, self.get_pagination_html(True, 1))
-
-    # page count = 2
-    def test_view_default_page_list_for_page_count_2_when_start_board(self):
-        PostPaginationTest.add_pages(self, 2)
-        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
-        self.assertContains(response, self.get_pagination_html(True, 1))
-
-    def test_change_page_with_click_page_1(self):
-        PostPaginationTest.add_pages(self, 2)
-        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug])+'?page=1')
-        self.assertContains(response, 'POST TITLE PAGE1 POST1')
-        self.assertContains(response, self.get_pagination_html(True, 1))
-        self.assertContains(response, self.get_pagination_html(False, 2))
-
-    def test_change_page_with_click_page_2(self):
-        PostPaginationTest.add_pages(self, 2)
-        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug])+'?page=2')
-        self.assertContains(response, 'POST TITLE PAGE2 POST1')
-        self.assertContains(response, self.get_pagination_html(False, 1))
-        self.assertContains(response, self.get_pagination_html(True, 2))
-
-    # page count = 13
-    def test_view_default_page_list_for_page_count_13_when_start_board(self):
-        PostPaginationTest.add_pages(self, 13)
-        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]))
-        self.assertContains(response, self.get_pagination_html(True, 1))
-
-
-# test setting : comment_list_count = 10
-class CommentPaginationTest(BoardAppTest):
-    POST_COUNT_IN_PAGE = 5
-
-    def add_pages(self, page_count, post):
-        for page_counter in range(1, page_count+1):
-            for comment_counter in range(1, CommentPaginationTest.POST_COUNT_IN_PAGE+1):
-                comment = Comment()
-                comment.post = post
-                comment.content = 'PAGE' + str(page_count - page_counter + 1) + \
-                                  ' COMMENT' + str(CommentPaginationTest.POST_COUNT_IN_PAGE - comment_counter + 1)
-                comment.save()
-
-    def get_pagination_html(self, disabled, flag, href_page=-1):
-        if flag == 'previous':
-            if disabled:
-                return '<li class="disabled"><a><span>이전</span></a></li>'
-            else:
-                return '<li><a href="?page='+str(href_page)+'"><span>이전</span></a></li>'
-        elif flag == 'next':
-            if disabled:
-                return '<li class="disabled"><a><span>다음</span></a></li>'
-            else:
-                return '<li><a href="?page='+str(href_page)+'"><span>다음</span></a></li>'
-        elif isinstance(flag, int):
-            if disabled:
-                return '<li class="disabled current-page-num"><a>'+str(flag)+'</a></li>'
-            else:
-                return '<li class="other-page-num"><a href="?page='+str(flag)+'">'+str(flag)+'</a></li>'
-
-    # page count = 1
-
-    def test_view_default_page_1_for_post_count_1_when_start_board(self):
-        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
-        CommentPaginationTest.add_pages(self, 1, default_post)
-        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
-        self.assertContains(response, self.get_pagination_html(True, 1))
-
-    # page count = 2
-    def test_view_default_page_list_for_page_count_2_when_start_board(self):
-        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
-        CommentPaginationTest.add_pages(self, 2, default_post)
-        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
-        self.assertContains(response, self.get_pagination_html(True, 1))
-
-    def test_change_page_with_click_page_1(self):
-        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
-        CommentPaginationTest.add_pages(self, 2, default_post)
-        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id])+'?page=1')
-        self.assertContains(response, 'PAGE1 COMMENT1')
-        self.assertContains(response, self.get_pagination_html(True, 1))
-        self.assertContains(response, self.get_pagination_html(False, 2))
-
-    def test_change_page_with_click_page_2(self):
-        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
-        CommentPaginationTest.add_pages(self, 2, default_post)
-        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id])+'?page=2')
-        self.assertContains(response, 'PAGE2 COMMENT1')
-        self.assertContains(response, self.get_pagination_html(False, 1))
-        self.assertContains(response, self.get_pagination_html(True, 2))
-
-
-    # page count = 13
-    def test_view_default_page_list_for_page_count_13_when_start_board(self):
-        default_post = Post.objects.create(title='title', content='content', board=self.default_board)
-        CommentPaginationTest.add_pages(self, 13, default_post)
-        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, default_post.id]))
-        self.assertContains(response, self.get_pagination_html(True, 1))
