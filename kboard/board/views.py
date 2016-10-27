@@ -79,6 +79,19 @@ def view_post(request, board_slug, post_id):
     })
 
 
+def edit_post(request, post_id):
+    post = Post.objects.get(id=post_id)
+
+    if request.method == 'POST':
+        post.title = request.POST['post_title_text']
+        post.content = request.POST.get('fields', '')
+        post.save()
+        return redirect(post.board)
+
+    form = PostForm(initial={'fields': post.content})
+    return render(request, 'edit_post.html', {'post': post, 'form': form})
+
+
 def board_list(request):
     board_count = Board.objects.all().count()
     if board_count == 0:

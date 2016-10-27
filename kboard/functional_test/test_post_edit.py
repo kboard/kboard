@@ -22,26 +22,26 @@ class EditPostTest(FunctionalTest):
         self.assertIn('Edit Post', self.browser.title)
         self.assertIn('Edit Post', header_text)
 
-        # 작성되어 있던 게시글이 보인다.
+        # 작성되어 있던 게시글의 제목인 'jango'가 보인다.
         titlebox = self.browser.find_element_by_id('id_edit_post_title')
         self.assertEqual(titlebox.get_attribute('value'), 'jango')
 
-        contentbox = self.get_contentbox()
-        self.assertEqual(contentbox.text, 'Hello jango')
-
-        # 제목과 내용의 'jango' 오타를 올바르게 수정한다.
+        # 'django'로 수정한다.
         titlebox.clear()
         titlebox.send_keys('django')
 
+        # 게시글의 내용은 'Hello jango'으로 보인다.
+        contentbox = self.get_contentbox()
+        self.assertEqual(contentbox.text, 'Hello jango')
+
+        # 'Hello django'로 수정한다.
         contentbox.clear()
         contentbox.send_keys('Hello django')
         self.browser.switch_to.default_content()
 
         # '확인' 버튼을 누른다.
         submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
-        response = submit_button.click()
+        submit_button.click()
 
         # 제목과 내용이 변경된 것을 확인한다.
-        table = self.browser.find_element_by_id('id_post_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertContains(self, response, 'django')
+        self.check_for_row_in_list_table('id_post_list_table', 'django')
