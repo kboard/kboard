@@ -86,7 +86,7 @@ class CommentModelTest(BoardAppTest):
         self.assertEqual(deleted_comments.count(), 0)
 
     def test_can_pass_comment_POST_data(self):
-        self.client.post(reverse('board:new_comment',args=[self.default_board.slug, self.default_post.id]), data={
+        self.client.post(reverse('board:new_comment', args=[self.default_post.id]), data={
             'comment_content': 'This is a comment'
         })
 
