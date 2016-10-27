@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from django.core.mail import send_mail
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -180,3 +181,20 @@ MEDIA_URL = '/media/'
 # https://django-registration.readthedocs.io/en/2.1.2/index.html
 
 ACCOUNT_ACTIVATION_DAYS = 7
+
+
+# Email Activation
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'chsun0303@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ.get('KBOARD_PASSWORD')
+SERVER_EMAIL = 'chsun0303@gmail.com'
+DEFAULT_FROM_MAIL = 'KBoard_Developer'
+
+
+# When Login success, go to main page.
+
+LOGIN_REDIRECT_URL = "/"
