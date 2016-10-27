@@ -91,7 +91,7 @@ class DeletePostTest(BoardAppTest):
         self.assertEqual(delete_post.is_deleted, False)
         self.assertEqual(other_post.is_deleted, False)
 
-        self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
+        self.client.post(reverse('board:delete_post', args=[delete_post.id]))
 
         delete_post.refresh_from_db()
         other_post.refresh_from_db()
@@ -101,7 +101,7 @@ class DeletePostTest(BoardAppTest):
 
     def test_redirect_to_post_list_after_delete_post(self):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
-        response = self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
+        response = self.client.post(reverse('board:delete_post', args=[delete_post.id]))
 
         self.assertRedirects(response, reverse('board:post_list', args=[self.default_board.slug]))
 
@@ -111,7 +111,7 @@ class DeletePostTest(BoardAppTest):
         viewed_list = Post.objects.filter(is_deleted=False)
         self.assertIn(delete_post, viewed_list)
 
-        self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
+        self.client.post(reverse('board:delete_post', args=[delete_post.id]))
 
         viewed_list = Post.objects.filter(is_deleted=False)
         self.assertNotIn(delete_post, viewed_list)
@@ -121,7 +121,7 @@ class DeletePostTest(BoardAppTest):
 
     def test_can_not_access_with_GET(self):
         delete_post = Post.objects.create(board=self.default_board, title='delete post', content='content')
-        response = self.client.get(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
+        response = self.client.get(reverse('board:delete_post', args=[delete_post.id]))
 
         self.assertEqual(response.status_code, 405)
 
