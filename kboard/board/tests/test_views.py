@@ -129,7 +129,7 @@ class DeletePostTest(BoardAppTest):
 class PostViewTest(BoardAppTest):
     def get_response_for_some_post_view(self):
         post_ = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
-        return self.client.get(reverse('board:view_post', args=[self.default_board.slug, post_.id]))
+        return self.client.get(reverse('board:view_post', args=[post_.id]))
 
     def test_uses_list_template(self):
         response = PostViewTest.get_response_for_some_post_view(self)
@@ -155,7 +155,7 @@ class PostViewTest(BoardAppTest):
             content='correct post of content'
         )
 
-        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, correct_post.id]))
+        response = self.client.get(reverse('board:view_post', args=[correct_post.id]))
 
         self.assertEqual(response.context['post'], correct_post)
 
@@ -171,7 +171,7 @@ class PostViewTest(BoardAppTest):
             content='correct post of content'
         )
 
-        response = self.client.get(reverse('board:view_post', args=[self.default_board.slug, correct_post.id]))
+        response = self.client.get(reverse('board:view_post', args=[correct_post.id]))
 
         self.assertContains(response, 'correct post of title')
         self.assertContains(response, 'correct post of content')
