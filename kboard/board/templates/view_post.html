@@ -41,7 +41,7 @@
     {% include 'pagination.html' with pages_nav_info=pages_nav_info query="" %}
 
     <div class="row">
-        <form method="POST" action="{% url 'board:new_comment' post.board.slug post.id %}">
+        <form method="POST" action="{% url 'board:new_comment' post.id %}">
             {% csrf_token %}
             <div class="col-sm-9">
                 <input type="text" id="id_new_comment" name="comment_content" class="form-control"

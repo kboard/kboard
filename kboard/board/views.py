@@ -89,7 +89,7 @@ def board_list(request):
 
 
 @require_POST
-def new_comment(request, board_slug, post_id):
+def new_comment(request, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
         Comment.objects.create(post=post, content=request.POST['comment_content'])
