@@ -16,7 +16,7 @@ class Board(models.Model):
 
 class Post(TimeStampedModel):
     def get_absolute_url(self):
-        return reverse('board:view_post', args=[self.board.slug, self.id])
+        return reverse('board:view_post', args=[self.id])
 
     objects = PostManager()
 

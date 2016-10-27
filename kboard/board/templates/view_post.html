@@ -41,7 +41,7 @@
     {% include 'pagination.html' with pages_nav_info=pages_nav_info query="" %}
 
     <div class="row">
-        <form method="POST" action="{% url 'board:new_comment' board_slug post.id %}">
+        <form method="POST" action="{% url 'board:new_comment' post.board.slug post.id %}">
             {% csrf_token %}
             <div class="col-sm-9">
                 <input type="text" id="id_new_comment" name="comment_content" class="form-control"
@@ -56,7 +56,7 @@
     <div class="row">
         <div class="col-sm-6">
             <button id="id_back_to_post_list_button" class="form-control btn btn-default"
-                    onclick="location.href='{% url 'board:post_list' board_slug %}'">목록</button>
+                    onclick="location.href='{% url 'board:post_list' post.board.slug %}'">목록</button>
         </div>
         <div class="col-sm-6">
             <button id="id_edit_post_button" class="form-control btn btn-default"

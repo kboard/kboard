@@ -51,7 +51,7 @@ def post_list(request, board_slug):
     })
 
 
-def view_post(request, board_slug, post_id):
+def view_post(request, post_id):
     non_sliced_query_set = Post.objects.filter(id=post_id)
     non_sliced_query_set.update(page_view_count=F('page_view_count') + 1)
 
@@ -73,7 +73,6 @@ def view_post(request, board_slug, post_id):
 
     return render(request, 'view_post.html', {
         'post': post,
-        'board_slug': board_slug,
         'comments': comments,
         'pages_nav_info': pages_nav_info
     })

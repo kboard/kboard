@@ -108,7 +108,7 @@ class NewVisitorTest(FunctionalTest):
         rows[1].click()
 
         # 게시글에 대한 자세한 내용을 보여주는 새로운 창이 뜬다.
-        self.assertRegex(self.browser.current_url, '.+/default/(\d+)/')
+        self.assertRegex(self.browser.current_url, '.+/(\d+)/')
 
         # 게시글 페이지의 타이틀에는 'View Post'라고 씌여져 있다.
         self.assertIn('View Post', self.browser.title)
