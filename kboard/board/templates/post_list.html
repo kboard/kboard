@@ -3,7 +3,6 @@
 {% block title %}Post list{% endblock %}
 
 {% block body %}
-<<<<<<< HEAD
 <div class="col-sm-5">
     <h2>Post list</h2>
     <table id="id_post_list_table" class="table table-condensed">
@@ -16,7 +15,7 @@
             {% for post in posts %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td><a href="{% url 'board:view_post' board_slug post.id %}">{{ post.title }}</a></td>
+                    <td><a href="{% url 'board:view_post' post.id %}">{{ post.title }}</a></td>
                     <td>{{ post.created_time|date:"Y-m-d H:i:s" }}</td>
                 </tr>
             {% endfor %}
