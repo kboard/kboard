@@ -1,10 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% load i18n %}
 
-</body>
-</html>
+{% block content %}
+<form method="post" action=".">
+  {% csrf_token %}
+  {{ form.as_p }}
+
+  <input type="submit" value="{% trans 'Submit' %}" />
+</form>
+{% endblock %}
