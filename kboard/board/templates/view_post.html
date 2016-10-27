@@ -59,7 +59,7 @@
                     onclick="location.href='{% url 'board:post_list' board_slug %}'">목록</button>
         </div>
         <div class="col-sm-6">
-            <form method="POST" action="{% url 'board:delete_post' board_slug post.id %}">
+            <form method="POST" action="{% url 'board:delete_post' post.id %}">
                 {% csrf_token %}
                 <button id="id_delete_post_button" type="submit" class="form-control btn btn-danger">삭제</button>
             </form>

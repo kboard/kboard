@@ -71,8 +71,12 @@ def view_post(request, board_slug, post_id):
 
     pages_nav_info = get_pages_nav_info(comments, nav_chunk_size=10)
 
-    return render(request, 'view_post.html',
-                  {'post': post, 'board_slug': board_slug, 'comments': comments, 'pages_nav_info': pages_nav_info})
+    return render(request, 'view_post.html', {
+        'post': post,
+        'board_slug': board_slug,
+        'comments': comments,
+        'pages_nav_info': pages_nav_info
+    })
 
 
 def board_list(request):
@@ -105,10 +109,10 @@ def delete_comment(request, post_id):
 
 
 @require_POST
-def delete_post(request, board_slug, post_id):
+def delete_post(request, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
         post.is_deleted = True
         post.save(update_fields=['is_deleted'])
 
-        return redirect(reverse('board:post_list', args=[board_slug]))
+        return redirect(post.board)
