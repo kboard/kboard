@@ -40,7 +40,7 @@ class PostModelTest(BoardAppTest):
         delete_post.save()
 
         self.assertEqual(delete_post.is_deleted, False)
-        self.client.post(reverse('board:delete_post', args=[self.default_board.slug, delete_post.id]))
+        self.client.post(reverse('board:delete_post', args=[delete_post.id]))
 
         delete_post.refresh_from_db()
 
