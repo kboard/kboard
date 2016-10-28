@@ -39,7 +39,31 @@ class EditPostTest(FunctionalTest):
         contentbox.send_keys('Hello django')
         self.browser.switch_to.default_content()
 
-        # '확인' 버튼을 누른다.
+        # 실수로 '취소' 버튼을 누른다.
+        self.browser.find_element_by_id('id_cancel_button').click()
+
+        # 제목과 내용이 변경되지 않고 그대로이다.
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertNotIn('django', "".join([row.text for row in rows]))
+
+        # 다시 해당 게시글로 이동하여 내용을 수정한다.
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_css_selector('tbody > tr > td > a')
+        rows[0].click()
+
+        self.browser.find_element_by_id('id_edit_post_button').click()
+
+        titlebox = self.browser.find_element_by_id('id_edit_post_title')
+        titlebox.clear()
+        titlebox.send_keys('django')
+
+        contentbox = self.get_contentbox()
+        contentbox.clear()
+        contentbox.send_keys('Hello django')
+        self.browser.switch_to.default_content()
+
+        # 이번에는 제대로 '확인' 버튼을 누른다.
         submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
         submit_button.click()
 
