@@ -243,8 +243,7 @@ class DeleteCommentTest(BoardAppTest):
             content='This is a comment'
         )
         response = self.client.post(
-            reverse('board:delete_comment', args=[self.default_post.id]),
-            data={'comment_id': comment.id}
+            reverse('board:delete_comment', args=[self.default_post.id, comment.id])
         )
 
         self.assertEqual(Comment.objects.count(), 1)
@@ -255,8 +254,7 @@ class DeleteCommentTest(BoardAppTest):
             content='This is a comment'
         )
         response = self.client.get(
-            reverse('board:delete_comment', args=[self.default_post.id]),
-            data={'comment_id': comment.id}
+            reverse('board:delete_comment', args=[self.default_post.id, comment.id])
         )
 
         self.assertEqual(response.status_code, 405)

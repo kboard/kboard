@@ -110,14 +110,13 @@ def new_comment(request, post_id):
 
 
 @require_POST
-def delete_comment(request, post_id):
+def delete_comment(request, post_id, comment_id):
     if request.method == 'POST':
-        post = Post.objects.get(id=post_id)
-        comment = Comment.objects.get(post=post, id=request.POST.get('comment_id'))
+        comment = Comment.objects.get(id=comment_id)
         comment.is_deleted = True
         comment.save()
 
-        return redirect(post)
+        return redirect(comment.post)
 
 
 @require_POST
