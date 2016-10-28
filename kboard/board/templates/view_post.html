@@ -54,11 +54,15 @@
     </div>
     <br/>
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <button id="id_back_to_post_list_button" class="form-control btn btn-default"
                     onclick="location.href='{% url 'board:post_list' post.board.slug %}'">목록</button>
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-4">
+            <button id="id_edit_post_button" class="form-control btn btn-default"
+                    onclick="location.href='{% url 'board:edit_post' post.id %}'">수정</button>
+        </div>
+        <div class="col-sm-4">
             <form method="POST" action="{% url 'board:delete_post' post.id %}">
                 {% csrf_token %}
                 <button id="id_delete_post_button" type="submit" class="form-control btn btn-danger">삭제</button>

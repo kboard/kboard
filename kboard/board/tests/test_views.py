@@ -2,8 +2,9 @@ from django.http import HttpRequest
 from django.core.urlresolvers import reverse
 
 from .base import BoardAppTest
-from board.views import new_post, post_list
+from board.views import new_post, post_list, edit_post
 from board.models import Post, Board, Comment
+from board.forms import PostForm
 
 
 class CreatePostPageTest(BoardAppTest):
@@ -177,6 +178,33 @@ class PostViewTest(BoardAppTest):
         self.assertContains(response, 'correct post of content')
         self.assertNotContains(response, 'other post of title')
         self.assertNotContains(response, 'other post of content')
+
+
+class EditPostTest(BoardAppTest):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.default_post = Post.objects.create(
+            board=cls.default_board,
+            title='some post title',
+            content='some post content'
+        )
+
+    def test_use_modify_template(self):
+        response = self.client.get(reverse('board:edit_post', args=[self.default_post.id]))
+        self.assertTemplateUsed(response, 'edit_post.html')
+
+    def test_uses_post_form(self):
+        response = self.client.get(reverse('board:edit_post', args=[self.default_post.id]))
+        self.assertIsInstance(response.context['form'], PostForm)
+
+    def test_POST_redirects_to_post_list(self):
+        response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'post_title_text': 'Edited title',
+            'fields': 'Edited content',
+        })
+
+        self.assertRedirects(response, reverse('board:post_list', args=[self.default_post.board.slug]))
 
 
 class NewCommentTest(BoardAppTest):

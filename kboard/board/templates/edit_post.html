@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Post{% endblock %}
+
+{% block body %}
+<div class="col-sm-7">
+    <h2>Edit Post</h2>
+    <form method="post" action="{% url 'board:edit_post' post.id %}">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-sm-12">
+            <input id="id_edit_post_title" class="form-control" name="post_title_text" value={{ post.title }}><br/>
+            {{ form | safe }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 col-sm-offset-9">
+            <button type="submit" class="form-control btn btn-primary">수정</button>
+        </div>
+    </div>
+    </form>
+</div>
+{% endblock %}
