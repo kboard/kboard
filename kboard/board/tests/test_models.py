@@ -123,12 +123,3 @@ class CommentModelTest(BoardAppTest):
         second_saved_comment = saved_comments[1]
         self.assertEqual(first_saved_comment.content, 'This is a first comment')
         self.assertEqual(second_saved_comment.content, 'This is a second comment')
-
-    def test_saving_create_time(self):
-        comment_ = Comment()
-        comment_.post = self.default_post
-        comment_.content = 'comment'
-        comment_.save()
-        time_after_create = datetime.now(timezone.utc)
-
-        self.assertGreater(timedelta(minutes=1), time_after_create - comment_.created_time)
