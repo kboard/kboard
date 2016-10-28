@@ -219,7 +219,7 @@ class NewCommentTest(BoardAppTest):
 
     def test_can_create_comment(self):
         self.client.post(
-            reverse('board:new_comment', args=[self.default_board.slug, self.default_post.id]),
+            reverse('board:new_comment', args=[self.default_post.id]),
             data={'comment_content': 'This is a comment'}
         )
 
@@ -227,7 +227,7 @@ class NewCommentTest(BoardAppTest):
 
     def test_can_not_access_with_GET_on_new_comment(self):
         response = self.client.get(
-            reverse('board:new_comment', args=[self.default_board.slug, self.default_post.id]),
+            reverse('board:new_comment', args=[self.default_post.id]),
             data={'comment_content': 'This is a comment'}
         )
 

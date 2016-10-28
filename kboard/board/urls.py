@@ -12,6 +12,6 @@ urlpatterns = [
     url(r'^(?P<post_id>\d+)/delete/$', views.delete_post, name='delete_post'),
     url(r'^(?P<post_id>\d+)/edit/$', views.edit_post, name='edit_post'),
     url(r'^(?P<post_id>\d+)/$', views.view_post, name='view_post'),
-    url(r'^(?P<board_slug>[-a-z]+)/(?P<post_id>\d+)/comment/new/$', views.new_comment, name='new_comment'),
+    url(r'^(?P<post_id>\d+)/comment/new/$', views.new_comment, name='new_comment'),
     url(r'^(?P<post_id>\d+)/comment/delete/$', views.delete_comment, name='delete_comment'),
 ]
