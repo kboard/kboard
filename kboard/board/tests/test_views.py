@@ -19,7 +19,7 @@ class CreatePostPageTest(BoardAppTest):
         request = HttpRequest()
         request.method = 'POST'
         request.POST['post_title_text'] = 'NEW POST TITLE'
-        request.POST['post_content_text'] = 'NEW POST CONTENT'
+        request.POST['fields'] = 'NEW POST CONTENT'
 
         response = new_post(request, self.default_board.slug)
 
@@ -31,7 +31,7 @@ class CreatePostPageTest(BoardAppTest):
         request = HttpRequest()
         request.method = 'POST'
         request.POST['post_title_text'] = 'NEW POST TITLE'
-        request.POST['post_content_text'] = 'NEW POST CONTENT'
+        request.POST['fields'] = 'NEW POST CONTENT'
 
         response = new_post(request, self.default_board.slug)
 
