@@ -12,7 +12,7 @@ from core.utils import get_pages_nav_info
 def new_post(request, board_slug):
     if request.method == 'POST':
         board = Board.objects.get(slug=board_slug)
-        Post.objects.create(board=board, title=request.POST['post_title_text'], content=request.POST.get('fields', ''))
+        Post.objects.create(board=board, title=request.POST['post_title_text'], content=request.POST['fields'])
         return redirect(reverse('board:post_list', args=[board_slug]))
 
     board = Board.objects.get(slug=board_slug)
