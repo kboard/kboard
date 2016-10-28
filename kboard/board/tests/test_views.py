@@ -9,35 +9,28 @@ from board.forms import PostForm
 
 class CreatePostPageTest(BoardAppTest):
     def test_new_post_page_returns_correct_html(self):
-        request = HttpRequest()
-        request.method = 'GET'
-        response = new_post(request, board_slug=self.default_board.slug)
+        response = self.client.get(reverse('board:new_post', args=[self.default_board.slug]))
 
         response_decoded = self.remove_csrf(response.content.decode())
         self.assertIn('settings_id_fields', response_decoded)
 
     def test_new_post_can_save_a_POST_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['post_title_text'] = 'NEW POST TITLE'
-        request.POST['fields'] = 'NEW POST CONTENT'
-
-        response = new_post(request, self.default_board.slug)
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'post_title_text': 'NEW POST TITLE',
+            'fields': 'NEW POST CONTENT',
+        })
 
         self.assertEqual(Post.objects.count(), 1)
         first_new_post = Post.objects.first()
         self.assertEqual(first_new_post.title, 'NEW POST TITLE')
 
     def test_new_post_page_redirects_after_POST(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['post_title_text'] = 'NEW POST TITLE'
-        request.POST['fields'] = 'NEW POST CONTENT'
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'post_title_text': 'NEW POST TITLE',
+            'fields': 'NEW POST CONTENT',
+        })
 
-        response = new_post(request, self.default_board.slug)
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], reverse('board:post_list', args=[self.default_board.slug]))
+        self.assertRedirects(response, reverse('board:post_list', args=[self.default_board.slug]))
 
     def test_create_post_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
