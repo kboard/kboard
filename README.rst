@@ -16,6 +16,13 @@ Developing Process
 -----
 - After clone, you need to run ``python ./dev/download_chromedriver.py`` to get chromedriver.
 - To install bower dependencies, run ``python ./kboard/manage.py bower install``.
+- If you want to test for registration, change some values at settings.py
+[...]
+#Email Activation
+[...]
+EMAIL_HOST_USER = 'your mail'
+EMAIL_HOST_PASSWORD = 'your password'
+SERVER_EMAIL = 'your mail'
 
 
 Developers
