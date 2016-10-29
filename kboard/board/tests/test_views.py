@@ -39,6 +39,13 @@ class CreatePostPageTest(BoardAppTest):
 
 
 class PostListTest(BoardAppTest):
+    def get_response_from_post_list_search_request(self, search_flag, query):
+        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]), data={
+            'search_flag': search_flag,
+            'query': query
+        })
+        return response
+
     def test_post_list_page_displays_all_list_titles(self):
         Post.objects.create(board=self.default_board, title='turtle1', content='slow')
         Post.objects.create(board=self.default_board, title='turtle2', content='slowslow')
@@ -50,17 +57,39 @@ class PostListTest(BoardAppTest):
         self.assertIn('turtle2', response.content.decode())
 
     def test_post_list_page_displays_searched_post(self):
-        repeat = 5
+        repeat = 3
         for i in range(repeat):
             Post.objects.create(
                 board=self.default_board,
                 title='Hi, ' + str(i),
-                content='content'
+                content='content ' + str(i)
             )
 
-        response = self.client.get(reverse('board:post_list', args=[self.default_board.slug]), data={'query': 1})
+        response = self.get_response_from_post_list_search_request('TITLE', 'Hi, 1')
         self.assertContains(response, 'Hi, 1')
         self.assertNotContains(response, 'Hi, 0')
+
+        response = self.get_response_from_post_list_search_request('CONTENT', 'content 1')
+        self.assertContains(response, 'Hi, 1')
+        self.assertNotContains(response, 'Hi, 2')
+
+        response = self.get_response_from_post_list_search_request('BOTH', 'Hi, 1')
+        self.assertContains(response, 'Hi, 1')
+
+        response = self.get_response_from_post_list_search_request('BOTH', 'content 2')
+        self.assertContains(response, 'Hi, 2')
+
+    def test_post_list_page_displays_all_posts_when_search_flag_is_invalid(self):
+        repeat = 3
+        for i in range(repeat):
+            Post.objects.create(
+                board=self.default_board,
+                title='Hi, ' + str(i),
+                content='content ' + str(i)
+            )
+
+        response = self.get_response_from_post_list_search_request('INVALID_FLAG', 'any query')
+        self.assertContains(response, repeat)
 
 
 class PostListViewTest(BoardAppTest):
