@@ -1,0 +1,14 @@
+{% load i18n %}
+
+{% block content %}
+<form method="post" action=".">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <input type="submit" value="{% trans 'Log in' %}" />
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+</form>
+
+<p>{% trans "Forgot password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset" %}</a>!</p>
+<p>{% trans "Join us" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>!</p>
+{% endblock %}
