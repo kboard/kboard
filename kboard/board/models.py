@@ -68,3 +68,10 @@ class Comment(TimeStampedModel):
     content = models.TextField(default='')
     post = models.ForeignKey(Post, null=True)
     is_deleted = models.BooleanField(default=False)
+
+
+class EditedPostHistory(TimeStampedModel):
+    post = models.ForeignKey(Post, null=False, default=None)
+    title = models.TextField(default='')
+    content = models.TextField(default='')
+

@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 
 from .base import BoardAppTest
 from board.views import new_post, post_list, edit_post
-from board.models import Post, Board, Comment
+from board.models import Post, Board, Comment, EditedPostHistory
 from board.forms import PostForm
 
 
@@ -227,6 +227,29 @@ class EditPostTest(BoardAppTest):
         })
 
         self.assertRedirects(response, reverse('board:post_list', args=[self.default_post.board.slug]))
+
+    def test_record_edited_post_history_when_post_edited(self):
+        saved_edited_post_history = EditedPostHistory.objects.all()
+        self.assertEqual(saved_edited_post_history.count(), 0)
+
+        response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'post_title_text': 'Edited title',
+            'fields': 'Edited content',
+            })
+
+        saved_edited_post_history = EditedPostHistory.objects.all()
+        self.assertEqual(saved_edited_post_history.count(), 1)
+        self.assertEqual(saved_edited_post_history[0].title, 'some post title')
+        self.assertEqual(saved_edited_post_history[0].content, 'some post content')
+
+    def test_edited_post_history_is_related_to_post(self):
+        response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'post_title_text': 'Edited title',
+            'fields': 'Edited content',
+        })
+
+        edited_post_history = EditedPostHistory.objects.first()
+        self.assertEqual(edited_post_history.post, self.default_post)
 
 
 class NewCommentTest(BoardAppTest):

@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.http import require_POST
 from django.db.models import F
 
-from board.models import Post, Board, Comment
+from board.models import Post, Board, Comment, EditedPostHistory
 from board.forms import PostForm
 from core.utils import get_pages_nav_info
 
@@ -87,6 +87,9 @@ def edit_post(request, post_id):
     post = Post.objects.get(id=post_id)
 
     if request.method == 'POST':
+        edited_post_history = EditedPostHistory.objects.create(post=post, title=post.title, content=post.content)
+        edited_post_history.save()
+
         post.title = request.POST['post_title_text']
         post.content = request.POST.get('fields', '')
         post.save()
