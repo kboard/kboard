@@ -1,9 +1,10 @@
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.db.models import Q
 from django_summernote import fields as summer_fields
 from django_summernote import models as summer_model
 
-from core.models import TimeStampedModel, PostManager
+from core.models import TimeStampedModel
 
 
 class Board(models.Model):
@@ -12,6 +13,38 @@ class Board(models.Model):
 
     slug = models.TextField(default='', unique=True)
     name = models.TextField(default='')
+
+
+class PostQuerySet(models.QuerySet):
+    def search(self, search_flag, query):
+        if search_flag == 'TITLE':
+            return self.filter(title__contains=query)
+        elif search_flag == 'CONTENT':
+            return self.filter(content__contains=query)
+        elif search_flag == 'BOTH':
+            return self.filter(Q(title__contains=query) | Q(content__contains=query))
+        else:
+            return self.all()
+
+    def remain(self):
+        return self.filter(is_deleted=False)
+
+    def get_from_board(self, board):
+        return self.filter(board=board)
+
+
+class PostManager(models.Manager):
+    def get_queryset(self):
+        return PostQuerySet(self.model, using=self._db)
+
+    def search(self, search_flag, query):
+        return self.get_queryset().search(search_flag, query)
+
+    def remain(self):
+        return self.get_queryset().remain()
+
+    def get_from_board(self, board):
+        return self.get_queryset().get_from_board(board)
 
 
 class Post(TimeStampedModel):

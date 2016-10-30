@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<div class="col-sm-7">
+<div class="col-sm-9">
     <h2>Post list</h2>
     <table id="id_post_list_table" class="table table-condensed">
         <thead>
@@ -28,16 +28,25 @@
     </table>
 
     <!-- pagination -->
-    {% include 'pagination.html' %}
+    {% include 'pagination.html' with pages_nav_info=pages_nav_info search_info=search_info %}
     <div class="row">
         <div class="col-sm-6">
-            <form class="form-inline" method="GET">
-                <input type="text" class="form-control input-search" name="query"
-                       placeholder="검색어 입력" value="{{query}}">
-                <button type="submit" class="btn btn-default btn-search">
-                    <i class="glyphicon glyphicon-search"></i>
-                </button>
-            </form>
+        <form method="GET" class="form-inline">
+            <select name="search_flag" class="form-control search-flag">
+                <option value="TITLE">제목</option>
+                <option value="CONTENT">내용</option>
+                <option value="BOTH">제목+내용</option>
+            </select>
+            <div class="input-group">
+                <input type="text" class="form-control" name="query"
+                   placeholder="검색어 입력" value="{{search_info.query}}">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-default btn-search">
+                        <i class="glyphicon glyphicon-search"></i>
+                    </button>
+                </span>
+            </div>
+        </form>
         </div>
         <div class="col-sm-3">
             <button type="button" id="id_create_post_button" class="form-control btn btn-primary"

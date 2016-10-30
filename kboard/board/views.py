@@ -23,9 +23,14 @@ def new_post(request, board_slug):
 def post_list(request, board_slug):
     board = Board.objects.get(slug=board_slug)
     # search
-    query = request.GET.get('query', '')
-    if query:
-        posts = Post.objects.get_from_board(board).remain().search(query).order_by('-id')
+    search_info = {
+        'query': request.GET.get('query', ''),
+        'flag': request.GET.get('search_flag', '')
+    }
+
+    if search_info['query']:
+        posts = Post.objects.get_from_board(board).remain().search(search_info['flag'], search_info['query'])\
+            .order_by('-id')
     else:
         posts = Post.objects.get_from_board(board).remain().order_by('-id')
 
@@ -47,7 +52,7 @@ def post_list(request, board_slug):
         'posts': posts,
         'board_slug': board_slug,
         'pages_nav_info': pages_nav_info,
-        'query': query
+        'search_info': search_info
     })
 
 

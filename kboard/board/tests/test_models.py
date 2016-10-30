@@ -46,18 +46,27 @@ class PostModelTest(BoardAppTest):
 
         self.assertEqual(delete_post.is_deleted, True)
 
-    def test_can_search_by_keyword(self):
-        repeat = 5
+    def test_can_search(self):
+        repeat = 3
         for i in range(repeat):
             Post.objects.create(
                 board=self.default_board,
                 title='Hi, ' + str(i),
-                content='content'
+                content='content ' + str(i)
             )
 
-        self.assertEqual(Post.objects.search('Hi').count(), repeat)
-        self.assertEqual(Post.objects.search('1').count(), 1)
-        self.assertEqual(Post.objects.search('2').count(), 1)
+        self.assertEqual(Post.objects.search('TITLE', 'Hi').count(), repeat)
+        self.assertEqual(Post.objects.search('TITLE', '1').count(), 1)
+        self.assertEqual(Post.objects.search('TITLE', 'content').count(), 0)
+
+        self.assertEqual(Post.objects.search('CONTENT', 'content 1').count(), 1)
+        self.assertEqual(Post.objects.search('CONTENT', 'Hi').count(), 0)
+
+        self.assertEqual(Post.objects.search('BOTH', 'Hi').count(), repeat)
+        self.assertEqual(Post.objects.search('BOTH', 'content').count(), repeat)
+        self.assertEqual(Post.objects.search('BOTH', '0').count(), 1)
+
+        self.assertEqual(Post.objects.search('NOT_A_FLAG', 'any query').count(), repeat)
 
 
 class CommentModelTest(BoardAppTest):
