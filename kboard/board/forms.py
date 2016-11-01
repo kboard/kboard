@@ -5,8 +5,9 @@ from .models import SummerNote
 
 
 class PostForm(forms.ModelForm):
+    fields = summer_fields.SummernoteTextFormField(error_messages={'required':(u'데이터를 입력해주세요'),})
+    file = forms.FileField()
 
-     fields = summer_fields.SummernoteTextFormField(error_messages={'required':(u'데이터를 입력해주세요'),})
-     class Meta:
-           model = SummerNote
-           fields = ('fields', )
+    class Meta:
+        model = SummerNote
+        fields = ('fields', )

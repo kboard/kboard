@@ -5,7 +5,7 @@
 {% block body %}
 <div class="col-sm-7">
     <h2>Edit Post</h2>
-    <form method="post" action="{% url 'board:edit_post' post.id %}">
+    <form method="post" action="{% url 'board:edit_post' post.id %}" enctype="multipart/form-data" novalidate>
     {% csrf_token %}
     <div class="row">
         <div class="col-sm-12">
