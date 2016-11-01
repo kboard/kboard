@@ -12,12 +12,12 @@ class CreatePostPageTest(BoardAppTest):
         response = self.client.get(reverse('board:new_post', args=[self.default_board.slug]))
 
         response_decoded = self.remove_csrf(response.content.decode())
-        self.assertIn('settings_id_fields', response_decoded)
+        self.assertIn('settings_id_content', response_decoded)
 
     def test_new_post_can_save_a_POST_request(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'post_title_text': 'NEW POST TITLE',
-            'fields': 'NEW POST CONTENT',
+            'content': 'NEW POST CONTENT',
         })
 
         self.assertEqual(Post.objects.count(), 1)
@@ -27,7 +27,7 @@ class CreatePostPageTest(BoardAppTest):
     def test_new_post_page_redirects_after_POST(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'post_title_text': 'NEW POST TITLE',
-            'fields': 'NEW POST CONTENT',
+            'content': 'NEW POST CONTENT',
         })
 
         self.assertRedirects(response, reverse('board:post_list', args=[self.default_board.slug]))
@@ -223,7 +223,7 @@ class EditPostTest(BoardAppTest):
     def test_POST_redirects_to_post_list(self):
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
             'post_title_text': 'Edited title',
-            'fields': 'Edited content',
+            'content': 'Edited content',
         })
 
         self.assertRedirects(response, reverse('board:post_list', args=[self.default_post.board.slug]))
@@ -234,7 +234,7 @@ class EditPostTest(BoardAppTest):
 
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
             'post_title_text': 'Edited title',
-            'fields': 'Edited content',
+            'content': 'Edited content',
             })
 
         saved_edited_post_history = EditedPostHistory.objects.all()
@@ -245,7 +245,7 @@ class EditPostTest(BoardAppTest):
     def test_edited_post_history_is_related_to_post(self):
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
             'post_title_text': 'Edited title',
-            'fields': 'Edited content',
+            'content': 'Edited content',
         })
 
         edited_post_history = EditedPostHistory.objects.first()
