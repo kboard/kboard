@@ -16,7 +16,7 @@ class CreatePostPageTest(BoardAppTest):
 
     def test_new_post_can_save_a_POST_request(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
-            'post_title_text': 'NEW POST TITLE',
+            'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
         })
 
@@ -26,7 +26,7 @@ class CreatePostPageTest(BoardAppTest):
 
     def test_new_post_page_redirects_after_POST(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
-            'post_title_text': 'NEW POST TITLE',
+            'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
         })
 

@@ -10,14 +10,21 @@ from core.utils import get_pages_nav_info
 
 
 def new_post(request, board_slug):
-    if request.method == 'POST':
-        board = Board.objects.get(slug=board_slug)
-        Post.objects.create(board=board, title=request.POST['post_title_text'], content=request.POST['content'])
-        return redirect(reverse('board:post_list', args=[board_slug]))
-
     board = Board.objects.get(slug=board_slug)
-    form = PostForm()
-    return render(request, 'new_post.html', {'board': board, 'form': form})
+    if request.method == 'POST':
+        post_form = PostForm(request.POST)
+        if post_form.is_valid():
+            post = post_form.save()
+            post.board = board
+            post.save()
+            return redirect(reverse('board:post_list', args=[board_slug]))
+        else:
+            print(post_form.errors)
+            return
+    else:
+        post_form = PostForm()
+
+    return render(request, 'new_post.html', {'board': board, 'post_form': post_form})
 
 
 def post_list(request, board_slug):
