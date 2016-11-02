@@ -14,6 +14,12 @@
             {{ post.content|safe }}
         </div>
     </div>
+    <form class="form-inline text-center" method="POST" action="{% url 'board:like_post' post.id %}">
+        {% csrf_token %}
+        <button class="form-control btn btn-primary like-button">
+            {{ post.like_count }}&nbsp;<i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;추천!
+        </button>
+    </form>
 
 
     <!-- comment -->
