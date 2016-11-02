@@ -48,8 +48,11 @@ class PostManager(models.Manager):
 
 
 class Post(TimeStampedModel):
-    def get_absolute_url(self):
-        return reverse('board:view_post', args=[self.id])
+    SEARCH_FLAG = [
+        ('TITLE', '제목'),
+        ('CONTENT', '내용'),
+        ('BOTH', '제목+내용')
+    ]
 
     objects = PostManager()
 
@@ -58,6 +61,9 @@ class Post(TimeStampedModel):
     board = models.ForeignKey(Board, null=True)
     is_deleted = models.BooleanField(default=False)
     page_view_count = models.IntegerField(default=0)
+
+    def get_absolute_url(self):
+        return reverse('board:view_post', args=[self.id])
 
 
 class SummerNote(summer_model.Attachment):
