@@ -3,19 +3,28 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.views.decorators.http import require_POST
 from django.db.models import F
+from django.conf import settings
 
 from board.models import Post, Board, Comment, EditedPostHistory
 from board.forms import PostForm
 from core.utils import get_pages_nav_info
 
 
+def handle_uploaded_file(f):
+    with open(settings.BASE_DIR + '/file/' + f.name, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+
 def new_post(request, board_slug):
+    board = Board.objects.get(slug=board_slug)
     if request.method == 'POST':
-        board = Board.objects.get(slug=board_slug)
         Post.objects.create(board=board, title=request.POST['post_title_text'], content=request.POST['fields'])
+
+        if request.FILES:
+            handle_uploaded_file(request.FILES['file'])
         return redirect(reverse('board:post_list', args=[board_slug]))
 
-    board = Board.objects.get(slug=board_slug)
     form = PostForm()
     return render(request, 'new_post.html', {'board': board, 'form': form})
 
