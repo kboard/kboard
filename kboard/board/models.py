@@ -58,6 +58,7 @@ class Post(TimeStampedModel):
     board = models.ForeignKey(Board, null=True)
     is_deleted = models.BooleanField(default=False)
     page_view_count = models.IntegerField(default=0)
+    like_count = models.IntegerField(default=0)
 
 
 class SummerNote(summer_model.Attachment):
