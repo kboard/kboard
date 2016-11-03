@@ -335,9 +335,6 @@ class FileUploadTest(BoardAppTest):
         upload_test_file_name = os.path.join(settings.BASE_DIR, 'test_file/test.txt')
         saved_test_file_name = os.path.join(settings.BASE_DIR, 'file/test.txt')
 
-        if os.path.isfile(saved_test_file_name):
-            os.remove(saved_test_file_name)
-
         upload_file = open(upload_test_file_name)
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
@@ -349,3 +346,6 @@ class FileUploadTest(BoardAppTest):
         saved_file = open(saved_test_file_name)
 
         self.assertEqual(upload_file.read(), saved_file.read())
+
+        if os.path.isfile(saved_test_file_name):
+            os.remove(saved_test_file_name)

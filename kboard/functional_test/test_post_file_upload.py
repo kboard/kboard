@@ -31,3 +31,8 @@ class PostFileUploadTest(FunctionalTest):
         # 하단의 등록 버튼을 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
         self.click_submit_button()
         self.assertRegex(self.browser.current_url, '.+/default/')
+
+        # 테스트에 사용했던 파일을 제거한다.
+        saved_test_file_name = os.path.join(settings.BASE_DIR, 'file/test.txt')
+        if os.path.isfile(saved_test_file_name):
+            os.remove(saved_test_file_name)
