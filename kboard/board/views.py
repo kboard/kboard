@@ -3,10 +3,17 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.views.decorators.http import require_POST
 from django.db.models import F
+from django.conf import settings
 
 from board.models import Post, Board, Comment, EditedPostHistory
 from board.forms import PostForm
 from core.utils import get_pages_nav_info
+
+
+def handle_uploaded_file(f):
+    with open(settings.BASE_DIR + '/file/' + f.name, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
 
 
 def new_post(request, board_slug):
@@ -29,14 +36,16 @@ def new_post(request, board_slug):
 
 def post_list(request, board_slug):
     board = Board.objects.get(slug=board_slug)
+
     # search
     search_info = {
         'query': request.GET.get('query', ''),
-        'flag': request.GET.get('search_flag', '')
+        'selected_flag': request.GET.get('search_flag', 'TITLE'),
+        'flags': Post.SEARCH_FLAG
     }
 
     if search_info['query']:
-        posts = Post.objects.get_from_board(board).remain().search(search_info['flag'], search_info['query'])\
+        posts = Post.objects.get_from_board(board).remain().search(search_info['selected_flag'], search_info['query'])\
             .order_by('-id')
     else:
         posts = Post.objects.get_from_board(board).remain().order_by('-id')
@@ -146,3 +155,11 @@ def delete_post(request, post_id):
         post.save(update_fields=['is_deleted'])
 
         return redirect(post.board)
+
+
+@require_POST
+def like_post(request, post_id):
+    post = Post.objects.filter(id=post_id)
+    post.update(like_count=F('like_count') + 1)
+
+    return redirect(post[0])

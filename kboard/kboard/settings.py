@@ -175,8 +175,8 @@ STATICFILES_DIRS = [
     os.path.join(BOWER_COMPONENTS_ROOT, 'bower_components'),
 ]
 
-MEDIA_URL = '/media/'
-
+MEDIA_URL = '/file/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'file')
 
 # Registration
 # https://django-registration.readthedocs.io/en/2.1.2/index.html

@@ -68,6 +68,18 @@ class PostModelTest(BoardAppTest):
 
         self.assertEqual(Post.objects.search('NOT_A_FLAG', 'any query').count(), repeat)
 
+    def test_search_does_not_consider_upper_or_lower_letter(self):
+        repeat = 3
+        for i in range(repeat):
+            Post.objects.create(
+                board=self.default_board,
+                title='hI, ' + str(i),
+                content='ConTeNt ' + str(i)
+            )
+
+        self.assertEqual(Post.objects.search('TITLE', 'hi').count(), repeat)
+        self.assertEqual(Post.objects.search('CONTENT', 'content').count(), repeat)
+
 
 class CommentModelTest(BoardAppTest):
     @classmethod

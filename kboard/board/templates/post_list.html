@@ -12,6 +12,7 @@
                 <th>#</th>
                 <th>제목</th>
                 <th>날짜</th>
+                <th>추천</th>
                 <th>조회 수</th>
             </tr>
         </thead>
@@ -21,6 +22,7 @@
                     <td>{{ forloop.counter }}</td>
                     <td><a href="{% url 'board:view_post' post.id %}">{{ post.title }}</a></td>
                     <td>{{ post.created_time|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ post.like_count }}</td>
                     <td class="page-view-count">{{ post.page_view_count }}</td>
                 </tr>
             {% endfor %}
@@ -33,9 +35,10 @@
         <div class="col-sm-6">
         <form method="GET" class="form-inline">
             <select name="search_flag" class="form-control search-flag">
-                <option value="TITLE">제목</option>
-                <option value="CONTENT">내용</option>
-                <option value="BOTH">제목+내용</option>
+                {% for key, value in search_info.flags %}
+                    <option value="{{ key }}"
+                            {% if search_info.selected_flag == key %} selected {% endif %}>{{ value }}</option>
+                {% endfor %}
             </select>
             <div class="input-group">
                 <input type="text" class="form-control" name="query"
