@@ -316,22 +316,22 @@ class DeleteCommentTest(BoardAppTest):
 
 
 class FileUploadTest(BoardAppTest):
-    def test_save_uploaded_file(self):
-        uploaded_file_name = settings.BASE_DIR + '/test_file/test.txt'
-        saved_file_name = settings.BASE_DIR + '/file/test.txt'
+    def test_save_upload_file(self):
+        upload_test_file_name = settings.BASE_DIR + '/test_file/test.txt'
+        saved_test_file_name = settings.BASE_DIR + '/file/test.txt'
 
-        if os.path.isfile(saved_file_name):
-            os.remove(saved_file_name)
+        if os.path.isfile(saved_test_file_name):
+            os.remove(saved_test_file_name)
 
-        uploaded_file = open(uploaded_file_name)
-        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+        upload_file = open(upload_test_file_name)
+        self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'post_title_text': 'NEW POST TITLE',
             'fields': 'NEW POST CONTENT',
-            'file': uploaded_file,
+            'file': upload_file,
         })
 
-        uploaded_file.seek(0)
-        saved_file = open(saved_file_name)
+        upload_file.seek(0)
+        saved_file = open(saved_test_file_name)
 
-        self.assertEqual(uploaded_file.read(os.path.getsize(uploaded_file_name)),
-                         saved_file.read(os.path.getsize(saved_file_name)))
+        self.assertEqual(upload_file.read(os.path.getsize(upload_test_file_name)),
+                         saved_file.read(os.path.getsize(saved_test_file_name)))
