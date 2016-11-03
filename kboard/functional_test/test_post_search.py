@@ -81,9 +81,13 @@ class SearchPostTest(FunctionalTest):
         input_search = self.browser.find_element_by_css_selector("input[name='query']")
         self.assertEqual(input_search.get_attribute('value'), 'fun')
 
+        # 분류가 '내용'으로 선택되어있다.
+        search_flag = Select(self.browser.find_element_by_css_selector("select[name='search_flag']"))
+        selected_option = search_flag.first_selected_option
+        self.assertEqual(selected_option.text, '내용')
+
         # 적고 난 뒤에 'overwatch'를 찾으려고 한다.
         # 분류를 '제목+내용'으로 선택한다.
-        search_flag = Select(self.browser.find_element_by_css_selector("select[name='search_flag']"))
         search_flag.select_by_visible_text('제목+내용')
 
         # 검색란에 'overwatch'라고 입력한다.
@@ -98,3 +102,8 @@ class SearchPostTest(FunctionalTest):
         searched_posts = self.browser.find_elements_by_css_selector('#id_post_list_table tbody tr')
         self.assertEqual(len(searched_posts), 1)
         self.check_for_row_in_list_table('id_post_list_table', 'league of legend')
+
+        # 분류가 '제목+내용'으로 선택되어있다.
+        search_flag = Select(self.browser.find_element_by_css_selector("select[name='search_flag']"))
+        selected_option = search_flag.first_selected_option
+        self.assertEqual(selected_option.text, '제목+내용')

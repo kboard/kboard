@@ -35,9 +35,10 @@
         <div class="col-sm-6">
         <form method="GET" class="form-inline">
             <select name="search_flag" class="form-control search-flag">
-                <option value="TITLE">제목</option>
-                <option value="CONTENT">내용</option>
-                <option value="BOTH">제목+내용</option>
+                {% for key, value in search_info.flags %}
+                    <option value="{{ key }}"
+                            {% if search_info.selected_flag == key %} selected {% endif %}>{{ value }}</option>
+                {% endfor %}
             </select>
             <div class="input-group">
                 <input type="text" class="form-control" name="query"
