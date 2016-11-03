@@ -12,7 +12,7 @@ from core.utils import get_pages_nav_info
 def new_post(request, board_slug):
     board = Board.objects.get(slug=board_slug)
     if request.method == 'POST':
-        post_form = PostForm(request.POST)
+        post_form = PostForm(request.POST, request.FILES)
         if post_form.is_valid():
             post = post_form.save(commit=False)
             post.board = board

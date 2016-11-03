@@ -153,3 +153,12 @@ class NewVisitorTest(FunctionalTest):
 
         # 게시글 목록 페이지가 뜬다.
         self.assertRegex(self.browser.current_url, '.+/default/$')
+
+        # 지훈이는 새 게시글 작성 중에 취소 기능을 확인하기 위해 다시 '글쓰기' 버튼을 누른다
+        self.click_create_post_button()
+
+        # 취소 버튼을 누르면
+        self.browser.find_element_by_id('id_cancel_button').click()
+
+        # 게시글 목록 페이지로 돌아온다.
+        self.assertRegex(self.browser.current_url, '.+/default/$')
