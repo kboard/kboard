@@ -17,8 +17,8 @@
             <button type="submit" class="form-control btn btn-primary">수정</button>
         </div>
         <div class="col-sm-3">
-            <button id="id_cancel_button" type="button" class="form-control btn btn-default"
-                onclick="location.href='{% url 'board:post_list' post.board.slug %}'">취소</button>
+            <button id="id_cancel_button" type="button" class="form-control btn btn-default move-button"
+                path="{% url 'board:post_list' post.board.slug %}">취소</button>
         </div>
     </div>
     </form>
