@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from urllib.parse import urlencode
 
 from .base import BoardAppTest
 from board.templatetags.url_parameter import url_parameter
@@ -13,12 +13,7 @@ class UrlParameterTest(BoardAppTest):
         }
         url_string = url_parameter(**parameter)
 
+        self.assertRegex(url_string, '^\?.*')
         self.assertIn('a=13', url_string)
         self.assertIn('query=hello', url_string)
-        self.assertIn('b=This is a test', url_string)
-
-    def test_returns_empty_string_when_there_is_no_data(self):
-        parameter = {}
-        url_string = url_parameter(**parameter)
-
-        self.assertEqual('', url_string)
+        self.assertIn('b=This+is+a+test', url_string)
