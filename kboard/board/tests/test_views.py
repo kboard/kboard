@@ -1,5 +1,8 @@
+import os
+
 from django.http import HttpRequest
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
 from .base import BoardAppTest
 from board.views import new_post, post_list, edit_post
@@ -325,3 +328,24 @@ class DeleteCommentTest(BoardAppTest):
         )
 
         self.assertEqual(response.status_code, 405)
+
+
+class FileUploadTest(BoardAppTest):
+    def test_save_upload_file(self):
+        upload_test_file_name = os.path.join(settings.BASE_DIR, 'test_file/test.txt')
+        saved_test_file_name = os.path.join(settings.BASE_DIR, 'file/test.txt')
+
+        if os.path.isfile(saved_test_file_name):
+            os.remove(saved_test_file_name)
+
+        upload_file = open(upload_test_file_name)
+        self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'post_title_text': 'NEW POST TITLE',
+            'fields': 'NEW POST CONTENT',
+            'file': upload_file,
+        })
+
+        upload_file.seek(0)
+        saved_file = open(saved_test_file_name)
+
+        self.assertEqual(upload_file.read(), saved_file.read())
