@@ -333,5 +333,4 @@ class FileUploadTest(BoardAppTest):
         upload_file.seek(0)
         saved_file = open(saved_test_file_name)
 
-        self.assertEqual(upload_file.read(os.path.getsize(upload_test_file_name)),
-                         saved_file.read(os.path.getsize(saved_test_file_name)))
+        self.assertEqual(upload_file.read(), saved_file.read())
