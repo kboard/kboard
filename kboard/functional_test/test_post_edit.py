@@ -23,7 +23,7 @@ class EditPostTest(FunctionalTest):
         self.assertIn('Edit Post', header_text)
 
         # 작성되어 있던 게시글의 제목인 'jango'가 보인다.
-        titlebox = self.browser.find_element_by_id('id_edit_post_title')
+        titlebox = self.browser.find_element_by_id('id_post_title')
         self.assertEqual(titlebox.get_attribute('value'), 'jango')
 
         # 'django'로 수정한다.
@@ -54,7 +54,7 @@ class EditPostTest(FunctionalTest):
 
         self.browser.find_element_by_id('id_edit_post_button').click()
 
-        titlebox = self.browser.find_element_by_id('id_edit_post_title')
+        titlebox = self.browser.find_element_by_id('id_post_title')
         titlebox.clear()
         titlebox.send_keys('django')
 

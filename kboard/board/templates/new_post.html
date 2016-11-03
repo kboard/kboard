@@ -9,8 +9,7 @@
     {% csrf_token %}
     <div class="row">
         <div class="col-sm-12">
-            <input id="id_new_post_title" class="form-control" name="post_title_text" placeholder="Insert Title"/><br/>
-            {{ form | safe }}
+            {{ post_form.as_p | safe }}
         </div>
     </div>
     <div class="row">

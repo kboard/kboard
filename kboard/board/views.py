@@ -19,14 +19,19 @@ def handle_uploaded_file(f):
 def new_post(request, board_slug):
     board = Board.objects.get(slug=board_slug)
     if request.method == 'POST':
-        Post.objects.create(board=board, title=request.POST['post_title_text'], content=request.POST['fields'])
+        post_form = PostForm(request.POST, request.FILES)
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
+            post.board = board
+            post.save()
+            return redirect(board)
+        else:
+            print(post_form.errors)
+            return
+    else:
+        post_form = PostForm()
 
-        if request.FILES:
-            handle_uploaded_file(request.FILES['file'])
-        return redirect(reverse('board:post_list', args=[board_slug]))
-
-    form = PostForm()
-    return render(request, 'new_post.html', {'board': board, 'form': form})
+    return render(request, 'new_post.html', {'board': board, 'post_form': post_form})
 
 
 def post_list(request, board_slug):
@@ -101,13 +106,17 @@ def edit_post(request, post_id):
         edited_post_history = EditedPostHistory.objects.create(post=post, title=post.title, content=post.content)
         edited_post_history.save()
 
-        post.title = request.POST['post_title_text']
-        post.content = request.POST.get('fields', '')
-        post.save()
-        return redirect(post.board)
+        post_form = PostForm(request.POST, instance=post)
+        if post_form.is_valid():
+            post = post_form.save()
+            return redirect(post.board)
+        else:
+            print(post_form.errors)
+            return
+    else:
+        post_form = PostForm(initial={'title': post.title, 'content': post.content})
 
-    form = PostForm(initial={'fields': post.content})
-    return render(request, 'edit_post.html', {'post': post, 'form': form})
+    return render(request, 'edit_post.html', {'post': post, 'post_form': post_form})
 
 
 def board_list(request):

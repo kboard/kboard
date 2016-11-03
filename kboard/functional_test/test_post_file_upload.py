@@ -17,7 +17,7 @@ class PostFileUploadTest(FunctionalTest):
         self.assertRegex(self.browser.current_url, '.+/default/new/')
 
         # 제목과 내용을 입력한다.
-        titlebox = self.browser.find_element_by_id('id_new_post_title')
+        titlebox = self.browser.find_element_by_id('id_post_title')
         titlebox.send_keys('Title of This Post')
 
         contentbox = self.get_contentbox()
