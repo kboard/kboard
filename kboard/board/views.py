@@ -135,3 +135,11 @@ def delete_post(request, post_id):
         post.save(update_fields=['is_deleted'])
 
         return redirect(post.board)
+
+
+@require_POST
+def like_post(request, post_id):
+    post = Post.objects.filter(id=post_id)
+    post.update(like_count=F('like_count') + 1)
+
+    return redirect(post[0])

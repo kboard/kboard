@@ -12,6 +12,7 @@
                 <th>#</th>
                 <th>제목</th>
                 <th>날짜</th>
+                <th>추천</th>
                 <th>조회 수</th>
             </tr>
         </thead>
@@ -21,6 +22,7 @@
                     <td>{{ forloop.counter }}</td>
                     <td><a href="{% url 'board:view_post' post.id %}">{{ post.title }}</a></td>
                     <td>{{ post.created_time|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ post.like_count }}</td>
                     <td class="page-view-count">{{ post.page_view_count }}</td>
                 </tr>
             {% endfor %}
