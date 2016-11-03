@@ -56,7 +56,7 @@ class Post(TimeStampedModel):
 
     objects = PostManager()
 
-    title = models.TextField(default='')
+    title = models.CharField(default='', max_length=100)
     content = models.TextField(default='')
     file = models.FileField(null=True)
     board = models.ForeignKey(Board, null=True)
