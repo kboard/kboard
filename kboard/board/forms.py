@@ -10,6 +10,6 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ('title', 'content',)
         widgets = {
-            'title': forms.TextInput(attrs={'id': 'id_new_post_title', 'class': 'form-control', 'name': 'post_title_text', 'placeholder': 'Insert Title'}),
+            'title': forms.TextInput(attrs={'id': 'id_post_title', 'class': 'form-control', 'name': 'post_title_text', 'placeholder': 'Insert Title'}),
             'content': SummernoteWidget(),
         }

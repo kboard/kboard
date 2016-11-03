@@ -52,7 +52,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     def add_post(self, title, content):
         self.click_create_post_button()
 
-        titlebox = self.browser.find_element_by_id('id_new_post_title')
+        titlebox = self.browser.find_element_by_id('id_post_title')
         titlebox.send_keys(title)
 
         contentbox = self.get_contentbox()

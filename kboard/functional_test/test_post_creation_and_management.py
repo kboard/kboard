@@ -53,7 +53,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn('Create Post', header_text)
 
         # 제목을 입력하는 상자에 'Insert Title'라고 씌여 있다.
-        titlebox = self.browser.find_element_by_id('id_new_post_title')
+        titlebox = self.browser.find_element_by_id('id_post_title')
         self.assertEqual(
             titlebox.get_attribute('placeholder'),
             'Insert Title'
@@ -84,7 +84,7 @@ class NewVisitorTest(FunctionalTest):
         self.click_create_post_button()
 
         # "Title of Second Post"라고 제목 상자에 입력한다.
-        titlebox = self.browser.find_element_by_id('id_new_post_title')
+        titlebox = self.browser.find_element_by_id('id_post_title')
         titlebox.send_keys('Title of Second Post')
 
         # "Content of Second Post"라고 본문 상자에 입력한다

@@ -218,11 +218,11 @@ class EditPostTest(BoardAppTest):
 
     def test_uses_post_form(self):
         response = self.client.get(reverse('board:edit_post', args=[self.default_post.id]))
-        self.assertIsInstance(response.context['form'], PostForm)
+        self.assertIsInstance(response.context['post_form'], PostForm)
 
     def test_POST_redirects_to_post_list(self):
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
-            'post_title_text': 'Edited title',
+            'title': 'Edited title',
             'content': 'Edited content',
         })
 
@@ -233,7 +233,7 @@ class EditPostTest(BoardAppTest):
         self.assertEqual(saved_edited_post_history.count(), 0)
 
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
-            'post_title_text': 'Edited title',
+            'title': 'Edited title',
             'content': 'Edited content',
             })
 
@@ -244,7 +244,7 @@ class EditPostTest(BoardAppTest):
 
     def test_edited_post_history_is_related_to_post(self):
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
-            'post_title_text': 'Edited title',
+            'title': 'Edited title',
             'content': 'Edited content',
         })
 
