@@ -317,8 +317,8 @@ class DeleteCommentTest(BoardAppTest):
 
 class FileUploadTest(BoardAppTest):
     def test_save_upload_file(self):
-        upload_test_file_name = settings.BASE_DIR + '/test_file/test.txt'
-        saved_test_file_name = settings.BASE_DIR + '/file/test.txt'
+        upload_test_file_name = os.path.join(settings.BASE_DIR, 'test_file/test.txt')
+        saved_test_file_name = os.path.join(settings.BASE_DIR, 'file/test.txt')
 
         if os.path.isfile(saved_test_file_name):
             os.remove(saved_test_file_name)
