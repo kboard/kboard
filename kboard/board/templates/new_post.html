@@ -1,26 +1,11 @@
-{% extends 'base.html' %}
+{% extends 'post_input_base.html' %}
 
 {% block title %}Create Post{% endblock %}
 
-{% block body %}
-<div class="col-sm-7">
-    <h2>Create Post</h2>
-    <form method="post" action="{% url 'board:new_post' board.slug %}" enctype="multipart/form-data" novalidate>
-    {% csrf_token %}
-    <div class="row">
-        <div class="col-sm-12">
-            {{ post_form.as_p | safe }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-3 col-sm-offset-6">
-            <button type="submit" class="form-control btn btn-primary">등록</button>
-        </div>
-        <div class="col-sm-3">
-            <button id="id_cancel_button" type="button" class="form-control btn btn-default"
-                onclick="location.href='{% url 'board:post_list' board.slug %}'">취소</button>
-        </div>
-    </div>
-    </form>
-</div>
-{% endblock %}
+{% block header %}Create Post{% endblock %}
+
+{% block form_action_url %}{% url 'board:new_post' board.slug %}{% endblock %}
+
+{% block submit_button_name %}등록{% endblock %}
+
+{% block cancel_url %}{% url 'board:post_list' board.slug %}{% endblock %}
