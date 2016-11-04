@@ -1,8 +1,8 @@
 import os
 
-from .base import FunctionalTest
-
 from django.conf import settings
+
+from .base import FunctionalTest
 
 
 class PostFileUploadTest(FunctionalTest):
@@ -31,6 +31,16 @@ class PostFileUploadTest(FunctionalTest):
         # 하단의 등록 버튼을 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
         self.click_submit_button()
         self.assertRegex(self.browser.current_url, '.+/default/')
+
+        # 첨부파일 업로드가 잘 되었는지 확인하기 위해 방금 작성한 게시글을 클릭한다.
+        table = self.browser.find_element_by_id('id_post_list_table')
+
+        rows = table.find_elements_by_css_selector('tbody > tr > td > a')
+        rows[0].click()
+
+        # 'test.txt'라는 이름의 첨부파일이 표시된다.
+        uploaded_file = self.browser.find_element_by_id('id_uploaded_file')
+        self.assertEqual(uploaded_file.text, 'test.txt')
 
         # 테스트에 사용했던 파일을 제거한다.
         saved_test_file_name = os.path.join(settings.BASE_DIR, 'file/test.txt')
