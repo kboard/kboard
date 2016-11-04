@@ -269,6 +269,15 @@ class EditPostTest(BoardAppTest):
         edited_post_history = EditedPostHistory.objects.first()
         self.assertEqual(edited_post_history.post, self.default_post)
 
+    def test_does_not_save_if_post_is_not_edited(self):
+        response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'title': 'some post title',
+            'content': 'some post content',
+        })
+
+        saved_edited_post_history = EditedPostHistory.objects.all()
+        self.assertEqual(saved_edited_post_history.count(), 0)
+
 
 class NewCommentTest(BoardAppTest):
     @classmethod
