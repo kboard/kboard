@@ -13,6 +13,11 @@
         <div class="panel-body" >
             {{ post.content|safe }}
         </div>
+        <div class="panel-footer">
+            {% if post.file %}
+                <a id="id_uploaded_file" href="{{ post.file.url }}" download>{{ post.file.name }}</a>
+            {% endif %}
+        </div>
     </div>
     <form class="form-inline text-center" method="POST" action="{% url 'board:like_post' post.id %}">
         {% csrf_token %}
