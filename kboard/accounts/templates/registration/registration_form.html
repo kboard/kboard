@@ -5,6 +5,9 @@
     {% csrf_token %}
     {{ form.as_p }}
 
-  <input type="submit" value="{% trans 'Submit' %}" />
+    <input type="checkbox" name="checkbox" value="check" id="agree" />
+    <a href="/accounts/terms/">I have read and agreed to the Terms of Service</a>
+
+    <input type="submit" value="{% trans 'Submit' %}" />
 </form>
 {% endblock %}
