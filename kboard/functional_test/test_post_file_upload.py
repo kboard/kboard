@@ -6,6 +6,13 @@ from .base import FunctionalTest
 
 
 class PostFileUploadTest(FunctionalTest):
+    def tearDown(self):
+        # 테스트에 사용했던 'test.txt'파일이 존재하면 제거한다.
+        saved_test_file_name = os.path.join(settings.BASE_DIR, 'file/test.txt')
+        if os.path.isfile(saved_test_file_name):
+            os.remove(saved_test_file_name)
+        super().tearDown()
+
     def test_file_upload(self):
         self.browser.get(self.live_server_url)
         self.move_to_default_board()
@@ -41,8 +48,3 @@ class PostFileUploadTest(FunctionalTest):
         # 'test.txt'라는 이름의 첨부파일이 표시된다.
         uploaded_file = self.browser.find_element_by_id('id_uploaded_file')
         self.assertEqual(uploaded_file.text, 'test.txt')
-
-        # 테스트에 사용했던 파일을 제거한다.
-        saved_test_file_name = os.path.join(settings.BASE_DIR, 'file/test.txt')
-        if os.path.isfile(saved_test_file_name):
-            os.remove(saved_test_file_name)
