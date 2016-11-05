@@ -331,6 +331,11 @@ class DeleteCommentTest(BoardAppTest):
 
 
 class FileUploadTest(BoardAppTest):
+    def tearDown(self):
+        saved_test_file_name = os.path.join(settings.BASE_DIR, 'file/test.txt')
+        if os.path.isfile(saved_test_file_name):
+            os.remove(saved_test_file_name)
+
     def test_save_upload_file(self):
         upload_test_file_name = os.path.join(settings.BASE_DIR, 'test_file/test.txt')
         saved_test_file_name = os.path.join(settings.BASE_DIR, 'file/test.txt')
@@ -346,6 +351,3 @@ class FileUploadTest(BoardAppTest):
         saved_file = open(saved_test_file_name)
 
         self.assertEqual(upload_file.read(), saved_file.read())
-
-        if os.path.isfile(saved_test_file_name):
-            os.remove(saved_test_file_name)
