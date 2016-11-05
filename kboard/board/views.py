@@ -103,16 +103,17 @@ def edit_post(request, post_id):
     post = Post.objects.get(id=post_id)
 
     if request.method == 'POST':
-        edited_post_history = EditedPostHistory.objects.create(post=post, title=post.title, content=post.content)
-        edited_post_history.save()
+        if post.title != request.POST['title'] or post.content != request.POST['content']:
+            edited_post_history = EditedPostHistory.objects.create(post=post, title=post.title, content=post.content)
+            edited_post_history.save()
 
-        post_form = PostForm(request.POST, instance=post)
-        if post_form.is_valid():
-            post = post_form.save()
-            return redirect(post.board)
-        else:
-            print(post_form.errors)
-            return
+            post_form = PostForm(request.POST, instance=post)
+            if post_form.is_valid():
+                post_form.save()
+            else:
+                print(post_form.errors)
+                return
+        return redirect(post.board)
     else:
         post_form = PostForm(initial={'title': post.title, 'content': post.content})
 
