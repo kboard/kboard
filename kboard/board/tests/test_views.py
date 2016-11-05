@@ -351,3 +351,6 @@ class FileUploadTest(BoardAppTest):
         saved_file = open(saved_test_file_name)
 
         self.assertEqual(upload_file.read(), saved_file.read())
+
+        upload_file.close()
+        saved_file.close()
