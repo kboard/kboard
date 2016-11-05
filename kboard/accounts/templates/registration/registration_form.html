@@ -1,11 +1,23 @@
 {% load i18n %}
 
+<script>
+    function tncSubmit() {
+        if(document.getElementById('agree').checked) {
+            return true;
+        }
+        else {
+            alert('Please read and agree our Terms and Conditions');
+            return false;
+        }
+    }
+</script>
+
 {% block content %}
-<form method="post" action="">
+<form method="post" action="" class="registration-form" onsubmit="return tncSubmit()">
     {% csrf_token %}
     {{ form.as_p }}
 
-    <input type="checkbox" name="checkbox" value="check" id="agree" />
+    <input type="checkbox" name="checkbox" value="check" id="agree"/>
     <a href="/accounts/terms/">I have read and agreed to the Terms of Service</a>
     <br/>
     <input type="submit" value="{% trans 'Submit' %}" />
