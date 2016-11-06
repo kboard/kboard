@@ -340,11 +340,15 @@ class DeleteCommentTest(BoardAppTest):
 
 
 class FileUploadTest(BoardAppTest):
-    def test_save_upload_file(self):
-        upload_test_file_name = os.path.join(settings.BASE_DIR, 'test_file/test.txt')
-        saved_test_file_name = os.path.join(settings.BASE_DIR, 'file/test.txt')
+    UPLOAD_TEST_FILE_NAME = os.path.join(settings.BASE_DIR, 'test_file/test.txt')
+    SAVED_TEST_FILE_NAME = os.path.join(settings.BASE_DIR, 'file/test.txt')
 
-        upload_file = open(upload_test_file_name)
+    def tearDown(self):
+        if os.path.isfile(self.SAVED_TEST_FILE_NAME):
+            os.remove(self.SAVED_TEST_FILE_NAME)
+
+    def test_save_upload_file(self):
+        upload_file = open(self.UPLOAD_TEST_FILE_NAME)
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
@@ -352,9 +356,9 @@ class FileUploadTest(BoardAppTest):
         })
 
         upload_file.seek(0)
-        saved_file = open(saved_test_file_name)
+        saved_file = open(self.SAVED_TEST_FILE_NAME)
 
         self.assertEqual(upload_file.read(), saved_file.read())
 
-        if os.path.isfile(saved_test_file_name):
-            os.remove(saved_test_file_name)
+        upload_file.close()
+        saved_file.close()
