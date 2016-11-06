@@ -1,11 +1,8 @@
-from datetime import datetime
-from datetime import timezone
-from datetime import timedelta
-
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 
 from .base import BoardAppTest
-from board.models import Post, Board, Comment
+from board.models import Post, Board, Comment, EditedPostHistory
 
 
 class PostModelTest(BoardAppTest):
@@ -118,6 +115,59 @@ class PostModelTest(BoardAppTest):
         posts_from_default_board = Post.objects.board(self.default_board)
         self.assertEqual(posts_from_another_board[0].title, 'another title')
         self.assertEqual(posts_from_default_board[0].title, 'default title')
+
+    def test_cannot_save_empty_title_post(self):
+        post = Post()
+        post.board = self.default_board
+        post.title = ''
+        post.content = 'This is a content'
+        with self.assertRaises(ValidationError):
+            post.save()
+            post.full_clean()
+
+    def test_cannot_save_empty_content_post(self):
+        post = Post()
+        post.board = self.default_board
+        post.title = 'This is a title'
+        post.content = ''
+        with self.assertRaises(ValidationError):
+            post.save()
+            post.full_clean()
+
+
+class EditedPostHistoryModelTest(BoardAppTest):
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.default_post = Post.objects.create(
+            board=cls.default_board,
+            title='some post title',
+            content='some post content'
+        )
+
+    def test_can_save_a_history_in_a_particular_post(self):
+        another_post = Post.objects.create(
+            board=self.default_board,
+            title='some post title',
+            content='some post content'
+        )
+
+        history1 = EditedPostHistory.objects.create(
+            post=self.default_post,
+            title='hello',
+            content='This is a content'
+        )
+        history2 = EditedPostHistory.objects.create(
+            post=another_post,
+            title='hello2',
+            content='This is a content2'
+        )
+
+        saved_history = EditedPostHistory.objects.all()
+        self.assertEqual(saved_history.count(), 2)
+
+        saved_history = EditedPostHistory.objects.filter(post=another_post)
+        self.assertEqual(saved_history.count(), 1)
 
 
 class CommentModelTest(BoardAppTest):

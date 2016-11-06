@@ -7,7 +7,7 @@ from django.conf import settings
 from .base import BoardAppTest
 from board.views import new_post, post_list, edit_post
 from board.models import Post, Board, Comment, EditedPostHistory
-from board.forms import PostForm
+from board.forms import PostForm, EMPTY_TITLE_ERROR, EMPTY_CONTENT_ERROR
 
 
 class CreatePostPageTest(BoardAppTest):
@@ -39,6 +39,36 @@ class CreatePostPageTest(BoardAppTest):
         request = HttpRequest()
         new_post(request, self.default_board.slug)
         self.assertEqual(Post.objects.count(), 0)
+
+    def test_invalid_input_renders_new_post_template(self):
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': '',
+            'content': 'NEW POST CONTENT',
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'new_post.html')
+
+    def test_title_invalid_error_is_shown(self):
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': '',
+            'content': 'NEW POST CONTENT',
+        })
+        self.assertContains(response, EMPTY_TITLE_ERROR)
+
+    def test_content_invalid_error_is_shown(self):
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': 'NEW POST TITLE',
+            'content': '',
+        })
+        self.assertContains(response, EMPTY_CONTENT_ERROR)
+
+    def test_both_title_and_content_invalid_errors_are_shown(self):
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': '',
+            'content': '',
+        })
+        self.assertContains(response, EMPTY_TITLE_ERROR)
+        self.assertContains(response, EMPTY_CONTENT_ERROR)
 
 
 class PostListTest(BoardAppTest):
@@ -244,7 +274,7 @@ class EditPostTest(BoardAppTest):
             'content': 'Edited content',
         })
 
-        self.assertRedirects(response, reverse('board:post_list', args=[self.default_post.board.slug]))
+        self.assertRedirects(response, reverse('board:view_post', args=[self.default_post.id]))
 
     def test_record_edited_post_history_when_post_edited(self):
         saved_edited_post_history = EditedPostHistory.objects.all()
@@ -252,8 +282,8 @@ class EditPostTest(BoardAppTest):
 
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
             'title': 'Edited title',
-            'content': 'Edited content',
-            })
+            'content': 'Edited content'
+        })
 
         saved_edited_post_history = EditedPostHistory.objects.all()
         self.assertEqual(saved_edited_post_history.count(), 1)

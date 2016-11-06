@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Post History List{% endblock %}
+
+{% block body %}
+<div class="col-sm-5">
+    <h2>Post History List</h2>
+    {% for history in history_list %}
+        <h4>{{ history.created_time|date:"Y-m-d H:i:s" }} ------------------</h4>
+        <div class="panel panel-default post-history-panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ history.title }}</h3>
+            </div>
+            <div class="panel-body">
+                {{ history.content|safe }}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-sm-4">
+            <button id="back_to_view_post_button" class="form-control btn btn-default move-button"
+                    path="{% url 'board:view_post' post_id %}">글 보기</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
