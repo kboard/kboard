@@ -18,8 +18,8 @@
     {{ form.as_p }}
 
     <input type="checkbox" name="checkbox" value="check" id="agree"/>
-    <a href="/accounts/terms/">I have read and agreed to the Terms of Service</a>
+    <a target="_blank" href="/accounts/terms/" id="terms">I have read and agreed to the Terms of Service</a>
     <br/>
-    <input type="submit" value="{% trans 'Submit' %}" />
+    <button type="submit" value="{% trans 'Submit' %}">Submit</button>
 </form>
 {% endblock %}
