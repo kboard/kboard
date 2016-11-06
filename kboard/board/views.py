@@ -113,7 +113,7 @@ def edit_post(request, post_id):
             else:
                 print(post_form.errors)
                 return
-        return redirect(post.board)
+        return redirect(post)
     else:
         post_form = PostForm(initial={'title': post.title, 'content': post.content})
 
