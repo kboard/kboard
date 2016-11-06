@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.db.models import F
 from django.conf import settings
 
@@ -25,9 +25,6 @@ def new_post(request, board_slug):
             post.board = board
             post.save()
             return redirect(board)
-        else:
-            print(post_form.errors)
-            return
     else:
         post_form = PostForm()
 
@@ -79,6 +76,10 @@ def view_post(request, post_id):
     post = Post.objects.get(id=post_id)
     comments_all_list = Comment.objects.filter(post=post, is_deleted=False).order_by('-id')
 
+    is_modified = False
+    if post.created_time != post.modified_time:
+        is_modified = True
+
     paginator = Paginator(comments_all_list, 5)  # Show 5 contacts per page
     page = request.GET.get('page')
     try:
@@ -94,8 +95,20 @@ def view_post(request, post_id):
 
     return render(request, 'view_post.html', {
         'post': post,
+        'is_modified': is_modified,
         'comments': comments,
         'pages_nav_info': pages_nav_info
+    })
+
+
+@require_GET
+def post_history_list(request, post_id):
+    post = Post.objects.get(id=post_id)
+    post_history = EditedPostHistory.objects.filter(post=post).order_by('-id')
+
+    return render(request, 'post_history_list.html', {
+        'history_list': post_history,
+        'post_id': post_id
     })
 
 

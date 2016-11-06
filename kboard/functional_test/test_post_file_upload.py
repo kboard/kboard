@@ -48,3 +48,6 @@ class PostFileUploadTest(FunctionalTest):
         # 'test.txt'라는 이름의 첨부파일이 표시된다.
         uploaded_file = self.browser.find_element_by_id('id_uploaded_file')
         self.assertEqual(uploaded_file.text, 'test.txt')
+
+        # 업로드 된 첨부파일인 'test.txt'을 다운받을 수 있는지 확인한다.
+        # TODO Add file download test

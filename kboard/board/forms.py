@@ -1,8 +1,20 @@
 from django import forms
+from django.forms.utils import ErrorList
 from django_summernote.widgets import SummernoteWidget
-from django.core.exceptions import NON_FIELD_ERRORS
 
 from .models import Post
+
+EMPTY_TITLE_ERROR = "제목을 입력하세요"
+
+
+class DivErrorList(ErrorList):
+    def __str__(self):
+        return self.as_divs()
+
+    def as_divs(self):
+        if not self:
+            return ''
+        return '<div class="form-group has-error">%s</div>' % ''.join(['<div class="help-block">%s</div>' % e for e in self])
 
 
 class PostForm(forms.ModelForm):
@@ -13,7 +25,12 @@ class PostForm(forms.ModelForm):
             'title': forms.TextInput(attrs={'id': 'id_post_title', 'class': 'form-control', 'name': 'post_title_text', 'placeholder': 'Insert Title'}),
             'content': SummernoteWidget(),
         }
+        error_messages = {
+            'title': {'required': EMPTY_TITLE_ERROR}
+        }
 
     def __init__(self, *args, **kwargs):
-        super(PostForm, self).__init__(*args, **kwargs)
+        kwargs_new = {'error_class': DivErrorList}
+        kwargs_new.update(kwargs)
+        super(PostForm, self).__init__(*args, **kwargs_new)
         self.fields['file'].required = False
