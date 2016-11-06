@@ -9,6 +9,9 @@
         <div class="panel-heading">
             <h3 class="panel-title">{{ post.title }} - {{ post.created_time|date:"Y-m-d H:i:s" }}</h3>
             <h4 id="id_page_view_count">조회수: {{ post.page_view_count }}</h4>
+            {% if is_modified %}
+                <h4 id="post_history"><a href="{% url 'board:post_history_list' post.id%}">수정 내역</a></h4>
+            {% endif %}
         </div>
         <div class="panel-body" >
             {{ post.content|safe }}
