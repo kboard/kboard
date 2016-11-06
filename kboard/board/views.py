@@ -25,9 +25,6 @@ def new_post(request, board_slug):
             post.board = board
             post.save()
             return redirect(board)
-        else:
-            print(post_form.errors)
-            return
     else:
         post_form = PostForm()
 
