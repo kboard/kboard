@@ -29,7 +29,7 @@ class PostQuerySet(models.QuerySet):
     def remain(self):
         return self.filter(is_deleted=False)
 
-    def get_from_board(self, board):
+    def board(self, board):
         return self.filter(board=board)
 
 
@@ -43,8 +43,8 @@ class PostManager(models.Manager):
     def remain(self):
         return self.get_queryset().remain()
 
-    def get_from_board(self, board):
-        return self.get_queryset().get_from_board(board)
+    def board(self, board):
+        return self.get_queryset().board(board)
 
 
 class Post(TimeStampedModel):

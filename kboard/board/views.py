@@ -45,10 +45,10 @@ def post_list(request, board_slug):
     }
 
     if search_info['query']:
-        posts = Post.objects.get_from_board(board).remain().search(search_info['selected_flag'], search_info['query'])\
+        posts = Post.objects.board(board).remain().search(search_info['selected_flag'], search_info['query'])\
             .order_by('-id')
     else:
-        posts = Post.objects.get_from_board(board).remain().order_by('-id')
+        posts = Post.objects.board(board).remain().order_by('-id')
 
     # pagination
     paginator = Paginator(posts, 10)  # Show 10 contacts per page
