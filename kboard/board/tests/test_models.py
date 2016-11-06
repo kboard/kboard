@@ -1,8 +1,5 @@
-from datetime import datetime
-from datetime import timezone
-from datetime import timedelta
-
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ValidationError
 
 from .base import BoardAppTest
 from board.models import Post, Board, Comment
@@ -79,6 +76,15 @@ class PostModelTest(BoardAppTest):
 
         self.assertEqual(Post.objects.search('TITLE', 'hi').count(), repeat)
         self.assertEqual(Post.objects.search('CONTENT', 'content').count(), repeat)
+
+    def test_cannot_save_empty_title_post(self):
+        post = Post()
+        post.board = self.default_board
+        post.title = ''
+        post.content = 'This is a content'
+        with self.assertRaises(ValidationError):
+            post.save()
+            post.full_clean()
 
 
 class CommentModelTest(BoardAppTest):
