@@ -77,6 +77,45 @@ class PostModelTest(BoardAppTest):
         self.assertEqual(Post.objects.search('TITLE', 'hi').count(), repeat)
         self.assertEqual(Post.objects.search('CONTENT', 'content').count(), repeat)
 
+    def test_can_get_remained_post(self):
+        repeat = 2
+        for i in range(repeat):
+            Post.objects.create(
+                board=self.default_board,
+                title='title',
+                content='content'
+            )
+        Post.objects.create(
+            board=self.default_board,
+            title='title',
+            content='content',
+            is_deleted=True
+        )
+
+        remained_post_list = Post.objects.remain()
+        self.assertEqual(remained_post_list.count(), 2)
+
+    def test_can_get_post_from_board(self):
+        another_board = Board.objects.create(
+            slug='another',
+            name='another_board'
+        )
+        Post.objects.create(
+            board=another_board,
+            title='another title',
+            content='another content'
+        )
+        Post.objects.create(
+            board=self.default_board,
+            title='default title',
+            content='default content'
+        )
+
+        posts_from_another_board = Post.objects.board(another_board)
+        posts_from_default_board = Post.objects.board(self.default_board)
+        self.assertEqual(posts_from_another_board[0].title, 'another title')
+        self.assertEqual(posts_from_default_board[0].title, 'default title')
+
     def test_cannot_save_empty_title_post(self):
         post = Post()
         post.board = self.default_board
