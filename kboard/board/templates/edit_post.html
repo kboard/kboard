@@ -8,4 +8,4 @@
 
 {% block submit_button_name %}수정{% endblock %}
 
-{% block cancel_url %}{% url 'board:post_list' post.board.slug %}{% endblock %}
+{% block cancel_url %}{% url 'board:view_post' post.id %}{% endblock %}

@@ -274,7 +274,7 @@ class EditPostTest(BoardAppTest):
             'content': 'Edited content',
         })
 
-        self.assertRedirects(response, reverse('board:post_list', args=[self.default_post.board.slug]))
+        self.assertRedirects(response, reverse('board:view_post', args=[self.default_post.id]))
 
     def test_record_edited_post_history_when_post_edited(self):
         saved_edited_post_history = EditedPostHistory.objects.all()
