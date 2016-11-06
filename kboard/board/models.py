@@ -68,10 +68,6 @@ class Post(TimeStampedModel):
         return reverse('board:view_post', args=[self.id])
 
 
-class SummerNote(summer_model.Attachment):
-    summer_field = summer_fields.SummernoteTextField(default='')
-
-
 class Comment(TimeStampedModel):
     content = models.TextField(default='')
     post = models.ForeignKey(Post, null=True)
