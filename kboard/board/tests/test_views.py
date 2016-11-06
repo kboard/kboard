@@ -7,7 +7,7 @@ from django.conf import settings
 from .base import BoardAppTest
 from board.views import new_post, post_list, edit_post
 from board.models import Post, Board, Comment, EditedPostHistory
-from board.forms import PostForm, EMPTY_TITLE_ERROR
+from board.forms import PostForm, EMPTY_TITLE_ERROR, EMPTY_CONTENT_ERROR
 
 
 class CreatePostPageTest(BoardAppTest):
@@ -54,6 +54,21 @@ class CreatePostPageTest(BoardAppTest):
             'content': 'NEW POST CONTENT',
         })
         self.assertContains(response, EMPTY_TITLE_ERROR)
+
+    def test_content_invalid_error_is_shown(self):
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': 'NEW POST TITLE',
+            'content': '',
+        })
+        self.assertContains(response, EMPTY_CONTENT_ERROR)
+
+    def test_both_title_and_content_invalid_errors_are_shown(self):
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': '',
+            'content': '',
+        })
+        self.assertContains(response, EMPTY_TITLE_ERROR)
+        self.assertContains(response, EMPTY_CONTENT_ERROR)
 
 
 class PostListTest(BoardAppTest):

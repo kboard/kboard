@@ -86,6 +86,15 @@ class PostModelTest(BoardAppTest):
             post.save()
             post.full_clean()
 
+    def test_cannot_save_empty_content_post(self):
+        post = Post()
+        post.board = self.default_board
+        post.title = 'This is a title'
+        post.content = ''
+        with self.assertRaises(ValidationError):
+            post.save()
+            post.full_clean()
+
 
 class EditedPostHistoryModelTest(BoardAppTest):
     @classmethod

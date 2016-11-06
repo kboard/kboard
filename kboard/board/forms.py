@@ -5,6 +5,7 @@ from django_summernote.widgets import SummernoteWidget
 from .models import Post
 
 EMPTY_TITLE_ERROR = "제목을 입력하세요"
+EMPTY_CONTENT_ERROR = "내용을 입력하세요"
 
 
 class DivErrorList(ErrorList):
@@ -26,7 +27,8 @@ class PostForm(forms.ModelForm):
             'content': SummernoteWidget(),
         }
         error_messages = {
-            'title': {'required': EMPTY_TITLE_ERROR}
+            'title': {'required': EMPTY_TITLE_ERROR},
+            'content': {'required': EMPTY_CONTENT_ERROR}
         }
 
     def __init__(self, *args, **kwargs):
