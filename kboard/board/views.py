@@ -42,10 +42,10 @@ def post_list(request, board_slug):
     }
 
     if search_info['query']:
-        posts = Post.objects.get_from_board(board).remain().search(search_info['selected_flag'], search_info['query'])\
+        posts = Post.objects.board(board).remain().search(search_info['selected_flag'], search_info['query'])\
             .order_by('-id')
     else:
-        posts = Post.objects.get_from_board(board).remain().order_by('-id')
+        posts = Post.objects.board(board).remain().order_by('-id')
 
     # pagination
     paginator = Paginator(posts, 10)  # Show 10 contacts per page
@@ -122,7 +122,7 @@ def edit_post(request, post_id):
             edited_post_history.save()
             if post_form.is_valid():
                 post_form.save()
-                return redirect(post.board)
+                return redirect(post)
     else:
         post_form = PostForm(initial={'title': post.title, 'content': post.content})
     return render(request, 'edit_post.html', {'post': post, 'post_form': post_form})

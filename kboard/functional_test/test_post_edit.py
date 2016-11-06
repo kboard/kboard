@@ -45,16 +45,15 @@ class EditPostTest(FunctionalTest):
         self.browser.find_element_by_id('id_cancel_button').click()
 
         # 제목과 내용이 변경되지 않고 그대로이다.
-        table = self.browser.find_element_by_id('id_post_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertNotIn('django', "".join([row.text for row in rows]))
+        titlebox = self.browser.find_element_by_class_name('panel-title')
+        self.assertRegex(titlebox.text, '^pjango.+')
 
-        # 다시 해당 게시글로 이동하여 내용을 수정한다.
-        table = self.browser.find_element_by_id('id_post_list_table')
-        rows = table.find_elements_by_css_selector('tbody > tr > td > a')
-        rows[0].click()
+        content = self.browser.find_element_by_class_name('panel-body')
+        self.assertIn('Hello pjango', content.text)
 
-        self.browser.find_element_by_id('id_edit_post_button').click()
+        # 다시 수정 버튼을 클릭하여 내용을 수정한다.
+        edit_button = self.browser.find_element_by_id('id_edit_post_button')
+        edit_button.click()
 
         titlebox = self.browser.find_element_by_id('id_post_title')
         titlebox.clear()
@@ -68,14 +67,6 @@ class EditPostTest(FunctionalTest):
         # 이번에는 제대로 '확인' 버튼을 누른다.
         submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
         submit_button.click()
-
-        # 제목이 변경된 것을 확인한다.
-        self.check_for_row_in_list_table('id_post_list_table', 'django')
-
-        # 내용을 확인하기 위해서 게시물을 클릭한다.
-        table = self.browser.find_element_by_id('id_post_list_table')
-        rows = table.find_elements_by_css_selector('tbody > tr > td > a')
-        rows[0].click()
 
         # 내용에 'Hello django'가 보여지고 있다.
         body = self.browser.find_element_by_class_name('panel-body')
@@ -104,4 +95,3 @@ class EditPostTest(FunctionalTest):
         # 다시 원문이 보인다.
         panel_body = self.browser.find_element_by_class_name('panel-body')
         self.assertIn('Hello django', panel_body.text)
-
