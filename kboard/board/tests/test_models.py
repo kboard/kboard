@@ -114,8 +114,8 @@ class PostModelTest(BoardAppTest):
             content='default content'
         )
 
-        posts_from_another_board = Post.objects.get_from_board(another_board)
-        posts_from_default_board = Post.objects.get_from_board(self.default_board)
+        posts_from_another_board = Post.objects.board(another_board)
+        posts_from_default_board = Post.objects.board(self.default_board)
         self.assertEqual(posts_from_another_board[0].title, 'another title')
         self.assertEqual(posts_from_default_board[0].title, 'default title')
 
