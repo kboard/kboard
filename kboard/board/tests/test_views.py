@@ -260,7 +260,7 @@ class EditPostTest(BoardAppTest):
             content='some post content'
         )
 
-    def test_use_modify_template(self):
+    def test_use_edit_post_template(self):
         response = self.client.get(reverse('board:edit_post', args=[self.default_post.id]))
         self.assertTemplateUsed(response, 'edit_post.html')
 
