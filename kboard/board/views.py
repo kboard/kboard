@@ -123,6 +123,10 @@ def edit_post(request, post_id):
             if post_form.is_valid():
                 post_form.save()
                 return redirect(post)
+        else:
+            error_message = "변경 사항이 없습니다"
+            return render(request, 'edit_post.html', {'post': post, 'post_form': post_form, 'error_alert': error_message})
+
     else:
         post_form = PostForm(initial={'title': post.title, 'content': post.content})
     return render(request, 'edit_post.html', {'post': post, 'post_form': post_form})
