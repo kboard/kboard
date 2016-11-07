@@ -308,6 +308,14 @@ class EditPostTest(BoardAppTest):
         saved_edited_post_history = EditedPostHistory.objects.all()
         self.assertEqual(saved_edited_post_history.count(), 0)
 
+    def test_both_title_and_content_invalid_errors_are_shown(self):
+        response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'title': '',
+            'content': '',
+        })
+        self.assertContains(response, EMPTY_TITLE_ERROR)
+        self.assertContains(response, EMPTY_CONTENT_ERROR)
+
 
 class NewCommentTest(BoardAppTest):
     @classmethod
