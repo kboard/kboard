@@ -63,7 +63,7 @@ def post_list(request, board_slug):
 
     return render(request, 'post_list.html', {
         'posts': posts,
-        'board_slug': board_slug,
+        'board': board,
         'pages_nav_info': pages_nav_info,
         'search_info': search_info
     })

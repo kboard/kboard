@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Post list{% endblock %}
+{% block title %}{{ board.name }}{% endblock %}
 
 {% block body %}
 
 <div class="col-sm-9">
-    <h2>Post list</h2>
+    <h2>{{ board.name }}</h2>
     <table id="id_post_list_table" class="table table-condensed">
         <thead>
             <tr>
@@ -53,7 +53,7 @@
         </div>
         <div class="col-sm-3">
             <button type="button" id="id_create_post_button" class="form-control btn btn-primary move-button"
-                    path="{% url 'board:new_post' board_slug %}">글쓰기</button>
+                    path="{% url 'board:new_post' board.slug %}">글쓰기</button>
         </div>
         <div class="col-sm-3">
             <button type="button" id="board_list_button" class="form-control btn btn-default move-button"
