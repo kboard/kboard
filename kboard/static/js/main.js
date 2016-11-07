@@ -4,7 +4,7 @@ $(document).ready(function() {
         form.submit();
     });
     
-    $(".move-button").click(function(){
+    $(".redirection-button").click(function(){
         var path = $(this).attr('path');
         location.href = path;
     });
