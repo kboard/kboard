@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^summernote/', include('django_summernote.urls')),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
+    url(r'^accounts/', include('accounts.urls')),
     url(r'^', include('board.urls')),
 ]
