@@ -1,6 +1,9 @@
 body {
   div.row {
     table.table {
+      th.table-title {
+        width: 70%;
+      }
       td {
         &.remove-item {
           width: 15px;

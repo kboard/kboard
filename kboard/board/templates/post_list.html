@@ -4,35 +4,40 @@
 
 {% block body %}
 
-<div class="col-sm-9">
-    <h2>Post list</h2>
-    <table id="id_post_list_table" class="table table-condensed">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>제목</th>
-                <th>날짜</th>
-                <th>추천</th>
-                <th>조회 수</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for post in posts %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td><a href="{% url 'board:view_post' post.id %}">{{ post.title }}</a></td>
-                    <td>{{ post.created_time|date:"Y-m-d H:i:s" }}</td>
-                    <td>{{ post.like_count }}</td>
-                    <td class="page-view-count">{{ post.page_view_count }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="col-sm-12">
+    <h3>Post list</h3>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <table id="id_post_list_table" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th class="table-title">제목</th>
+                        <th>날짜</th>
+                        <th>추천</th>
+                        <th>조회 수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{% url 'board:view_post' post.id %}">{{ post.title }}</a></td>
+                            <td>{{ post.created_time|date:"Y-m-d H:i:s" }}</td>
+                            <td>{{ post.like_count }}</td>
+                            <td class="page-view-count">{{ post.page_view_count }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include 'pagination.html' with pages_nav_info=pages_nav_info search_info=search_info %}
+        </div>
+    </div>
 
     <!-- pagination -->
-    {% include 'pagination.html' with pages_nav_info=pages_nav_info search_info=search_info %}
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-8">
         <form method="GET" class="form-inline">
             <select name="search_flag" class="form-control search-flag">
                 {% for key, value in search_info.flags %}
@@ -51,11 +56,11 @@
             </div>
         </form>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
             <button type="button" id="id_create_post_button" class="form-control btn btn-primary move-button"
                     path="{% url 'board:new_post' board_slug %}">글쓰기</button>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
             <button type="button" id="board_list_button" class="form-control btn btn-default move-button"
                     path="{% url 'board:board_list' %}">게시판 목록</button>
         </div>
