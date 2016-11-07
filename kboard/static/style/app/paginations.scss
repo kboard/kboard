@@ -1,0 +1,13 @@
+.page-nav {
+  text-align: right;
+
+  ul.pagination {
+    margin: 0 0 0 10px;
+
+    li{
+      &.disabled > a {
+        color: #e4eaec;
+      }
+    }
+  }
+}
