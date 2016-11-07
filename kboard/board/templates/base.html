@@ -4,14 +4,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, user-scalable=no"/>
+
     <title>{% block title %}{% endblock %}</title>
 
     <script type="text/javascript" src="{% static 'jquery/dist/jquery.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootswatch-dist/js/bootstrap.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bootstrap/dist/js/bootstrap.js' %}"></script>
     {% javascript 'main' %}
 
-    <link rel="stylesheet" href="{% static 'bootswatch-dist/css/bootstrap.css' %}"/>
+    <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.css' %}"/>
     {% stylesheet 'main' %}
 </head>
 <body>
