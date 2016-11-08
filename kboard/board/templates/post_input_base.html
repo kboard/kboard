@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
 {% block body %}
+    {%if error_alert %}
+    <script>
+        alert('{{ error_alert }}');
+    </script>
+    {% endif %}
+
 <div class="col-sm-7">
     <h2>{% block header %}{% endblock %}</h2>
     <form method="post" action="{% block form_action_url %}{% endblock %}" enctype="multipart/form-data" novalidate>
