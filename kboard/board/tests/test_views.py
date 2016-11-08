@@ -260,7 +260,7 @@ class EditPostTest(BoardAppTest):
             content='some post content'
         )
 
-    def test_use_modify_template(self):
+    def test_use_edit_post_template(self):
         response = self.client.get(reverse('board:edit_post', args=[self.default_post.id]))
         self.assertTemplateUsed(response, 'edit_post.html')
 
@@ -307,6 +307,14 @@ class EditPostTest(BoardAppTest):
 
         saved_edited_post_history = EditedPostHistory.objects.all()
         self.assertEqual(saved_edited_post_history.count(), 0)
+
+    def test_show_error_message_if_not_edited(self):
+        response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'title': 'some post title',
+            'content': 'some post content',
+        })
+
+        self.assertContains(response, '변경 사항이 없습니다')
 
     def test_both_title_and_content_invalid_errors_are_shown(self):
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {

@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Post list{% endblock %}
+{% block title %}{{ board.name }}{% endblock %}
 
 {% block body %}
 
 <div class="col-sm-9">
-    <h2>Post list</h2>
+    <h2>{{ board.name }}</h2>
     <table id="id_post_list_table" class="table table-condensed">
         <thead>
             <tr>
