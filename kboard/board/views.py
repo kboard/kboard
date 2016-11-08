@@ -16,6 +16,10 @@ def handle_uploaded_file(f):
             destination.write(chunk)
 
 
+def home(request):
+    return render(request, 'home.html')
+
+
 def new_post(request, board_slug):
     board = Board.objects.get(slug=board_slug)
     if request.method == 'POST':
@@ -63,7 +67,7 @@ def post_list(request, board_slug):
 
     return render(request, 'post_list.html', {
         'posts': posts,
-        'board_slug': board_slug,
+        'board': board,
         'pages_nav_info': pages_nav_info,
         'search_info': search_info
     })
@@ -123,6 +127,10 @@ def edit_post(request, post_id):
             if post_form.is_valid():
                 post_form.save()
                 return redirect(post)
+        else:
+            error_message = "변경 사항이 없습니다"
+            return render(request, 'edit_post.html', {'post': post, 'post_form': post_form, 'error_alert': error_message})
+
     else:
         post_form = PostForm(initial={'title': post.title, 'content': post.content})
     return render(request, 'edit_post.html', {'post': post, 'post_form': post_form})

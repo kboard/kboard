@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Post list{% endblock %}
+{% block title %}{{ board.name }}{% endblock %}
 
 {% block body %}
 
 <div class="col-sm-12">
-    <h3>Post list</h3>
+    <h3>{{ board.name }}</h3>
     <div class="panel panel-default">
         <div class="panel-body">
             <table id="id_post_list_table" class="table table-hover">
@@ -56,12 +56,12 @@
             </div>
         </form>
         </div>
-        <div class="col-sm-2">
-            <button type="button" id="id_create_post_button" class="form-control btn btn-primary move-button"
-                    path="{% url 'board:new_post' board_slug %}">글쓰기</button>
+        <div class="col-sm-3">
+            <button type="button" id="id_create_post_button" class="form-control btn btn-primary redirection-button"
+                    path="{% url 'board:new_post' board.slug %}">글쓰기</button>
         </div>
-        <div class="col-sm-2">
-            <button type="button" id="board_list_button" class="form-control btn btn-default move-button"
+        <div class="col-sm-3">
+            <button type="button" id="board_list_button" class="form-control btn btn-default redirection-button"
                     path="{% url 'board:board_list' %}">게시판 목록</button>
         </div>
     </div>

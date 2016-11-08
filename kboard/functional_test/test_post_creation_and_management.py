@@ -72,10 +72,10 @@ class NewVisitorTest(FunctionalTest):
         self.click_submit_button()
         self.assertRegex(self.browser.current_url, '.+/default/')
 
-        # 게시글 목록 페이지의 타이틀에 'Post list'라고 씌여져 있다.
+        # 게시글 목록 페이지의 타이틀에 'Default'라고 씌여져 있다.
         header_text = self.browser.find_element_by_tag_name('h3').text
-        self.assertIn('Post list', self.browser.title)
-        self.assertIn('Post list', header_text)
+        self.assertIn('Default', self.browser.title)
+        self.assertIn('Default', header_text)
 
         # 게시글 목록에 "1: Title of This Post"라고 씌여져 있다.
         self.check_for_row_in_list_table('id_post_list_table', 'Title of This Post')
