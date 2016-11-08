@@ -16,6 +16,10 @@ def handle_uploaded_file(f):
             destination.write(chunk)
 
 
+def home(request):
+    return render(request, 'home.html')
+
+
 def new_post(request, board_slug):
     board = Board.objects.get(slug=board_slug)
     if request.method == 'POST':
