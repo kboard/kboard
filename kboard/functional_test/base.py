@@ -60,3 +60,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.switch_to.default_content()
 
         self.click_submit_button()
+
+    def register_send_key(self, css_id, send_text):
+        id = self.browser.find_element_by_id(css_id)
+        id.send_keys(send_text)
