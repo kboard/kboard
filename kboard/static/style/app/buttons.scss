@@ -1,0 +1,68 @@
+@mixin button-variant($background) {
+  $border: darken($background, 1%);
+
+  background-color: $background;
+  border-color: $border;
+
+  &:focus,
+  &.focus {
+    background-color: darken($background, 4%);
+        border-color: darken($border, 8%);
+  }
+  &:hover {
+    background-color: darken($background, 4%);
+        border-color: darken($border, 8%);
+  }
+  &:active,
+  &.active,
+  .open > &.dropdown-toggle {
+    background-color: darken($background, 4%);
+        border-color: darken($border, 8%);
+
+    &:hover,
+    &:focus,
+    &.focus {
+      background-color: darken($background, 4%);
+          border-color: darken($border, 8%);
+    }
+  }
+  &:active,
+  &.active,
+  .open > &.dropdown-toggle {
+    background-image: none;
+  }
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    &:hover,
+    &:focus,
+    &.focus {
+      background-color: $background;
+          border-color: $border;
+    }
+  }
+
+  .badge {
+    color: $background;
+  }
+}
+
+.btn-primary {
+  @include button-variant($brand-primary);
+}
+
+.btn-success {
+  @include button-variant($brand-success);
+}
+
+.btn-info {
+  @include button-variant($brand-info);
+}
+
+.btn-warning {
+  @include button-variant($brand-warning);
+}
+
+.btn-danger {
+  @include button-variant($brand-danger);
+}

@@ -1,6 +1,16 @@
+@import 'app/variables.scss';
+
+@import 'app/panels';
+@import 'app/tables.scss';
+@import 'app/paginations.scss';
+@import 'app/buttons.scss';
+
 body {
   div.row {
     table.table {
+      th.table-title {
+        width: 70%;
+      }
       td {
         &.remove-item {
           width: 15px;
