@@ -7,17 +7,10 @@ class TnsCheckTest(FunctionalTest):
         self.browser.get(self.live_server_url + '/accounts/register/')
 
         # 가입에 필요한 정보를 작성한다.
-        usernamebox = self.browser.find_element_by_id("id_username")
-        usernamebox.send_keys("chickenlover01")
-
-        emailbox = self.browser.find_element_by_id("id_email")
-        emailbox.send_keys("chsun0303@naver.com")
-
-        password1box = self.browser.find_element_by_id("id_password1")
-        password1box.send_keys("abcd0000")
-
-        password2box = self.browser.find_element_by_id("id_password2")
-        password2box.send_keys("abcd0000")
+        self.register_send_key("id_username", "chickenlover01")
+        self.register_send_key("id_email", "chsun0303@naver.com")
+        self.register_send_key("id_password1", "abcd0000")
+        self.register_send_key("id_password2", "abcd0000")
 
         # 회원가입약관을 살펴본다.
         terms = self.browser.find_element_by_id("terms")

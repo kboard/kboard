@@ -12,7 +12,7 @@ class RegistrationFormTest(FunctionalTest):
         self.register_send_key("id_password1", "abcd0000")
 
         # 손이 미끄러져서 똑같은 비밀번호를 치지못했다.
-        self.register_send_key("id_password1", "abcd0009")
+        self.register_send_key("id_password2", "abcd0009")
 
         checkbox = self.browser.find_element_by_id("agree")
         checkbox.click()
