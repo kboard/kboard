@@ -44,4 +44,25 @@ class RegistrationFormTest(FunctionalTest):
         error = self.browser.find_element_by_class_name("errorlist")
         self.assertTrue("This password is too short. It must contain at least 8 characters.", error)
 
+    def test_password_only_numbers(self):
+        # 혜선이는 회원가입을 하고싶어한다.
+        self.browser.get(self.live_server_url + '/accounts/register/')
+
+        # 가입에 필요한 정보를 작성한다.
+        self.register_send_key("id_username", "chickenlover01")
+        self.register_send_key("id_email", "chsun0303@naver.com")
+
+        # 귀찮아서 비밀번호를 숫자로만 만든다.
+        self.register_send_key("id_password1", "13579000")
+        self.register_send_key("id_password2", "13579000")
+
+        checkbox = self.browser.find_element_by_id("agree")
+        checkbox.click()
+
+        self.click_submit_button()
+
+        # Password 아래 쪽에 비밀번호는 숫자로만 이루어져서는 안된다는 에러메시지가 나온다.
+        error = self.browser.find_element_by_class_name("errorlist")
+        self.assertTrue("This password is entirely numeric.", error)
+
     ## 어디까지 테스트를 작성해야 할지 모르겠다..
