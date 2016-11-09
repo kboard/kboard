@@ -324,6 +324,14 @@ class EditPostTest(BoardAppTest):
         self.assertContains(response, EMPTY_TITLE_ERROR)
         self.assertContains(response, EMPTY_CONTENT_ERROR)
 
+    def test_does_not_save_history_while_invalid(self):
+        self.assertEqual(EditedPostHistory.objects.count(), 0)
+        response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'title': '',
+            'content': 'content',
+        })
+        self.assertEqual(EditedPostHistory.objects.count(), 0)
+
 
 class NewCommentTest(BoardAppTest):
     @classmethod
