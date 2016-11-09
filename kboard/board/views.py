@@ -132,7 +132,7 @@ def edit_post(request, post_id):
             return render(request, 'edit_post.html', {'post': post, 'post_form': post_form, 'error_alert': error_message})
 
     else:
-        post_form = PostForm(initial={'title': post.title, 'content': post.content})
+        post_form = PostForm(initial={'title': post.title, 'content': post.content, 'file': post.file})
     return render(request, 'edit_post.html', {'post': post, 'post_form': post_form})
 
 
