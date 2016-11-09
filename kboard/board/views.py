@@ -118,13 +118,19 @@ def post_history_list(request, post_id):
 
 def edit_post(request, post_id):
     post = Post.objects.get(id=post_id)
+    origin_post = Post.objects.get(id=post_id)
 
     if request.method == 'POST':
         post_form = PostForm(request.POST, instance=post)
         if post.title != request.POST['title'] or post.content != request.POST['content']:
-            edited_post_history = EditedPostHistory.objects.create(post=post, title=post.title, content=post.content)
-            edited_post_history.save()
             if post_form.is_valid():
+                edited_post_history = EditedPostHistory.objects.create(
+                    post=origin_post,
+                    title=origin_post.title,
+                    content=origin_post.content,
+                )
+                edited_post_history.save()
+
                 post_form.save()
                 return redirect(post)
         else:
