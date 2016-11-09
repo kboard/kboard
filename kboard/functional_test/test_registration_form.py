@@ -85,3 +85,7 @@ class RegistrationFormTest(FunctionalTest):
         # Password 아래 쪽에 username와 비밀번호는 유사하면 안된다는 에러메시지가 나온다.
         error = self.browser.find_element_by_class_name("errorlist")
         self.assertTrue("A user with that username already exists.", error)
+
+    # TODO
+    # password가 abcd1234와 같이 너무 흔한 경우 일 때 에러메시지 띄우기
+    # db에 username이 이미 있으면 에러메시지 띄우기
