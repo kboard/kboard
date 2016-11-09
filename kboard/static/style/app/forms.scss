@@ -1,3 +1,4 @@
+// Buttons
 @mixin button-variant($background) {
   $border: darken($background, 1%);
 
@@ -65,4 +66,10 @@
 
 .btn-danger {
   @include button-variant($brand-danger);
+}
+
+
+// Selects
+select.search-flag {
+  width: 100px;
 }

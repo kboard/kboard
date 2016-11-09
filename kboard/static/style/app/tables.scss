@@ -1,7 +1,15 @@
 table {
-  & tr {
+  th.table-title {
+    width: 70%;
+  }
+  tr {
     td{
       padding: 8px;
+
+      &.remove-item {
+        width: 15px;
+        cursor: pointer;
+      }
     }
   }
 }
