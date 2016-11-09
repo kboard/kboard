@@ -45,7 +45,7 @@ class NewVisitorTest(FunctionalTest):
         self.click_create_post_button()
 
         # 글 쓰기 페이지로 이동한다.
-        self.assertRegex(self.browser.current_url, '.+/default/new/')
+        self.assertRegex(self.browser.current_url, '.+/boards/default/posts/new/')
 
         # 웹 페이지 타이틀과 헤더가 'Create Post'를 표시하고 있다.
         header_text = self.browser.find_element_by_tag_name('h2').text
@@ -70,7 +70,7 @@ class NewVisitorTest(FunctionalTest):
 
         # 하단의 등록 버튼을 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
         self.click_submit_button()
-        self.assertRegex(self.browser.current_url, '.+/default/')
+        self.assertRegex(self.browser.current_url, '.+/boards/default/')
 
         # 게시글 목록 페이지의 타이틀에 'Default'라고 씌여져 있다.
         header_text = self.browser.find_element_by_tag_name('h3').text
@@ -94,7 +94,7 @@ class NewVisitorTest(FunctionalTest):
 
         # 하단의 등록 버든틍 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
         self.click_submit_button()
-        self.assertRegex(self.browser.current_url, '.+/default/')
+        self.assertRegex(self.browser.current_url, '.+/boards/default/')
 
         # 게시글 목록에 두 개의 게시글 제목이 보인다.
         self.check_for_row_in_list_table('id_post_list_table', 'Title of Second Post')
@@ -108,7 +108,7 @@ class NewVisitorTest(FunctionalTest):
         rows[1].click()
 
         # 게시글에 대한 자세한 내용을 보여주는 새로운 창이 뜬다.
-        self.assertRegex(self.browser.current_url, '.+/(\d+)/')
+        self.assertRegex(self.browser.current_url, '.+/posts/(\d+)/')
 
         # 게시글 페이지의 타이틀에는 'View Post'라고 씌여져 있다.
         self.assertIn('View Post', self.browser.title)
@@ -152,7 +152,7 @@ class NewVisitorTest(FunctionalTest):
         create_post_button.click()
 
         # 게시글 목록 페이지가 뜬다.
-        self.assertRegex(self.browser.current_url, '.+/default/$')
+        self.assertRegex(self.browser.current_url, '.+/boards/default/$')
 
         # 지훈이는 새 게시글 작성 중에 취소 기능을 확인하기 위해 다시 '글쓰기' 버튼을 누른다
         self.click_create_post_button()
@@ -161,4 +161,4 @@ class NewVisitorTest(FunctionalTest):
         self.browser.find_element_by_id('id_cancel_button').click()
 
         # 게시글 목록 페이지로 돌아온다.
-        self.assertRegex(self.browser.current_url, '.+/default/$')
+        self.assertRegex(self.browser.current_url, '.+/boards/default/$')

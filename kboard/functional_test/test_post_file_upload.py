@@ -21,7 +21,7 @@ class PostFileUploadTest(FunctionalTest):
         self.click_create_post_button()
 
         # 글 쓰기 페이지로 이동한다.
-        self.assertRegex(self.browser.current_url, '.+/default/new/')
+        self.assertRegex(self.browser.current_url, '.+/boards/default/posts/new/')
 
         # 제목과 내용을 입력한다.
         titlebox = self.browser.find_element_by_id('id_post_title')
@@ -37,7 +37,7 @@ class PostFileUploadTest(FunctionalTest):
 
         # 하단의 등록 버튼을 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.
         self.click_submit_button()
-        self.assertRegex(self.browser.current_url, '.+/default/')
+        self.assertRegex(self.browser.current_url, '.+/boards/default/')
 
         # 첨부파일 업로드가 잘 되었는지 확인하기 위해 방금 작성한 게시글을 클릭한다.
         table = self.browser.find_element_by_id('id_post_list_table')
