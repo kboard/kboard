@@ -251,6 +251,10 @@ class PostViewTest(BoardAppTest):
 
 
 class EditPostTest(BoardAppTest):
+    def tearDown(self):
+        if os.path.isfile(FileUploadTest.SAVED_TEST_FILE_NAME):
+            os.remove(FileUploadTest.SAVED_TEST_FILE_NAME)
+
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
