@@ -105,6 +105,31 @@ def view_post(request, post_id):
     })
 
 
+def comment_list(request, post_id):
+    post = Post.objects.get(id=post_id)
+    comments_all_list = Comment.objects.filter(post=post, is_deleted=False).order_by('-id')
+
+    paginator = Paginator(comments_all_list, 5)
+    page = request.GET.get('page')
+
+    try:
+        comments = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        comments = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        comments = paginator.page(paginator.num_pages)
+
+    pages_nav_info = get_pages_nav_info(comments, nav_chunk_size=10)
+
+    return render(request, 'comment_list.html', {
+        'post': post,
+        'comments': comments,
+        'pages_nav_info': pages_nav_info
+    })
+
+
 @require_GET
 def post_history_list(request, post_id):
     post = Post.objects.get(id=post_id)
@@ -158,7 +183,7 @@ def new_comment(request, post_id):
     if request.method == 'POST':
         post = Post.objects.get(id=post_id)
         Comment.objects.create(post=post, content=request.POST['comment_content'])
-        return redirect(post)
+        return redirect(reverse('board:comment_list', args=[post_id]))
 
 
 @require_POST
