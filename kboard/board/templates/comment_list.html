@@ -11,6 +11,9 @@
             <div class="media comment">
                 <div class="media-body">
                     <div class="comment-info">
+                        <form method="POST" class="delete-comment-form" action="{% url 'board:delete_comment' post.id comment.id %}">
+                            {% csrf_token %}
+                        </form>
                         <small class="delete-comment">삭제</small>
                         <small class="text-muted comment-date">{{ comment.created_time|date:"Y-m-d H:i:s" }}</small>
                     </div>
@@ -27,8 +30,8 @@
     </div>
 </div>
 {% else %}
-<p>
-<strong>댓글이 없습니다</strong>
+<p class="no-comment">
+    <strong>댓글이 없습니다</strong>
 </p>
 {% endif %}
 
