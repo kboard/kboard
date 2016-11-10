@@ -1,20 +1,8 @@
-{% load static %}
-{% load pipeline %}
-
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, user-scalable=no"/>
-
+    {% include 'head.html' %}
     <title>K-Board - {% block title %}{% endblock %}</title>
-
-    <script type="text/javascript" src="{% static 'jquery/dist/jquery.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap/dist/js/bootstrap.js' %}"></script>
-    {% javascript 'main' %}
-
-    <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.css' %}"/>
-    {% stylesheet 'main' %}
 </head>
 <body>
 
