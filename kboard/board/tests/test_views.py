@@ -295,7 +295,7 @@ class EditPostTest(BoardAppTest):
         self.assertEqual(saved_edited_post_history.count(), 1)
         self.assertEqual(saved_edited_post_history[0].title, 'some post title')
         self.assertEqual(saved_edited_post_history[0].content, 'some post content')
-        self.assertEqual(saved_edited_post_history[0].file.name, 'test.txt')
+        self.assertEqual(saved_edited_post_history[0].file.name, '')
 
         upload_file.close()
 
@@ -365,8 +365,9 @@ class EditPostTest(BoardAppTest):
             'file': upload_file,
         })
 
+        edited_post = Post.objects.get(id=self.default_post.id)
         self.assertRedirects(response, reverse('board:view_post', args=[self.default_post.id]))
-        self.assertEqual(self.default_post.file.name, 'test.txt')
+        self.assertEqual(edited_post.file.name, 'test.txt')
 
 
 class NewCommentTest(BoardAppTest):
