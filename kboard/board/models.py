@@ -1,8 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models import Q
-from django_summernote import fields as summer_fields
-from django_summernote import models as summer_model
 
 from core.models import TimeStampedModel
 
