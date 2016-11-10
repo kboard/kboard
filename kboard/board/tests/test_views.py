@@ -295,7 +295,7 @@ class EditPostTest(BoardAppTest):
         self.assertEqual(saved_edited_post_history.count(), 1)
         self.assertEqual(saved_edited_post_history[0].title, 'some post title')
         self.assertEqual(saved_edited_post_history[0].content, 'some post content')
-        self.assertEqual(saved_edited_post_history[0].file.name, 'test.txt')
+        self.assertEqual(saved_edited_post_history[0].file.name, '')
 
         upload_file.close()
 
@@ -355,6 +355,19 @@ class EditPostTest(BoardAppTest):
             'content': 'content',
         })
         self.assertEqual(EditedPostHistory.objects.count(), 0)
+
+    def test_can_edit_post_if_file_is_edtied_only(self):
+        upload_file = open(FileUploadTest.UPLOAD_TEST_FILE_NAME)
+
+        response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'title': 'some post title',
+            'content': 'some post content',
+            'file': upload_file,
+        })
+
+        edited_post = Post.objects.get(id=self.default_post.id)
+        self.assertRedirects(response, reverse('board:view_post', args=[self.default_post.id]))
+        self.assertEqual(edited_post.file.name, 'test.txt')
 
 
 class NewCommentTest(BoardAppTest):
