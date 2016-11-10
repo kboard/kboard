@@ -13,6 +13,8 @@ class Board(models.Model):
 
     slug = models.TextField(default='', unique=True)
     name = models.TextField(default='')
+    posts_chunk_size = models.IntegerField(default=10)
+    pages_nav_chunk_size = models.IntegerField(default=10)
 
 
 class PostQuerySet(models.QuerySet):

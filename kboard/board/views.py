@@ -52,7 +52,7 @@ def post_list(request, board_slug):
         posts = Post.objects.board(board).remain().order_by('-id')
 
     # pagination
-    paginator = Paginator(posts, 10)  # Show 10 contacts per page
+    paginator = Paginator(posts, board.posts_chunk_size)
     page = request.GET.get('page')
     try:
         posts = paginator.page(page)
@@ -63,7 +63,7 @@ def post_list(request, board_slug):
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts = paginator.page(paginator.num_pages)
 
-    pages_nav_info = get_pages_nav_info(posts, nav_chunk_size=10)
+    pages_nav_info = get_pages_nav_info(posts, nav_chunk_size=board.pages_nav_chunk_size)
 
     return render(request, 'post_list.html', {
         'posts': posts,
