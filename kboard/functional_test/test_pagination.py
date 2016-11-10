@@ -42,7 +42,7 @@ class PaginationTest(FunctionalTest):
 
         # 페이지 번호 2를 클릭하였더니 두 번째 페이지로 넘어간다.
         page_list[0].find_element_by_tag_name('a').click()
-        self.assertRegex(self.browser.current_url, '.+/default/?.+page=2')
+        self.assertRegex(self.browser.current_url, '.+/boards/default/?.+page=2')
 
         # 게시글은 3개만 보여진다.
         table = self.browser.find_element_by_id('id_post_list_table')

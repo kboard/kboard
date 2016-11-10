@@ -284,15 +284,20 @@ class EditPostTest(BoardAppTest):
         saved_edited_post_history = EditedPostHistory.objects.all()
         self.assertEqual(saved_edited_post_history.count(), 0)
 
+        upload_file = open(FileUploadTest.UPLOAD_TEST_FILE_NAME)
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
             'title': 'Edited title',
-            'content': 'Edited content'
+            'content': 'Edited content',
+            'file': upload_file,
         })
 
         saved_edited_post_history = EditedPostHistory.objects.all()
         self.assertEqual(saved_edited_post_history.count(), 1)
         self.assertEqual(saved_edited_post_history[0].title, 'some post title')
         self.assertEqual(saved_edited_post_history[0].content, 'some post content')
+        self.assertEqual(saved_edited_post_history[0].file.name, 'test.txt')
+
+        upload_file.close()
 
     def test_show_origin_value_when_start_editing(self):
         upload_file = open(FileUploadTest.UPLOAD_TEST_FILE_NAME)

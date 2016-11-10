@@ -1,28 +1,13 @@
+// Variables
 @import 'app/variables.scss';
 
+// App styles
 @import 'app/panels';
 @import 'app/tables.scss';
 @import 'app/paginations.scss';
-@import 'app/buttons.scss';
+@import 'app/forms';
+@import 'app/navbars.scss';
 
 body {
-  div.row {
-    table.table {
-      th.table-title {
-        width: 70%;
-      }
-      td {
-        &.remove-item {
-          width: 15px;
-          cursor: pointer;
-        }
-      }
-    }
-    select.search-flag {
-      width: 100px;
-    }
-    button.like-button {
-      width: 80px;
-    }
-  }
+  background-color: #f9f9f9;
 }
