@@ -1,0 +1,23 @@
+.media {
+  border-bottom: 1px solid rgb(228, 234, 236);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+  .media-body {
+    .comment-info {
+      float: right;
+      text-align: right;
+
+      small + small {
+        margin-left: 5px;
+      }
+      .remove-comment {
+        cursor: pointer;
+      }
+      .remove-comment:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

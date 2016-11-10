@@ -1,7 +1,39 @@
 .panel {
   border-color: $container-border-color;
+
+  .panel-heading {
+    .panel-title {
+      font-size: 22px;
+      font-weight: bolder;
+    }
+
+    .post-info {
+      text-align: right;
+      float: right;
+
+      span + span {
+        margin-left: 10px;
+      }
+    }
+  }
+  .panel-footer {
+    background-color: #fafafa;
+    border-top: 1px solid #eee;
+  }
 }
 
 .panel-default {
   border-top-width: 3px;
+
+  .panel-heading {
+    color: #444;
+    background-color: #fff;
+    border-color: #cfdbe2;
+  }
+}
+
+.post-panel {
+  .panel-body {
+    min-height: 200px;
+  }
 }
