@@ -122,6 +122,8 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn('Content of This Post', post_content)
 
         # 지훈이는 게시글 내용 하단의 댓글 란에 'This is a comment'라고 입력한다.
+        comment_iframe = self.browser.find_element_by_class_name('comment-iframe')
+        self.browser.switch_to.frame(comment_iframe)
         comment = self.browser.find_element_by_id('id_new_comment')
         comment.send_keys('This is a comment')
 
@@ -138,7 +140,6 @@ class NewVisitorTest(FunctionalTest):
         comment_date = comment_list.find_element_by_class_name('comment-date')
         self.assertRegex(comment_date.text, '\d{4}-[01]\d-[0-3]\d [0-2]\d:[0-5]\d:[0-5]\d')
 
-        # # 게시글과 댓글이 잘 작성된 것을 확인한 지훈이는 다시 게시글 목록을 보여주는 페이지로 돌아가기 위해 게시글 하단의 '목록' 버튼을 누른다.
         # # 댓글이 마음에 들지 않아 다시 삭제하려고 한다. 댓글 우측에 x 버튼을 누른다.
         # remove_comment_button = self.browser.find_element_by_css_selector("#id_comment_list .remove-comment")
         # remove_comment_button.click()
@@ -148,6 +149,7 @@ class NewVisitorTest(FunctionalTest):
         # self.assertEqual(len(comments), 0)
 
         # 게시글과 댓글이 잘 삭제된 것을 확인한 지훈이는 다시 게시글 목록을 보여주는 페이지로 돌아가기 위해 게시글 하단의 '목록' 버튼을 누른다.
+        self.browser.switch_to.default_content()
         create_post_button = self.browser.find_element_by_id('id_back_to_post_list_button')
         create_post_button.click()
 
