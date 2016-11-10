@@ -63,7 +63,7 @@ def post_list(request, board_slug):
         # If page is out of range (e.g. 9999), deliver last page of results.
         posts = paginator.page(paginator.num_pages)
 
-    pages_nav_info = get_pages_nav_info(posts, nav_chunk_size=board.pages_nav_chunk_size)
+    pages_nav_info = get_pages_nav_info(posts, nav_chunk_size=board.post_pages_nav_chunk_size)
 
     return render(request, 'post_list.html', {
         'posts': posts,
@@ -84,7 +84,7 @@ def view_post(request, post_id):
     if post.created_time != post.modified_time:
         is_modified = True
 
-    paginator = Paginator(comments_all_list, 5)  # Show 5 contacts per page
+    paginator = Paginator(comments_all_list, post.board.comments_chunk_size)
     page = request.GET.get('page')
     try:
         comments = paginator.page(page)
@@ -95,7 +95,7 @@ def view_post(request, post_id):
         # If page is out of range (e.g. 9999), deliver last page of results.
         comments = paginator.page(paginator.num_pages)
 
-    pages_nav_info = get_pages_nav_info(comments, nav_chunk_size=10)
+    pages_nav_info = get_pages_nav_info(comments, nav_chunk_size=post.board.comment_pages_nav_chunk_size)
 
     return render(request, 'view_post.html', {
         'post': post,
