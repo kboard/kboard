@@ -1,5 +1,3 @@
-from urllib.parse import urlencode
-
 from .base import BoardAppTest
 from board.templatetags.url_parameter import url_parameter
 

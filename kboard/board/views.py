@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.urlresolvers import reverse
 from django.views.decorators.http import require_POST, require_GET
 from django.db.models import F
 from django.conf import settings
