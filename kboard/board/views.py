@@ -121,13 +121,14 @@ def edit_post(request, post_id):
     origin_post = Post.objects.get(id=post_id)
 
     if request.method == 'POST':
-        post_form = PostForm(request.POST, instance=post)
-        if post.title != request.POST['title'] or post.content != request.POST['content']:
+        post_form = PostForm(request.POST, request.FILES, instance=post)
+        if post.title != request.POST['title'] or post.content != request.POST['content'] or post.file.name != request.FILES.get('file', ''):
             if post_form.is_valid():
                 edited_post_history = EditedPostHistory.objects.create(
                     post=origin_post,
                     title=origin_post.title,
                     content=origin_post.content,
+                    file=origin_post.file,
                 )
                 edited_post_history.save()
 
