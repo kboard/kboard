@@ -46,7 +46,7 @@ class EditPostTest(FunctionalTest):
 
         # 제목과 내용이 변경되지 않고 그대로이다.
         titlebox = self.browser.find_element_by_class_name('panel-title')
-        self.assertRegex(titlebox.text, '^pjango.+')
+        self.assertEqual(titlebox.text, 'pjango')
 
         content = self.browser.find_element_by_class_name('panel-body')
         self.assertIn('Hello pjango', content.text)
