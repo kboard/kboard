@@ -1,6 +1,6 @@
 $(document).ready(function() {
-    $(".remove-comment").click(function(){
-        var form = $(this).find('form');
+    $(".delete-comment").click(function(){
+        var form = $(this).parent().find('form');
         form.submit();
     });
     
