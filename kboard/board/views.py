@@ -81,7 +81,8 @@ def view_post(request, post_id):
     comments_all_list = Comment.objects.filter(post=post, is_deleted=False).order_by('-id')
 
     is_modified = False
-    if post.created_time != post.modified_time:
+    history = EditedPostHistory.objects.filter(post=post)
+    if history:
         is_modified = True
 
     paginator = Paginator(comments_all_list, 5)  # Show 5 contacts per page
