@@ -58,7 +58,6 @@ class PaginationTest(FunctionalTest):
         self.assertEqual(len(page_list), 1)
         self.assertEqual(page_list[0].find_element_by_tag_name('a').text, '1')
 
-    @skip
     def test_pagination_comment(self):
         self.browser.get(self.live_server_url)
         self.move_to_default_board()
@@ -76,6 +75,9 @@ class PaginationTest(FunctionalTest):
         # 순서는 최신순으로 보여진다.
 
         # 2개의 댓글을 추가한다.
+        comment_iframe = self.browser.find_element_by_class_name('comment-iframe')
+        self.browser.switch_to.frame(comment_iframe)
+
         for day in range(1, 3):
             comment = self.browser.find_element_by_id('id_new_comment')
             comment.send_keys('comment ' + str(day))
@@ -84,12 +86,12 @@ class PaginationTest(FunctionalTest):
             comment_submit.click()
 
         # 현재 2개의 댓글이 존재하고
-        comment_list = self.browser.find_element_by_id("id_comment_list")
-        comments = comment_list.find_elements_by_tag_name('a')
-        self.assertEqual(len(comments), 2)
+        comment_list = self.browser.find_elements_by_class_name("comment")
+        self.assertEqual(len(comment_list), 2)
 
         # 가장 최신 댓글인 'comment 2'가 맨 위에 보인다.
-        self.assertEqual(comments[0].text, 'comment 2')
+        content = comment_list[0].find_element_by_class_name('comment-content').text
+        self.assertEqual(content, 'comment 2')
 
         # 페이지 번호는 1로 표시된다
         current_page_num = self.browser.find_element_by_css_selector('.current-page-num > a').text
@@ -104,15 +106,12 @@ class PaginationTest(FunctionalTest):
             comment_submit.click()
 
         # 댓글은 5개만 보여진다.
-        comment_list = self.browser.find_element_by_id("id_comment_list")
-        comments = comment_list.find_elements_by_tag_name('a')
-        self.assertEqual(len(comments), 5)
+        comment_list = self.browser.find_elements_by_class_name("comment")
+        self.assertEqual(len(comment_list), 5)
 
         # 가장 최신 댓글인 'comment 7'이 맨 위에 보인다.
-        self.assertEqual(comments[0].text, 'comment 7')
-
-        # 맨 아래에는 'comment 3'이 보인다.
-        self.assertEqual(comments[4].text, 'comment 3')
+        content = comment_list[0].find_element_by_class_name('comment-content').text
+        self.assertEqual(content, 'comment 7')
 
         # 현재 페이지 번호는 그대로 1이고 페이지 번호 2가 추가된다
         current_page_num = self.browser.find_element_by_css_selector('.current-page-num > a').text
@@ -126,15 +125,16 @@ class PaginationTest(FunctionalTest):
         other_page_list[0].find_element_by_tag_name('a').click()
 
         # 게시글은 2개만 보여진다.
-        comment_list = self.browser.find_element_by_id("id_comment_list")
-        comments = comment_list.find_elements_by_tag_name('a')
-        self.assertEqual(len(comments), 2)
+        comment_list = self.browser.find_elements_by_class_name("comment")
+        self.assertEqual(len(comment_list), 2)
 
         # 두번 째 페이지의 첫 번째 댓글인 'comment 2'가 맨 위에 보인다.
-        self.assertEqual(comments[0].text, 'comment 2')
+        content = comment_list[0].find_element_by_class_name('comment-content').text
+        self.assertEqual(content, 'comment 2')
 
         # 마지막 댓글에는 가장 먼저 작성된 'comment 1'이 보인다.
-        self.assertEqual(comments[len(comments)-1].text, 'comment 1')
+        content = comment_list[len(comment_list)-1].find_element_by_class_name('comment-content').text
+        self.assertEqual(content, 'comment 1')
 
         # 현재 페이지 번호는 2로 표시된다.
         current_page_num = self.browser.find_element_by_css_selector('.current-page-num > a').text

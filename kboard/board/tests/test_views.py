@@ -203,16 +203,8 @@ class PostViewTest(BoardAppTest):
         return self.client.get(reverse('board:view_post', args=[post_.id]))
 
     def test_uses_list_template(self):
-        response = PostViewTest.get_response_for_some_post_view(self)
+        response = self.get_response_for_some_post_view()
         self.assertTemplateUsed(response, 'view_post.html')
-
-    def test_use_pagination_template(self):
-        response = PostViewTest.get_response_for_some_post_view(self)
-        self.assertTemplateUsed(response, 'pagination.html')
-
-    def test_view_default_page_list_when_post_open(self):
-        response = PostViewTest.get_response_for_some_post_view(self)
-        self.assertContains(response, '<li class="disabled current-page-num"><a>'+str(1)+'</a></li>')
 
     def test_passes_correct_post_to_template(self):
         other_post = Post.objects.create(
@@ -248,6 +240,19 @@ class PostViewTest(BoardAppTest):
         self.assertContains(response, 'correct post of content')
         self.assertNotContains(response, 'other post of title')
         self.assertNotContains(response, 'other post of content')
+
+
+class CommentListTest(BoardAppTest):
+    def test_use_pagination_template_when_post_has_comments(self):
+        post = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
+        Comment.objects.create(post=post, content='content')
+        response = self.client.get(reverse('board:comment_list', args=[post.id]))
+        self.assertTemplateUsed(response, 'pagination.html')
+
+    def test_does_not_use_pagination_template_when_post_has_no_comments(self):
+        post = Post.objects.create(board=self.default_board, title='post of title', content='post of content')
+        response = self.client.get(reverse('board:comment_list', args=[post.id]))
+        self.assertTemplateNotUsed(response, 'pagination.html')
 
 
 class EditPostTest(BoardAppTest):

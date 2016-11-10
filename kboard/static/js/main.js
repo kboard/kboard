@@ -8,4 +8,9 @@ $(document).ready(function() {
         var path = $(this).attr('path');
         location.href = path;
     });
+
+    $('.comment-iframe').on('load', function () {
+        var height = this.contentWindow.document.body.offsetHeight;
+        $(this).height(height);
+    });
 });
