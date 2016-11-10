@@ -1,4 +1,5 @@
 from .base import FunctionalTest
+from unittest import skip
 
 
 class PaginationTest(FunctionalTest):
@@ -57,6 +58,7 @@ class PaginationTest(FunctionalTest):
         self.assertEqual(len(page_list), 1)
         self.assertEqual(page_list[0].find_element_by_tag_name('a').text, '1')
 
+    @skip
     def test_pagination_comment(self):
         self.browser.get(self.live_server_url)
         self.move_to_default_board()
