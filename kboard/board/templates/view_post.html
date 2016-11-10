@@ -34,41 +34,8 @@
 
     <!-- comment -->
     <h3>댓글</h3>
-    <div class="panel">
-        <div class="panel-body">
-            {% for comment in comments %}
-                <div class="media comment">
-                    <div class="media-body">
-                        <div class="comment-info">
-                            <small class="remove-comment">삭제</small>
-                            <small class="text-muted comment-date">{{ comment.created_time|date:"Y-m-d H:i:s" }}</small>
-                        </div>
-                        <span class="text-primary">사용자 이름</span>
-                        <p>
-                            {{ comment.content }}
-                        </p>
-                    </div>
-                </div>
-            {% endfor %}
-            <div style="margin-top: 10px;">
-                {% include 'pagination.html' with pages_nav_info=pages_nav_info query="" %}
-            </div>
-        </div>
-    </div>
-
-
-
-    <div class="row">
-        <form method="POST" action="{% url 'board:new_comment' post.id %}">
-            {% csrf_token %}
-            <div class="col-sm-9">
-                <input type="text" id="id_new_comment" name="comment_content" class="form-control"
-                       placeholder="Write comment..."/>
-            </div>
-            <div class="col-sm-3">
-                <button type="submit" id="id_new_comment_submit" class="form-control btn btn-primary">댓글 달기</button>
-            </div>
-        </form>
+    <div>
+        <iframe src="{% url 'board:comment_list' post.id %}" class="comment-iframe" scrolling="no"></iframe>
     </div>
     <br/>
     <div class="row">
