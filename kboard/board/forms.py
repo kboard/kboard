@@ -2,7 +2,7 @@ from django import forms
 from django.forms.utils import ErrorList
 from django_summernote.widgets import SummernoteWidget
 
-from .models import Post
+from .models import Post, Attachment
 
 EMPTY_TITLE_ERROR = "제목을 입력하세요"
 EMPTY_CONTENT_ERROR = "내용을 입력하세요"
@@ -35,3 +35,9 @@ class PostForm(forms.ModelForm):
         kwargs_new = {'error_class': DivErrorList}
         kwargs_new.update(kwargs)
         super(PostForm, self).__init__(*args, **kwargs_new)
+
+
+class AttachmentForm(forms.ModelForm):
+    class Meta:
+        model = Attachment
+        fields = ('attachment', )
