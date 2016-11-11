@@ -3,6 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from registration.forms import RegistrationFormUniqueEmail
 
+
 class RegistrationForm(RegistrationFormUniqueEmail):
     error_messages = {
         'email_mismatch': _('The two email fields didn\'t match.'),
@@ -37,9 +38,3 @@ class RegistrationForm(RegistrationFormUniqueEmail):
                 code='password_mismatch',
             )
         return password2
-
-    def save(self, commit=True):
-        user = super(RegistrationFormUniqueEmail, self).save(commit=False)
-        if commit:
-            user.save()
-        return user
