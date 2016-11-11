@@ -17,9 +17,6 @@
     {% csrf_token %}
     {{ form.as_p }}
 
-    <input type="checkbox" name="checkbox" value="check" id="agree"/>
-    <a target="_blank" href="/accounts/terms/" id="terms">I have read and agreed to the Terms of Service</a>
-    <br/>
     <button type="submit" value="{% trans 'Submit' %}">Submit</button>
 </form>
 {% endblock %}
