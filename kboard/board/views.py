@@ -6,7 +6,7 @@ from django.db.models import F
 from django.conf import settings
 
 from board.models import Post, Board, Comment, EditedPostHistory
-from board.forms import PostForm
+from board.forms import PostForm, AttachmentForm
 from core.utils import get_pages_nav_info
 
 
@@ -24,6 +24,7 @@ def new_post(request, board_slug):
     board = Board.objects.get(slug=board_slug)
     if request.method == 'POST':
         post_form = PostForm(request.POST, request.FILES)
+        attachment_form = AttachmentForm(request.FILES)
         if post_form.is_valid():
             post = post_form.save(commit=False)
             post.board = board
@@ -31,8 +32,9 @@ def new_post(request, board_slug):
             return redirect(board)
     else:
         post_form = PostForm()
+        attachment_form = AttachmentForm()
 
-    return render(request, 'new_post.html', {'board': board, 'post_form': post_form})
+    return render(request, 'new_post.html', {'board': board, 'post_form': post_form, 'attachment_form': attachment_form})
 
 
 def post_list(request, board_slug):
