@@ -16,7 +16,7 @@ class Board(models.Model):
     name = models.TextField(default='')
     posts_chunk_size = models.IntegerField(default=10)
     post_pages_nav_chunk_size = models.IntegerField(default=10)
-    comments_chunk_size = models.IntegerField(default=30)
+    comments_chunk_size = models.IntegerField(default=5)
     comment_pages_nav_chunk_size = models.IntegerField(default=10)
 
 
