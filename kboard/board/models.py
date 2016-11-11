@@ -76,6 +76,11 @@ class Post(TimeStampedModel):
         return reverse('board:view_post', args=[self.id])
 
 
+class Attachment(models.Model):
+    post = models.ForeignKey(Post, null=False)
+    attachment = models.FileField(blank=True, null=True)
+
+
 class Comment(TimeStampedModel):
     content = models.TextField(default='')
     post = models.ForeignKey(Post, null=True)
