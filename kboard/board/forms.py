@@ -35,4 +35,3 @@ class PostForm(forms.ModelForm):
         kwargs_new = {'error_class': DivErrorList}
         kwargs_new.update(kwargs)
         super(PostForm, self).__init__(*args, **kwargs_new)
-        self.fields['file'].required = False

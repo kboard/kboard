@@ -66,7 +66,7 @@ class Post(TimeStampedModel):
 
     title = models.CharField(blank=False, max_length=100)
     content = models.TextField(default='')
-    file = models.FileField(null=True)
+    file = models.FileField(blank=True, null=True)
     board = models.ForeignKey(Board, null=True)
     is_deleted = models.BooleanField(default=False)
     page_view_count = models.IntegerField(default=0)
