@@ -80,3 +80,6 @@ bower_components/
 docs/_build
 build
 dist
+
+# media file
+kboard/file/
