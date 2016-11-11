@@ -10,11 +10,12 @@ class RegistrationFormTest(FunctionalTest):
         self.register_send_key("id_username", "chickenlover01")
         self.register_send_key("id_email", "chsun0303@naver.com")
         self.register_send_key("id_password1", "abcd0000")
+        self.register_send_key("id_fullName", "testfullname")
 
         # 손이 미끄러져서 똑같은 비밀번호를 치지못했다.
         self.register_send_key("id_password2", "abcd0009")
 
-        checkbox = self.browser.find_element_by_id("agree")
+        checkbox = self.browser.find_element_by_id("id_terms")
         checkbox.click()
 
         self.click_submit_button()
@@ -30,12 +31,13 @@ class RegistrationFormTest(FunctionalTest):
         # 가입에 필요한 정보를 작성한다.
         self.register_send_key("id_username", "chickenlover01")
         self.register_send_key("id_email", "chsun0303@naver.com")
+        self.register_send_key("id_fullName", "testfullname")
 
         # 귀찮아서 비밀번호를 짧게 만든다.
         self.register_send_key("id_password1", "abcd")
         self.register_send_key("id_password2", "abcd")
 
-        checkbox = self.browser.find_element_by_id("agree")
+        checkbox = self.browser.find_element_by_id("id_terms")
         checkbox.click()
 
         self.click_submit_button()
@@ -51,12 +53,13 @@ class RegistrationFormTest(FunctionalTest):
         # 가입에 필요한 정보를 작성한다.
         self.register_send_key("id_username", "chickenlover01")
         self.register_send_key("id_email", "chsun0303@naver.com")
+        self.register_send_key("id_fullName", "testfullname")
 
         # 귀찮아서 비밀번호를 숫자로만 만든다.
         self.register_send_key("id_password1", "13579000")
         self.register_send_key("id_password2", "13579000")
 
-        checkbox = self.browser.find_element_by_id("agree")
+        checkbox = self.browser.find_element_by_id("id_terms")
         checkbox.click()
 
         self.click_submit_button()
@@ -72,12 +75,13 @@ class RegistrationFormTest(FunctionalTest):
         # 가입에 필요한 정보를 작성한다.
         self.register_send_key("id_username", "chickenlover01")
         self.register_send_key("id_email", "chsun0303@naver.com")
+        self.register_send_key("id_fullName", "testfullname")
 
         # 귀찮아서 비밀번호를 username과 똑같이 만든다.
         self.register_send_key("id_password1", "chickenlover01")
         self.register_send_key("id_password2", "chickenlover01")
 
-        checkbox = self.browser.find_element_by_id("agree")
+        checkbox = self.browser.find_element_by_id("id_terms")
         checkbox.click()
 
         self.click_submit_button()

@@ -1,17 +1,5 @@
 {% load i18n %}
 
-<script>
-    function tncSubmit() {
-        if(document.getElementById('agree').checked) {
-            return true;
-        }
-        else {
-            alert('Please read and agree our Terms and Conditions');
-            return false;
-        }
-    }
-</script>
-
 {% block content %}
 <form method="post" action="" class="registration-form" onsubmit="return tncSubmit()">
     {% csrf_token %}
