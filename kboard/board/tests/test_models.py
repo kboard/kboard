@@ -1,8 +1,13 @@
+import os
+
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.conf import settings
+
 
 from .base import BoardAppTest
-from board.models import Post, Board, Comment, EditedPostHistory
+from board.models import Post, Board, Comment, EditedPostHistory, Attachment
 
 
 class PostModelTest(BoardAppTest):
@@ -233,3 +238,49 @@ class CommentModelTest(BoardAppTest):
         second_saved_comment = saved_comments[1]
         self.assertEqual(first_saved_comment.content, 'This is a first comment')
         self.assertEqual(second_saved_comment.content, 'This is a second comment')
+
+
+class AttachmentModelTest(BoardAppTest):
+    UPLOAD_TEST_FILE_NAME = 'test_file/test.txt'
+    SAVED_TEST_FILE_NAME_1 = 'attachment_test_1.txt'
+    SAVED_TEST_FILE_NAME_2 = 'attachment_test_2.txt'
+    SAVED_TEST_FILE_PATH_1 = os.path.join(settings.MEDIA_ROOT, SAVED_TEST_FILE_NAME_1)
+    SAVED_TEST_FILE_PATH_2 = os.path.join(settings.MEDIA_ROOT, SAVED_TEST_FILE_NAME_2)
+
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.default_post = Post.objects.create(
+            board=cls.default_board,
+            title='some post title',
+            content='some post content'
+        )
+
+    def tearDown(self):
+        if os.path.isfile(self.SAVED_TEST_FILE_PATH_1):
+            os.remove(self.SAVED_TEST_FILE_PATH_1)
+
+        if os.path.isfile(self.SAVED_TEST_FILE_PATH_2):
+            os.remove(self.SAVED_TEST_FILE_PATH_2)
+
+    def test_can_save_a_attachment_in_a_particular_post(self):
+        another_post = Post.objects.create(
+            board=self.default_board,
+            title='other post title',
+            content='other post content'
+        )
+
+        first_uploaded_file = SimpleUploadedFile(self.SAVED_TEST_FILE_NAME_1, open(self.UPLOAD_TEST_FILE_NAME, 'rb').read())
+        Attachment.objects.create(post=self.default_post, attachment=first_uploaded_file)
+
+        second_uploaded_file = SimpleUploadedFile(self.SAVED_TEST_FILE_NAME_2, open(self.UPLOAD_TEST_FILE_NAME, 'rb').read())
+        Attachment.objects.create(post=another_post, attachment=second_uploaded_file)
+
+        saved_attachments = Attachment.objects.all()
+        self.assertEqual(saved_attachments.count(), 2)
+
+        saved_attachments = Attachment.objects.filter(post=self.default_post)
+        self.assertEqual(saved_attachments.count(), 1)
+
+        saved_attachments = Attachment.objects.filter(post=another_post)
+        self.assertEqual(saved_attachments.count(), 1)
