@@ -448,7 +448,7 @@ class FileUploadTest(BoardAppTest):
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
-            'file': upload_file,
+            'attachment': upload_file,
         })
 
         upload_file.seek(0)
