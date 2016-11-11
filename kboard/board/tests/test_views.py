@@ -6,7 +6,7 @@ from django.conf import settings
 
 from .base import BoardAppTest
 from board.views import new_post, post_list, edit_post
-from board.models import Post, Board, Comment, EditedPostHistory
+from board.models import Post, Board, Comment, EditedPostHistory, Attachment
 from board.forms import PostForm, EMPTY_TITLE_ERROR, EMPTY_CONTENT_ERROR
 
 
@@ -367,12 +367,15 @@ class EditPostTest(BoardAppTest):
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
             'title': 'some post title',
             'content': 'some post content',
-            'file': upload_file,
+            'attachment': upload_file,
         })
 
         edited_post = Post.objects.get(id=self.default_post.id)
+        edited_attachment = Attachment.objects.get(post=edited_post)
+
         self.assertRedirects(response, reverse('board:view_post', args=[self.default_post.id]))
-        self.assertEqual(edited_post.file.name, 'test.txt')
+        self.assertEqual(edited_post.title, 'some post title')
+        self.assertEqual(edited_attachment.attachment.name, 'test.txt')
 
 
 class NewCommentTest(BoardAppTest):
