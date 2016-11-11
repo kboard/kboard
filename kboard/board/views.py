@@ -110,7 +110,7 @@ def comment_list(request, post_id):
     post = Post.objects.get(id=post_id)
     comments_all_list = Comment.objects.filter(post=post, is_deleted=False).order_by('-id')
 
-    paginator = Paginator(comments_all_list, 5)
+    paginator = Paginator(comments_all_list, post.board.comments_chunk_size)
     page = request.GET.get('page')
 
     try:
@@ -122,7 +122,7 @@ def comment_list(request, post_id):
         # If page is out of range (e.g. 9999), deliver last page of results.
         comments = paginator.page(paginator.num_pages)
 
-    pages_nav_info = get_pages_nav_info(comments, nav_chunk_size=10)
+    pages_nav_info = get_pages_nav_info(comments, nav_chunk_size=post.board.comment_pages_nav_chunk_size)
 
     return render(request, 'comment_list.html', {
         'post': post,
