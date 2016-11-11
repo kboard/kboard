@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.conf import settings
 
-from board.models import Post, Board, Comment, EditedPostHistory
+from board.models import Post, Board, Comment, EditedPostHistory, Attachment
 from board.forms import PostForm, AttachmentForm
 from core.utils import get_pages_nav_info
 
@@ -150,11 +150,19 @@ def post_history_list(request, post_id):
 def edit_post(request, post_id):
     post = Post.objects.get(id=post_id)
     origin_post = Post.objects.get(id=post_id)
+    try:
+        attachment = Attachment.objects.get(post=post)
+        attachment_name = attachment.attachment.name
+    except Attachment.DoesNotExist:
+        attachment = None
+        attachment_name = ''
 
     if request.method == 'POST':
         post_form = PostForm(request.POST, request.FILES, instance=post)
-        if post.title != request.POST['title'] or post.content != request.POST['content'] or post.file.name != request.FILES.get('file', ''):
-            if post_form.is_valid():
+        attachment_form = AttachmentForm(request.POST, request.FILES, instance=attachment)
+        if post.title != request.POST['title'] or post.content != request.POST['content'] or \
+                attachment_name != request.FILES.get('attachment', ''):
+            if post_form.is_valid() and attachment_form.is_valid():
                 edited_post_history = EditedPostHistory.objects.create(
                     post=origin_post,
                     title=origin_post.title,
@@ -163,15 +171,28 @@ def edit_post(request, post_id):
                 )
                 edited_post_history.save()
 
-                post_form.save()
+                post.save()
+
+                attachment = attachment_form.save(commit=False)
+                attachment.post = post
+                attachment.save()
                 return redirect(post)
         else:
             error_message = "변경 사항이 없습니다"
-            return render(request, 'edit_post.html', {'post': post, 'post_form': post_form, 'error_alert': error_message})
-
+            return render(request, 'edit_post.html', {
+                'post': post,
+                'post_form': post_form,
+                'attachment_form': attachment_form,
+                'error_alert': error_message
+            })
     else:
         post_form = PostForm(initial={'title': post.title, 'content': post.content, 'file': post.file})
-    return render(request, 'edit_post.html', {'post': post, 'post_form': post_form})
+        if attachment:
+            attachment_form = AttachmentForm(initial={'attachment': attachment.attachment})
+        else:
+            attachment_form = AttachmentForm()
+
+    return render(request, 'edit_post.html', {'post': post, 'post_form': post_form, 'attachment_form': attachment_form})
 
 
 def board_list(request):
