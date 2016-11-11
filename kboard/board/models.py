@@ -6,6 +6,9 @@ from core.models import TimeStampedModel
 
 
 class Board(models.Model):
+    def __str__(self):
+        return 'Board Name: ' + self.name
+
     def get_absolute_url(self):
         return reverse('board:post_list', args=[self.slug])
 
@@ -48,6 +51,9 @@ class PostManager(models.Manager):
 
 
 class Post(TimeStampedModel):
+    def __str__(self):
+        return 'Post Title: ' + self.title
+
     SEARCH_FLAG = [
         ('TITLE', '제목'),
         ('CONTENT', '내용'),
