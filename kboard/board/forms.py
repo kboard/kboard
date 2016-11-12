@@ -24,7 +24,7 @@ class PostForm(forms.ModelForm):
         fields = ('title', 'content', 'file')
         widgets = {
             'title': forms.TextInput(attrs={'id': 'id_post_title', 'class': 'form-control', 'placeholder': 'Insert Title'}),
-            'content': SummernoteWidget(),
+            'content': SummernoteWidget({'width': '100%'}),
         }
         error_messages = {
             'title': {'required': EMPTY_TITLE_ERROR},
