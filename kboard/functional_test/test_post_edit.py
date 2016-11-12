@@ -77,7 +77,7 @@ class EditPostTest(FunctionalTest):
         history_button.click()
 
         # 하나의 수정 내역이 보인다.
-        panel_list = self.browser.find_elements_by_css_selector('.post-history-panel')
+        panel_list = self.browser.find_elements_by_css_selector('.post-history')
         self.assertEqual(len(panel_list), 1)
 
         # 'pjango'라는 제목을 가진 기록이 있다.
