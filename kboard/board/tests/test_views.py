@@ -2,12 +2,14 @@ import os
 
 from django.http import HttpRequest
 from django.core.urlresolvers import reverse
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 
 from .base import BoardAppTest
 from board.views import new_post, post_list, edit_post
 from board.models import Post, Board, Comment, EditedPostHistory, Attachment
 from board.forms import PostForm, EMPTY_TITLE_ERROR, EMPTY_CONTENT_ERROR
+from board.tests.test_models import AttachmentModelTest
 
 
 class CreatePostPageTest(BoardAppTest):
@@ -450,9 +452,24 @@ class FileUploadTest(BoardAppTest):
     UPLOAD_TEST_FILE_NAME = os.path.join(settings.BASE_DIR, 'test_file/test.txt')
     SAVED_TEST_FILE_NAME = os.path.join(settings.BASE_DIR, 'file/test.txt')
 
+    @classmethod
+    def setUpTestData(cls):
+        super().setUpTestData()
+        cls.default_post = Post.objects.create(
+            board=cls.default_board,
+            title='some post title',
+            content='some post content'
+        )
+
     def tearDown(self):
         if os.path.isfile(self.SAVED_TEST_FILE_NAME):
             os.remove(self.SAVED_TEST_FILE_NAME)
+
+        if os.path.isfile(AttachmentModelTest.SAVED_TEST_FILE_PATH_1):
+            os.remove(AttachmentModelTest.SAVED_TEST_FILE_PATH_1)
+
+        if os.path.isfile(AttachmentModelTest.SAVED_TEST_FILE_PATH_2):
+            os.remove(AttachmentModelTest.SAVED_TEST_FILE_PATH_2)
 
     def test_save_upload_file(self):
         upload_file = open(self.UPLOAD_TEST_FILE_NAME)
@@ -469,3 +486,21 @@ class FileUploadTest(BoardAppTest):
 
         upload_file.close()
         saved_file.close()
+
+    def test_can_modify_uploaded_file_with_edit_post(self):
+        uploaded_file = SimpleUploadedFile(AttachmentModelTest.SAVED_TEST_FILE_NAME_1,
+                                           open(AttachmentModelTest.UPLOAD_TEST_FILE_NAME, 'rb').read())
+        Attachment.objects.create(post=self.default_post, attachment=uploaded_file)
+
+        self.assertEqual(Attachment.objects.get(post=self.default_post).attachment.name,
+                         AttachmentModelTest.SAVED_TEST_FILE_NAME_1)
+
+        upload_file = open(os.path.join(settings.BASE_DIR, 'test_file/attachment_test_2.txt'))
+        self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'title': 'some post title',
+            'content': 'some post content',
+            'attachment': upload_file,
+        })
+
+        self.assertEqual(Attachment.objects.get(post=self.default_post).attachment.name,
+                         AttachmentModelTest.SAVED_TEST_FILE_NAME_2)
