@@ -9,6 +9,14 @@ class NewVisitorTest(FunctionalTest):
         # 해당 웹 사이트를 확인하러 간다.
         self.browser.get(self.live_server_url)
 
+        # header navbar의 로고에 'K-Board'라고 씌여져 있다.
+        logo_text = self.browser.find_element_by_class_name('navbar-brand')
+        self.assertEqual('K-Board', logo_text.text)
+
+        # navbar에 'Default' 게시판이 보인다.
+        navbar_item = self.browser.find_elements_by_class_name('navbar-item')
+        self.assertEqual('Default', navbar_item[0].text)
+
         # 타이틀과 헤더가 'Board List'를 표시하고 있다.
         header_text = self.browser.find_element_by_tag_name('h2').text
         self.assertIn('Board List', self.browser.title)
