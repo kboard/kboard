@@ -13,4 +13,10 @@ $(document).ready(function() {
         var height = this.contentWindow.document.body.offsetHeight;
         $(this).height(height);
     });
+
+    $('#id_content_iframe').on('load', function () {
+        var height = this.contentWindow.document.body.offsetHeight;
+        $(this).height(height);
+        $(this).attr('scrolling', 'no');
+    });
 });
