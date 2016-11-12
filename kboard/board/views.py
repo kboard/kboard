@@ -171,6 +171,16 @@ def edit_post(request, post_id):
                     new_attachment.post = edited_post
                     new_attachment.save()
 
+                # modify attachment
+                if origin_attachment and request.FILES.get('attachment', '') != '' \
+                        and origin_attachment_name != request.FILES.get('attachment', ''):
+                    origin_attachment.post = None
+                    origin_attachment.save()
+
+                    new_attachment = attachment_form.save(commit=False)
+                    new_attachment.post = edited_post
+                    new_attachment.save()
+
                 edited_post_history = EditedPostHistory.objects.create(
                     post=origin_post,
                     title=origin_post.title,
