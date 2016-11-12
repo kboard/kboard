@@ -8,6 +8,7 @@ from board.models import Board
 
 
 class FunctionalTest(StaticLiveServerTestCase):
+    fixtures = ['default.json']
     def setUp(self):
         if sys.platform == 'darwin':
             project_root = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -20,8 +21,6 @@ class FunctionalTest(StaticLiveServerTestCase):
             self.browser = webdriver.Chrome(chrome_path)
         else:
             self.browser = webdriver.Firefox()
-        self.browser.implicitly_wait(3)
-        Board.objects.create(name='Default', slug='default')
 
     def tearDown(self):
         self.browser.quit()
