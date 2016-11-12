@@ -9,13 +9,16 @@ class NewVisitorTest(FunctionalTest):
         # 해당 웹 사이트를 확인하러 간다.
         self.browser.get(self.live_server_url)
 
-        # 타이틀과 헤더가 'Board List'를 표시하고 있다.
-        header_text = self.browser.find_element_by_tag_name('h2').text
-        self.assertIn('Board List', self.browser.title)
-        self.assertIn('Board List', header_text)
+        # 타이틀이 'Home'를 표시하고 있다.
+        self.assertIn('Home', self.browser.title)
 
-        # 게시판 목록에 'Default' 게시판이라고 씌여져 있다.
-        self.check_for_row_in_list_table('id_board_list_table', 'Default')
+        # 박스에 게시판 하나가 보인다.
+        boards = self.browser.find_elements_by_class_name('panel-post-summary')
+        self.assertEqual(len(boards), 1)
+
+        # 그 게시판에는 'Default'라고 씌여져 있다.
+        panel_title = boards[0].find_element_by_css_selector('.panel-heading > a')
+        self.assertEqual(panel_title.text, 'Default')
 
         # 지훈이는 첫 번째에 있는 'Default'게시판에 들어간다.
         self.move_to_default_board()
@@ -25,17 +28,23 @@ class NewVisitorTest(FunctionalTest):
         with self.assertRaises(NoSuchElementException):
             tbody.find_element_by_tag_name('tr')
 
-        # 지훈이는 다른 게시판이 있나 보려고 게시판 목록 버튼을 눌러 게시판 목록 페이지로 돌아간다.
-        board_list_button = self.browser.find_element_by_id('board_list_button')
-        board_list_button.click()
+        # 글 하나를 작성한다.
+        self.add_post('Hello', 'Hello guys')
 
+        # 지훈이는 다른 게시판이 있나 보려고 로고 버튼을 눌러 게시판 목록 페이지로 돌아간다.
+        home_button = self.browser.find_element_by_class_name('navbar-brand')
+        home_button.click()
+
+        # url이 / 이다.
         self.assertRegex(self.browser.current_url, '.+/$')
 
-        self.check_for_row_in_list_table('id_board_list_table', 'Default')
-
-        # Default 게시판 밖에 없어서 글을 쓰려고 게시판을 누른다.
-        default_board = self.browser.find_element_by_css_selector('table#id_board_list_table a')
-        default_board.click()
+        # Default 게시판 panel에 작성한 글이 보인다.
+        boards = self.browser.find_elements_by_class_name('panel-post-summary')
+        panel_title = boards[0].find_element_by_css_selector('.panel-heading > a')
+        panel_posts = boards[0].find_elements_by_css_selector('table tr')
+        self.assertEqual(panel_title.text, 'Default')
+        self.assertEqual(len(panel_posts), 1)
+        self.assertEqual(panel_posts[0].text, 'Hello')
 
     def test_write_post_and_confirm_post_view(self):
         self.browser.get(self.live_server_url)
