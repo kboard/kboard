@@ -77,7 +77,7 @@ class Post(TimeStampedModel):
 
 
 class Attachment(models.Model):
-    post = models.ForeignKey(Post, null=False)
+    post = models.ForeignKey(Post, null=True)
     attachment = models.FileField(blank=True, null=True)
 
 

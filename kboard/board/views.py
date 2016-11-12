@@ -171,6 +171,11 @@ def edit_post(request, post_id):
                     new_attachment.post = edited_post
                     new_attachment.save()
 
+                # remove attachment
+                if request.POST.get('attachment-clear', '') == 'on':
+                    origin_attachment.post = None
+                    origin_attachment.save()
+
                 edited_post_history = EditedPostHistory.objects.create(
                     post=origin_post,
                     title=origin_post.title,
