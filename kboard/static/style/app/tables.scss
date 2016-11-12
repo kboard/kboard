@@ -3,6 +3,9 @@ table {
     width: 70%;
   }
   tr {
+    &:last-child {
+      border-bottom: 1px solid #dddddd;
+    }
     td{
       padding: 8px;
     }
