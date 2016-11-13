@@ -304,12 +304,6 @@ class EditPostTest(BoardAppTest):
         if os.path.isfile(FileUploadTest.SAVED_TEST_FILE_NAME):
             os.remove(FileUploadTest.SAVED_TEST_FILE_NAME)
 
-        if os.path.isfile(AttachmentModelTest.SAVED_TEST_FILE_PATH_1):
-            os.remove(AttachmentModelTest.SAVED_TEST_FILE_PATH_1)
-
-        if os.path.isfile(AttachmentModelTest.SAVED_TEST_FILE_PATH_2):
-            os.remove(AttachmentModelTest.SAVED_TEST_FILE_PATH_2)
-
     def test_use_edit_post_template(self):
         response = self.client.get(reverse('board:edit_post', args=[self.default_post.id]))
         self.assertTemplateUsed(response, 'edit_post.html')
