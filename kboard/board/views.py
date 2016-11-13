@@ -91,6 +91,12 @@ def view_post(request, post_id):
     non_sliced_query_set.update(page_view_count=F('page_view_count') + 1)
 
     post = Post.objects.get(id=post_id)
+    try:
+        attachment = Attachment.objects.get(post=post)
+        uploaded_file = attachment.attachment
+    except Attachment.DoesNotExist:
+        uploaded_file = None
+
     comments_all_list = Comment.objects.filter(post=post, is_deleted=False).order_by('-id')
 
     is_modified = False
@@ -113,6 +119,7 @@ def view_post(request, post_id):
 
     return render(request, 'view_post.html', {
         'post': post,
+        'uploaded_file': uploaded_file,
         'is_modified': is_modified,
         'comments': comments,
         'pages_nav_info': pages_nav_info
