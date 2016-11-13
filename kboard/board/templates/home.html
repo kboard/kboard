@@ -1,16 +1,26 @@
 {% extends 'base.html' %}
 
-{% block title %}K-Board{% endblock %}
+{% block title %}Home{% endblock %}
 
 {% block body %}
-<div class="col-sm-12">
-    <div class="panel panel-info">
-        <div class="panel-heading">
-            Home view
-        </div>
-        <div class="panel-body">
-            We have to discuss a home content
+{% for data in home_data %}
+    <div class="col-md-6">
+        <div class="panel panel-post-summary">
+            <div class="panel-heading">
+                <a href="{% url 'board:post_list' data.board.slug %}">{{ data.board.name }}</a>
+            </div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <tbody>
+                        {% for post in data.recent_posts %}
+                            <tr>
+                                <td><a href="{% url 'board:view_post' post.id %}">{{ post.title|truncatechars:40 }}</a></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-</div>
+{% endfor %}
 {% endblock %}

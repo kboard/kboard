@@ -37,3 +37,18 @@
     min-height: 200px;
   }
 }
+
+.panel-post-summary {
+  .panel-heading {
+    border-bottom: 1px solid #dddddd;
+
+    > a {
+      color: #404040;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  }
+  .panel-body {
+    padding: 0;
+  }
+}

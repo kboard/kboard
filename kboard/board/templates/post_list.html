@@ -60,10 +60,6 @@
             <button type="button" id="id_create_post_button" class="form-control btn btn-primary redirection-button"
                     path="{% url 'board:new_post' board.slug %}">글쓰기</button>
         </div>
-        <div class="col-sm-2">
-            <button type="button" id="board_list_button" class="form-control btn btn-default redirection-button"
-                    path="{% url 'board:board_list' %}">게시판 목록</button>
-        </div>
     </div>
 </div>
 {% endblock %}

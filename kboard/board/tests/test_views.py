@@ -12,6 +12,31 @@ from board.forms import PostForm, EMPTY_TITLE_ERROR, EMPTY_CONTENT_ERROR
 from board.tests.test_models import AttachmentModelTest
 
 
+class HomePageTest(BoardAppTest):
+    def test_displays_board_panel(self):
+        another_board = Board.objects.create(
+            slug='hello',
+            name='Board_name'
+        )
+
+        response = self.client.get(reverse('board:home'))
+        self.assertIn(self.default_board.name, response.content.decode())
+        self.assertIn(another_board.name, response.content.decode())
+
+    def test_displays_recent_posts(self):
+        repeat = 6
+        for i in range(repeat):
+            Post.objects.create(
+                board=self.default_board,
+                title='Hi, ' + str(i),
+                content='content ' + str(i)
+            )
+
+        response = self.client.get(reverse('board:home'))
+        self.assertIn('Hi, 5', response.content.decode())
+        self.assertNotIn('Hi, 0', response.content.decode())
+
+
 class CreatePostPageTest(BoardAppTest):
     def test_new_post_page_returns_correct_html(self):
         response = self.client.get(reverse('board:new_post', args=[self.default_board.slug]))
@@ -342,7 +367,7 @@ class EditPostTest(BoardAppTest):
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
             'title': 'some post title',
             'content': 'some post content',
-        })
+            })
 
         saved_edited_post_history = EditedPostHistory.objects.all()
         self.assertEqual(saved_edited_post_history.count(), 0)
@@ -504,3 +529,17 @@ class FileUploadTest(BoardAppTest):
 
         self.assertEqual(Attachment.objects.get(post=self.default_post).attachment.name,
                          AttachmentModelTest.SAVED_TEST_FILE_NAME_2)
+
+    def test_can_remove_uploaded_file_with_edit_post(self):
+        uploaded_file = SimpleUploadedFile(AttachmentModelTest.SAVED_TEST_FILE_NAME_1,
+                                           open(AttachmentModelTest.UPLOAD_TEST_FILE_NAME, 'rb').read())
+        Attachment.objects.create(post=self.default_post, attachment=uploaded_file)
+
+        self.assertEqual(Attachment.objects.filter(post=self.default_post).count(), 1)
+        self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'title': 'NEW POST TITLE',
+            'content': 'NEW POST CONTENT',
+            'attachment-clear': 'on',
+        })
+
+        self.assertEqual(Attachment.objects.filter(post=self.default_post).count(), 0)
