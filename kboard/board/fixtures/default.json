@@ -1,0 +1,14 @@
+[
+  {
+    "model": "board.board",
+    "pk": 1,
+    "fields": {
+      "slug": "default",
+      "name": "Default",
+      "posts_chunk_size": 10,
+      "post_pages_nav_chunk_size": 10,
+      "comments_chunk_size": 5,
+      "comment_pages_nav_chunk_size": 10
+    }
+  }
+]

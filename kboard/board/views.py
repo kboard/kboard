@@ -196,10 +196,6 @@ def edit_post(request, post_id):
 
 
 def board_list(request):
-    board_count = Board.objects.all().count()
-    if board_count == 0:
-        Board.objects.create(name='Default', slug='default')
-
     boards = Board.objects.all()
 
     return render(request, 'board_list.html', {'boards': boards})
