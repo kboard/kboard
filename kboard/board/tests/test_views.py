@@ -367,7 +367,7 @@ class EditPostTest(BoardAppTest):
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
             'title': 'some post title',
             'content': 'some post content',
-            })
+        })
 
         saved_edited_post_history = EditedPostHistory.objects.all()
         self.assertEqual(saved_edited_post_history.count(), 0)
