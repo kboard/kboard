@@ -6,10 +6,5 @@ from . import views
 
 app_name = 'accounts'
 urlpatterns = [
-    url(r'^register/$',
-        RegistrationView.as_view(
-            form_class=RegistrationForm
-        ), name='registration_register'),
-    url(r'^', include('registration.backends.hmac.urls')),
-    url(r'^terms/$', views.tns_page, name='tns_page'),
+    url(r'^profile/$', views.profile, name='profile'),
 ]
