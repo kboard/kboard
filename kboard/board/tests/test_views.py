@@ -291,10 +291,6 @@ class CommentListTest(BoardAppTest):
 
 
 class EditPostTest(BoardAppTest):
-    def tearDown(self):
-        if os.path.isfile(FileUploadTest.SAVED_TEST_FILE_NAME):
-            os.remove(FileUploadTest.SAVED_TEST_FILE_NAME)
-
     @classmethod
     def setUpTestData(cls):
         super().setUpTestData()
@@ -303,6 +299,16 @@ class EditPostTest(BoardAppTest):
             title='some post title',
             content='some post content'
         )
+
+    def tearDown(self):
+        if os.path.isfile(FileUploadTest.SAVED_TEST_FILE_NAME):
+            os.remove(FileUploadTest.SAVED_TEST_FILE_NAME)
+
+        if os.path.isfile(AttachmentModelTest.SAVED_TEST_FILE_PATH_1):
+            os.remove(AttachmentModelTest.SAVED_TEST_FILE_PATH_1)
+
+        if os.path.isfile(AttachmentModelTest.SAVED_TEST_FILE_PATH_2):
+            os.remove(AttachmentModelTest.SAVED_TEST_FILE_PATH_2)
 
     def test_use_edit_post_template(self):
         response = self.client.get(reverse('board:edit_post', args=[self.default_post.id]))
@@ -411,6 +417,22 @@ class EditPostTest(BoardAppTest):
         self.assertRedirects(response, reverse('board:view_post', args=[self.default_post.id]))
         self.assertEqual(edited_post.title, 'some post title')
         self.assertEqual(edited_attachment.attachment.name, 'test.txt')
+
+    def test_record_edited_attachment_if_attachment_is_removed(self):
+        uploaded_file = SimpleUploadedFile(AttachmentModelTest.SAVED_TEST_FILE_NAME_1,
+                                           open(AttachmentModelTest.UPLOAD_TEST_FILE_NAME, 'rb').read())
+        attachment = Attachment.objects.create(post=self.default_post, attachment=uploaded_file)
+
+        self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'title': 'NEW POST TITLE',
+            'content': 'NEW POST CONTENT',
+            'attachment-clear': 'on',
+        })
+
+        attachment.refresh_from_db()
+        edtied_post_history = EditedPostHistory.objects.get(post=self.default_post)
+        self.assertEqual(attachment.post, None)
+        self.assertEqual(attachment.editedPostHistory, edtied_post_history)
 
 
 class NewCommentTest(BoardAppTest):
