@@ -95,6 +95,14 @@ class CreatePostPageTest(BoardAppTest):
         self.assertContains(response, EMPTY_TITLE_ERROR)
         self.assertContains(response, EMPTY_CONTENT_ERROR)
 
+    def test_does_not_save_attachment_if_file_is_not_uploaded(self):
+        self.assertEqual(Attachment.objects.count(), 0)
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': '',
+            'content': '',
+        })
+        self.assertEqual(Attachment.objects.count(), 0)
+
 
 class PostListTest(BoardAppTest):
     def get_response_from_post_list_search_request(self, search_flag, query):

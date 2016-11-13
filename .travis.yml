@@ -18,8 +18,15 @@ before_script:
 
 # command to run tests
 script:
- - cd kboard && coverage run --source=board manage.py test board/tests core/tests
- - python manage.py test functional_test/
+  - cd kboard && coverage run --source=board manage.py test board/tests core/tests
+  - python manage.py test functional_test/
+
 after_success:
- - coveralls
- - cd docs; make html
+  - coveralls
+  - cd docs; make html
+
+notifications:
+  email:
+    - darjeeling@gmail.com
+    - guswnsxodlf@gmail.com
+    - cjh5414@gmail.com

@@ -12,6 +12,14 @@ class NewVisitorTest(FunctionalTest):
         # 타이틀이 'Home'를 표시하고 있다.
         self.assertIn('Home', self.browser.title)
 
+        # header navbar의 로고에 'K-Board'라고 씌여져 있다.
+        logo_text = self.browser.find_element_by_class_name('navbar-brand')
+        self.assertEqual('K-Board', logo_text.text)
+
+        # navbar에 'Default' 게시판이 보인다.
+        navbar_item = self.browser.find_elements_by_class_name('navbar-item')
+        self.assertEqual('Default', navbar_item[0].text)
+
         # 박스에 게시판 하나가 보인다.
         boards = self.browser.find_elements_by_class_name('panel-post-summary')
         self.assertEqual(len(boards), 1)

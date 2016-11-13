@@ -3,13 +3,17 @@
 {% block title %}Post History List{% endblock %}
 
 {% block body %}
-<div class="col-sm-5">
-    <h2>Post History List</h2>
+<div class="col-sm-12" class="history-container">
+
+    <h2>수정 내역</h2>
     {% for history in history_list %}
-        <h4>{{ history.created_time|date:"Y-m-d H:i:s" }} ------------------</h4>
-        <div class="panel panel-default post-history-panel">
+        <hr/>
+        <div class="panel panel-default post-panel post-history">
             <div class="panel-heading">
-                <h3 class="panel-title">{{ history.title }}</h3>
+                <span class="panel-title">{{ history.title }}</span>
+                <div class="post-info">
+                    <strong class="text-primary">~ {{ history.created_time|date:"Y-m-d H:i:s" }}</strong>
+                </div>
             </div>
             <div class="panel-body">
                 {{ history.content|safe }}
@@ -18,7 +22,7 @@
     {% endfor %}
 
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-2">
             <button id="back_to_view_post_button" class="form-control btn btn-default redirection-button"
                     path="{% url 'board:view_post' post_id %}">글 보기</button>
         </div>

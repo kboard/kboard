@@ -156,20 +156,20 @@ def post_history_list(request, post_id):
 
 
 def edit_post(request, post_id):
-    post = Post.objects.get(id=post_id)
     origin_post = Post.objects.get(id=post_id)
+    edited_post = Post.objects.get(id=post_id)
     try:
-        attachment = Attachment.objects.get(post=post)
-        attachment_name = attachment.attachment.name
+        origin_attachment = Attachment.objects.get(post=origin_post)
+        origin_attachment_name = origin_attachment.attachment.name
     except Attachment.DoesNotExist:
-        attachment = None
-        attachment_name = ''
+        origin_attachment = None
+        origin_attachment_name = ''
 
     if request.method == 'POST':
-        post_form = PostForm(request.POST, request.FILES, instance=post)
-        attachment_form = AttachmentForm(request.POST, request.FILES, instance=attachment)
-        if post.title != request.POST['title'] or post.content != request.POST['content'] or \
-                attachment_name != request.FILES.get('attachment', ''):
+        post_form = PostForm(request.POST, request.FILES, instance=edited_post)
+        attachment_form = AttachmentForm(request.POST, request.FILES, instance=origin_attachment)
+        if origin_post.title != request.POST['title'] or origin_post.content != request.POST['content'] or \
+                origin_attachment_name != request.FILES.get('attachment', ''):
             if post_form.is_valid() and attachment_form.is_valid():
                 edited_post_history = EditedPostHistory.objects.create(
                     post=origin_post,
@@ -179,28 +179,28 @@ def edit_post(request, post_id):
                 )
                 edited_post_history.save()
 
-                post.save()
+                edited_post.save()
 
                 attachment = attachment_form.save(commit=False)
-                attachment.post = post
+                attachment.post = edited_post
                 attachment.save()
-                return redirect(post)
+                return redirect(edited_post)
         else:
             error_message = "변경 사항이 없습니다"
             return render(request, 'edit_post.html', {
-                'post': post,
+                'post': origin_post,
                 'post_form': post_form,
                 'attachment_form': attachment_form,
                 'error_alert': error_message
             })
     else:
-        post_form = PostForm(initial={'title': post.title, 'content': post.content, 'file': post.file})
-        if attachment:
-            attachment_form = AttachmentForm(initial={'attachment': attachment.attachment})
+        post_form = PostForm(initial={'title': origin_post.title, 'content': origin_post.content, 'file': origin_post.file})
+        if origin_attachment:
+            attachment_form = AttachmentForm(initial={'attachment': origin_attachment.attachment})
         else:
             attachment_form = AttachmentForm()
 
-    return render(request, 'edit_post.html', {'post': post, 'post_form': post_form, 'attachment_form': attachment_form})
+    return render(request, 'edit_post.html', {'post': origin_post, 'post_form': post_form, 'attachment_form': attachment_form})
 
 
 @require_POST

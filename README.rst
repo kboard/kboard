@@ -25,6 +25,7 @@ Developing Process
         EMAIL_HOST_PASSWORD = 'your password'
         SERVER_EMAIL = 'your mail'
 
+- To set initial data, run ``python ./kboard/manage.py loaddata default``.
 
 Developers
 -----
