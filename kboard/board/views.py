@@ -159,10 +159,18 @@ def edit_post(request, post_id):
 
     if request.method == 'POST':
         post_form = PostForm(request.POST, request.FILES, instance=edited_post)
-        attachment_form = AttachmentForm(request.POST, request.FILES, instance=origin_attachment)
+        attachment_form = AttachmentForm(request.POST, request.FILES)
         if origin_post.title != request.POST['title'] or origin_post.content != request.POST['content'] or \
                 origin_attachment_name != request.FILES.get('attachment', ''):
             if post_form.is_valid() and attachment_form.is_valid():
+                edited_post.save()
+
+                # add attachment
+                if not origin_attachment and request.FILES.get('attachment', '') != '':
+                    new_attachment = attachment_form.save(commit=False)
+                    new_attachment.post = edited_post
+                    new_attachment.save()
+
                 edited_post_history = EditedPostHistory.objects.create(
                     post=origin_post,
                     title=origin_post.title,
@@ -171,11 +179,6 @@ def edit_post(request, post_id):
                 )
                 edited_post_history.save()
 
-                edited_post.save()
-
-                attachment = attachment_form.save(commit=False)
-                attachment.post = edited_post
-                attachment.save()
                 return redirect(edited_post)
         else:
             error_message = "변경 사항이 없습니다"
