@@ -180,6 +180,13 @@ def edit_post(request, post_id):
             if post_form.is_valid() and attachment_form.is_valid():
                 edited_post.save()
 
+                edited_post_history = EditedPostHistory.objects.create(
+                    post=origin_post,
+                    title=origin_post.title,
+                    content=origin_post.content,
+                )
+                edited_post_history.save()
+
                 # add attachment
                 if not origin_attachment and request.FILES.get('attachment', '') != '':
                     new_attachment = attachment_form.save(commit=False)
@@ -197,17 +204,10 @@ def edit_post(request, post_id):
                     new_attachment.save()
 
                 # remove attachment
-                if request.POST.get('attachment-clear', '') == 'on':
+                elif request.POST.get('attachment-clear', '') == 'on':
                     origin_attachment.post = None
+                    origin_attachment.editedPostHistory = edited_post_history
                     origin_attachment.save()
-
-                edited_post_history = EditedPostHistory.objects.create(
-                    post=origin_post,
-                    title=origin_post.title,
-                    content=origin_post.content,
-                    file=origin_post.file,
-                )
-                edited_post_history.save()
 
                 return redirect(edited_post)
         else:
