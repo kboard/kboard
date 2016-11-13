@@ -26,7 +26,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.quit()
 
     def move_to_default_board(self):
-        default_board = self.browser.find_element_by_css_selector('table#id_board_list_table a')
+        default_board = self.browser.find_element_by_css_selector('.panel-post-summary > .panel-heading > a')
         default_board.click()
 
     def click_create_post_button(self):

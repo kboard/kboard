@@ -8,8 +8,7 @@ from . import views
 
 app_name = 'board'
 urlpatterns = [
-    url(r'^$', views.board_list, name='board_list'),
-    url(r'^home/$', views.home, name='home'),
+    url(r'^$', views.home, name='home'),
     url(r'^boards/(?P<board_slug>[-a-z\d]+)/$', views.post_list, name='post_list'),
     url(r'^boards/(?P<board_slug>[-a-z\d]+)/posts/new/$', views.new_post, name='new_post'),
     url(r'^posts/(?P<post_id>\d+)/delete/$', views.delete_post, name='delete_post'),

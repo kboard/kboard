@@ -10,6 +10,31 @@ from board.models import Post, Board, Comment, EditedPostHistory, Attachment
 from board.forms import PostForm, EMPTY_TITLE_ERROR, EMPTY_CONTENT_ERROR
 
 
+class HomePageTest(BoardAppTest):
+    def test_displays_board_panel(self):
+        another_board = Board.objects.create(
+            slug='hello',
+            name='Board_name'
+        )
+
+        response = self.client.get(reverse('board:home'))
+        self.assertIn(self.default_board.name, response.content.decode())
+        self.assertIn(another_board.name, response.content.decode())
+
+    def test_displays_recent_posts(self):
+        repeat = 6
+        for i in range(repeat):
+            Post.objects.create(
+                board=self.default_board,
+                title='Hi, ' + str(i),
+                content='content ' + str(i)
+            )
+
+        response = self.client.get(reverse('board:home'))
+        self.assertIn('Hi, 5', response.content.decode())
+        self.assertNotIn('Hi, 0', response.content.decode())
+
+
 class CreatePostPageTest(BoardAppTest):
     def test_new_post_page_returns_correct_html(self):
         response = self.client.get(reverse('board:new_post', args=[self.default_board.slug]))

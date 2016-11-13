@@ -17,7 +17,15 @@ def handle_uploaded_file(f):
 
 
 def home(request):
-    return render(request, 'home.html')
+    boards = Board.objects.all()
+
+    data = []
+    for board in boards:
+        data.append({
+            'board': board,
+            'recent_posts': Post.objects.board(board).remain().order_by('-id')[:5]
+        })
+    return render(request, 'home.html', {'home_data': data})
 
 
 def new_post(request, board_slug):
@@ -196,12 +204,6 @@ def edit_post(request, post_id):
             attachment_form = AttachmentForm()
 
     return render(request, 'edit_post.html', {'post': origin_post, 'post_form': post_form, 'attachment_form': attachment_form})
-
-
-def board_list(request):
-    boards = Board.objects.all()
-
-    return render(request, 'board_list.html', {'boards': boards})
 
 
 @require_POST
