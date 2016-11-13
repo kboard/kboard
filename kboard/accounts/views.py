@@ -5,9 +5,6 @@ from .forms import RegistrationForm
 from .models import Account
 
 
-def tns_page(request):
-    return render(request, 'terms.html')
-
 class RegistrationView(BaseRegistrationView):
     form_class = RegistrationForm
 
