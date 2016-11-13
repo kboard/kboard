@@ -434,6 +434,27 @@ class EditPostTest(BoardAppTest):
         self.assertEqual(attachment.post, None)
         self.assertEqual(attachment.editedPostHistory, edtied_post_history)
 
+    def test_record_edited_attachment_if_attachment_is_modified(self):
+        uploaded_file = SimpleUploadedFile(AttachmentModelTest.SAVED_TEST_FILE_NAME_1,
+                                           open(AttachmentModelTest.UPLOAD_TEST_FILE_NAME, 'rb').read())
+        origin_attachment = Attachment.objects.create(post=self.default_post, attachment=uploaded_file)
+
+        upload_file = open(os.path.join(settings.BASE_DIR, 'test_file/attachment_test_2.txt'))
+        self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
+            'title': 'NEW POST TITLE',
+            'content': 'NEW POST CONTENT',
+            'attachment': upload_file,
+        })
+
+        origin_attachment.refresh_from_db()
+        new_attachment = Attachment.objects.get(post=self.default_post)
+        edtied_post_history = EditedPostHistory.objects.get(post=self.default_post)
+
+        self.assertEqual(origin_attachment.post, None)
+        self.assertEqual(origin_attachment.editedPostHistory, edtied_post_history)
+        self.assertEqual(new_attachment.post, self.default_post)
+        self.assertEqual(new_attachment.editedPostHistory, None)
+
 
 class NewCommentTest(BoardAppTest):
     @classmethod
