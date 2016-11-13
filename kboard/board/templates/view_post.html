@@ -18,9 +18,9 @@
         <div class="panel-body" >
             {{ post.content|safe }}
         </div>
-        {% if post.file %}
+        {% if uploaded_file %}
             <div class="panel-footer">
-                <a id="id_uploaded_file" href="{{ post.file.url }}" download>{{ post.file.name }}</a>
+                <a id="id_uploaded_file" href="{{ uploaded_file.url }}" download>{{ uploaded_file.name }}</a>
             </div>
         {% endif %}
     </div>
