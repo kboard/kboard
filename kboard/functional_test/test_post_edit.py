@@ -20,9 +20,9 @@ class EditPostTest(FunctionalTest):
         self.browser.find_element_by_id('id_edit_post_button').click()
 
         # 웹 페이지 타이틀과 헤더가 'Edit Post'를 표시하고 있다.
-        header_text = self.browser.find_element_by_tag_name('h2').text
-        self.assertIn('Edit Post', self.browser.title)
-        self.assertIn('Edit Post', header_text)
+        header_text = self.browser.find_element_by_tag_name('h3').text
+        self.assertIn('글 수정', self.browser.title)
+        self.assertIn('글 수정', header_text)
 
         # 작성되어 있던 게시글의 제목인 'pjango'가 보인다.
         titlebox = self.browser.find_element_by_id('id_post_title')
@@ -77,7 +77,7 @@ class EditPostTest(FunctionalTest):
         history_button.click()
 
         # 하나의 수정 내역이 보인다.
-        panel_list = self.browser.find_elements_by_css_selector('.post-history-panel')
+        panel_list = self.browser.find_elements_by_css_selector('.post-history')
         self.assertEqual(len(panel_list), 1)
 
         # 'pjango'라는 제목을 가진 기록이 있다.

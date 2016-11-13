@@ -56,9 +56,9 @@ class NewVisitorTest(FunctionalTest):
         self.assertRegex(self.browser.current_url, '.+/boards/default/posts/new/')
 
         # 웹 페이지 타이틀과 헤더가 'Create Post'를 표시하고 있다.
-        header_text = self.browser.find_element_by_tag_name('h2').text
-        self.assertIn('Create Post', self.browser.title)
-        self.assertIn('Create Post', header_text)
+        header_text = self.browser.find_element_by_tag_name('h3').text
+        self.assertIn('글 쓰기', self.browser.title)
+        self.assertIn('글 쓰기', header_text)
 
         # 제목을 입력하는 상자에 'Insert Title'라고 씌여 있다.
         titlebox = self.browser.find_element_by_id('id_post_title')

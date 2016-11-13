@@ -6,7 +6,7 @@ from django.conf import settings
 
 from .base import BoardAppTest
 from board.views import new_post, post_list, edit_post
-from board.models import Post, Board, Comment, EditedPostHistory
+from board.models import Post, Board, Comment, EditedPostHistory, Attachment
 from board.forms import PostForm, EMPTY_TITLE_ERROR, EMPTY_CONTENT_ERROR
 
 
@@ -69,6 +69,14 @@ class CreatePostPageTest(BoardAppTest):
         })
         self.assertContains(response, EMPTY_TITLE_ERROR)
         self.assertContains(response, EMPTY_CONTENT_ERROR)
+
+    def test_does_not_save_attachment_if_file_is_not_uploaded(self):
+        self.assertEqual(Attachment.objects.count(), 0)
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': '',
+            'content': '',
+        })
+        self.assertEqual(Attachment.objects.count(), 0)
 
 
 class PostListTest(BoardAppTest):
@@ -367,12 +375,15 @@ class EditPostTest(BoardAppTest):
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
             'title': 'some post title',
             'content': 'some post content',
-            'file': upload_file,
+            'attachment': upload_file,
         })
 
         edited_post = Post.objects.get(id=self.default_post.id)
+        edited_attachment = Attachment.objects.get(post=edited_post)
+
         self.assertRedirects(response, reverse('board:view_post', args=[self.default_post.id]))
-        self.assertEqual(edited_post.file.name, 'test.txt')
+        self.assertEqual(edited_post.title, 'some post title')
+        self.assertEqual(edited_attachment.attachment.name, 'test.txt')
 
 
 class NewCommentTest(BoardAppTest):
@@ -448,7 +459,7 @@ class FileUploadTest(BoardAppTest):
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
-            'file': upload_file,
+            'attachment': upload_file,
         })
 
         upload_file.seek(0)

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block body %}
+    <div class="container">
+    <h1>Profile</h1>
+    <p>This is your personal account</p>
+    <p>Username: {{user.username}}</p>
+    <p>Email: {{user.email}}</p>
+    <p>Full name: {{account.fullName}}</p>
+    <p>Status: {{account.status}}</p>
+</div>
+{% endblock %}
