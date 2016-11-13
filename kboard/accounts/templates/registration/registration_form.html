@@ -1,6 +1,7 @@
+{% extends 'base.html' %}
 {% load i18n %}
 
-{% block content %}
+{% block body %}
 <form method="post" action="" class="registration-form" onsubmit="return tncSubmit()">
     {% csrf_token %}
     {{ form.as_p }}
