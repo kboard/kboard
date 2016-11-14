@@ -76,8 +76,16 @@ class Post(TimeStampedModel):
         return reverse('board:view_post', args=[self.id])
 
 
+class EditedPostHistory(TimeStampedModel):
+    post = models.ForeignKey(Post, null=False, default=None)
+    title = models.TextField(default='')
+    content = models.TextField(default='')
+    file = models.FileField(null=True)
+
+
 class Attachment(models.Model):
     post = models.ForeignKey(Post, null=True)
+    editedPostHistory = models.ForeignKey(EditedPostHistory, null=True, default=None)
     attachment = models.FileField(blank=True, null=True)
 
 
@@ -86,9 +94,3 @@ class Comment(TimeStampedModel):
     post = models.ForeignKey(Post, null=True)
     is_deleted = models.BooleanField(default=False)
 
-
-class EditedPostHistory(TimeStampedModel):
-    post = models.ForeignKey(Post, null=False, default=None)
-    title = models.TextField(default='')
-    content = models.TextField(default='')
-    file = models.FileField(null=True)
