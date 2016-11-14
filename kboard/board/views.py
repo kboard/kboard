@@ -194,9 +194,10 @@ def edit_post(request, post_id):
                     new_attachment.save()
 
                 # modify attachment
-                if origin_attachment and request.FILES.get('attachment', '') != '' \
+                elif origin_attachment and request.FILES.get('attachment', '') != '' \
                         and origin_attachment_name != request.FILES.get('attachment', ''):
                     origin_attachment.post = None
+                    origin_attachment.editedPostHistory = edited_post_history
                     origin_attachment.save()
 
                     new_attachment = attachment_form.save(commit=False)
