@@ -580,3 +580,20 @@ class FileUploadTest(BoardAppTest):
         self.assertEqual(new_attachment.post, self.default_post)
         self.assertEqual(new_attachment.editedPostHistory, None)
 
+    def test_view_edited_attachment_in_post_history_list(self):
+        edited_post_history = EditedPostHistory.objects.create(
+            post=self.default_post,
+            title='edited post title',
+            content='edited post content',
+        )
+        uploaded_file = SimpleUploadedFile(AttachmentModelTest.SAVED_TEST_FILE_NAME_1,
+                                           open(AttachmentModelTest.UPLOAD_TEST_FILE_NAME, 'rb').read())
+        attachment = Attachment.objects.create(
+            post=None,
+            editedPostHistory=edited_post_history,
+            attachment=uploaded_file,
+        )
+
+        response = self.client.get(reverse('board:post_history_list', args=[self.default_post.id]))
+        self.assertContains(response, 'edited post title')
+        self.assertContains(response, attachment.attachment.name)
