@@ -1,8 +1,7 @@
-from django.conf.urls import url, include
-from accounts.views import RegistrationView
-from accounts.forms import RegistrationForm
+from django.conf.urls import url
 
 from . import views
+
 
 app_name = 'accounts'
 urlpatterns = [
