@@ -32,7 +32,7 @@ class PostFileUploadTest(FunctionalTest):
         self.browser.switch_to.default_content()
 
         # 하단에 파일을 업로드 할 수 있는 버튼을 클릭하여 파일을 추가한다.
-        fileuploadbox = self.browser.find_elements_by_tag_name('input')[3]
+        fileuploadbox = self.browser.find_elements_by_tag_name('input')[2]
         fileuploadbox.send_keys(os.path.join(settings.BASE_DIR, 'test_file/test.txt'))
 
         # 하단의 등록 버튼을 누르면 글 작성이 완료되고 게시글 목록으로 돌아간다.

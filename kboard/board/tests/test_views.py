@@ -328,7 +328,7 @@ class EditPostTest(BoardAppTest):
         response = self.client.post(reverse('board:edit_post', args=[self.default_post.id]), {
             'title': 'Edited title',
             'content': 'Edited content',
-            'file': upload_file,
+            'attachment': upload_file,
         })
 
         saved_edited_post_history = EditedPostHistory.objects.all()
@@ -344,7 +344,7 @@ class EditPostTest(BoardAppTest):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
-            'file': upload_file,
+            'attachment': upload_file,
         })
 
         response = self.client.get(reverse('board:edit_post', args=[Post.objects.count()]))
