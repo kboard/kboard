@@ -65,8 +65,7 @@ class EditPostTest(FunctionalTest):
         self.browser.switch_to.default_content()
 
         # 이번에는 제대로 '확인' 버튼을 누른다.
-        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
-        submit_button.click()
+        self.click_submit_button()
 
         # 내용에 'Hello django'가 보여지고 있다.
         body = self.browser.find_element_by_class_name('panel-body')

@@ -18,9 +18,9 @@ class PostValidationTest(FunctionalTest):
         # title의 입력 상자가 비어있는 상태에서 '등록' 버튼을 누른다.
         self.click_submit_button()
 
-        # 페이지가 새로고침되고 빈 제목의 게시글을 등록할 수 없다는 에러 메세지가 표시된다.
-        error = self.browser.find_element_by_css_selector('.has-error')
-        self.assertEqual(error.text, "제목을 입력하세요")
+        # 제목과 내용을 입력해달라는 경고메시지가 떠서 확인을 누른다.
+        alert = self.browser.switch_to_alert()
+        alert.accept()
 
         # 제목을 입력해서 다시 시도하면 정상 처리된다.
         titlebox = self.browser.find_element_by_id('id_post_title')
@@ -43,9 +43,9 @@ class PostValidationTest(FunctionalTest):
         # content 입력 상자가 비어있는 상태에서 '등록' 버튼을 누른다.
         self.click_submit_button()
 
-        # 페이지가 새로고침 되고 빈 내용의 게시글을 등록할 수 없다는 에러 메세지가 표시된다.
-        error = self.browser.find_element_by_css_selector('.has-error')
-        self.assertEqual(error.text, "내용을 입력하세요")
+        # 제목과 내용을 입력해달라는 경고메시지가 떠서 확인을 누른다.
+        alert = self.browser.switch_to_alert()
+        alert.accept()
 
         # 내용을 입력해서 다시 시도하면 정상 처리된다.
         contentbox = self.get_contentbox()

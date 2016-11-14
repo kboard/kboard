@@ -9,6 +9,7 @@ from board.models import Board
 
 class FunctionalTest(StaticLiveServerTestCase):
     fixtures = ['default.json']
+
     def setUp(self):
         if sys.platform == 'darwin':
             project_root = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
@@ -34,7 +35,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         create_post_button.click()
 
     def click_submit_button(self):
-        submit_button = self.browser.find_element_by_css_selector('button[type="submit"]')
+        submit_button = self.browser.find_element_by_class_name('post-submit-button')
         submit_button.click()
 
     def check_for_row_in_list_table(self, id, row_text):

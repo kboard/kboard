@@ -19,4 +19,16 @@ $(document).ready(function() {
         $(this).height(height);
         $(this).attr('scrolling', 'no');
     });
+
+    $('.post-submit-button').click(function () {
+        var title = $('#id_post_title').val();
+        var contentHTML = $('#id_content').val();
+        var content = $('<div>' + contentHTML + '</div>').text();
+
+        if(title.trim() && content.trim()){
+            $('.post-form').submit();
+        }else{
+            alert("제목과 내용을 채워주세요!" + content);
+        }
+    });
 });
