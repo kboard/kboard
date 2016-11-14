@@ -119,6 +119,7 @@ class PostListTest(BoardAppTest):
         Post.objects.create(board=self.default_board, title='turtle2', content='slowslow')
 
         request = HttpRequest()
+        request.method = 'GET'
         response = post_list(request, self.default_board.slug)
 
         self.assertIn('turtle1', response.content.decode())
