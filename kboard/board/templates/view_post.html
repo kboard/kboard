@@ -3,55 +3,57 @@
 {% block title %}{{ post.title }}{% endblock %}
 
 {% block body %}
-<div class="col-sm-12">
-    <div class="panel panel-default post-panel">
-        <div class="panel-heading">
-            <span class="panel-title">{{ post.title }}</span>
-            <div class="post-info">
-                {% if is_modified %}
-                    <span id="post_history"><a href="{% url 'board:post_history_list' post.id%}">수정 내역</a></span>
-                {% endif %}
-                <span class="text-muted" id="id_page_view_count">조회수: {{ post.page_view_count }}</span>
-                <span class="text-muted">날짜: {{ post.created_time|date:"Y-m-d H:i:s" }}</span>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="panel panel-default post-panel">
+            <div class="panel-heading">
+                <span class="panel-title">{{ post.title }}</span>
+                <div class="post-info">
+                    {% if is_modified %}
+                        <span id="post_history"><a href="{% url 'board:post_history_list' post.id%}">수정 내역</a></span>
+                    {% endif %}
+                    <span class="text-muted" id="id_page_view_count">조회수: {{ post.page_view_count }}</span>
+                    <span class="text-muted">날짜: {{ post.created_time|date:"Y-m-d H:i:s" }}</span>
+                </div>
             </div>
-        </div>
-        <div class="panel-body" >
-            {{ post.content|safe }}
-        </div>
-        {% if uploaded_file %}
-            <div class="panel-footer">
-                <a id="id_uploaded_file" href="{{ uploaded_file.url }}" download>{{ uploaded_file.name }}</a>
+            <div class="panel-body" >
+                {{ post.content|safe }}
             </div>
-        {% endif %}
-    </div>
-    <form class="form-inline text-center" method="POST" action="{% url 'board:like_post' post.id %}">
-        {% csrf_token %}
-        <button class="form-control btn btn-primary like-button">
-            {{ post.like_count }}&nbsp;<i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;추천!
-        </button>
-    </form>
+            {% if uploaded_file %}
+                <div class="panel-footer">
+                    <a id="id_uploaded_file" href="{{ uploaded_file.url }}" download>{{ uploaded_file.name }}</a>
+                </div>
+            {% endif %}
+        </div>
+        <form class="form-inline text-center" method="POST" action="{% url 'board:like_post' post.id %}">
+            {% csrf_token %}
+            <button class="form-control btn btn-primary like-button">
+                {{ post.like_count }}&nbsp;<i class="glyphicon glyphicon-thumbs-up"></i>&nbsp;추천!
+            </button>
+        </form>
 
 
-    <!-- comment -->
-    <h3>댓글</h3>
-    <div>
-        <iframe src="{% url 'board:comment_list' post.id %}" class="comment-iframe" scrolling="no"></iframe>
-    </div>
-    <br/>
-    <div class="row">
-        <div class="col-sm-4">
-            <button id="id_back_to_post_list_button" class="form-control btn btn-default redirection-button"
-                    path="{% url 'board:post_list' post.board.slug %}">목록</button>
+        <!-- comment -->
+        <h3>댓글</h3>
+        <div>
+            <iframe src="{% url 'board:comment_list' post.id %}" class="comment-iframe" scrolling="no"></iframe>
         </div>
-        <div class="col-sm-4">
-            <button id="id_edit_post_button" class="form-control btn btn-default redirection-button"
-                    path="{% url 'board:edit_post' post.id %}">수정</button>
-        </div>
-        <div class="col-sm-4">
-            <form method="POST" action="{% url 'board:delete_post' post.id %}">
-                {% csrf_token %}
-                <button id="id_delete_post_button" type="submit" class="form-control btn btn-danger">삭제</button>
-            </form>
+        <br/>
+        <div class="row">
+            <div class="col-sm-4">
+                <button id="id_back_to_post_list_button" class="form-control btn btn-default redirection-button"
+                        path="{% url 'board:post_list' post.board.slug %}">목록</button>
+            </div>
+            <div class="col-sm-4">
+                <button id="id_edit_post_button" class="form-control btn btn-default redirection-button"
+                        path="{% url 'board:edit_post' post.id %}">수정</button>
+            </div>
+            <div class="col-sm-4">
+                <form method="POST" action="{% url 'board:delete_post' post.id %}">
+                    {% csrf_token %}
+                    <button id="id_delete_post_button" type="submit" class="form-control btn btn-danger">삭제</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>

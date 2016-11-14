@@ -2,10 +2,16 @@
 {% load i18n %}
 
 {% block body %}
-<form method="post" action="" class="registration-form" onsubmit="return tncSubmit()">
-    {% csrf_token %}
-    {{ form.as_p }}
-
-    <button type="submit">Submit</button>
-</form>
+<div class="panel panel-primary block-center" style="width:800px;">
+    <div class="panel-heading">
+        <h5 class="panel-title">회원가입</h5>
+    </div>
+    <div class="panel-body">
+        <form method="post" class="registration-form" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary" type="submit">가입하기</button>
+        </form>
+    </div>
+</div>
 {% endblock %}
