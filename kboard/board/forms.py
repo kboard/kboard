@@ -21,7 +21,7 @@ class DivErrorList(ErrorList):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ('title', 'content', 'file')
+        fields = ('title', 'content')
         widgets = {
             'title': forms.TextInput(attrs={'id': 'id_post_title', 'class': 'form-control', 'placeholder': 'Insert Title'}),
             'content': SummernoteWidget({'width': '100%'}),
