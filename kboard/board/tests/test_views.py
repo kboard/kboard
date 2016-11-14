@@ -335,7 +335,6 @@ class EditPostTest(BoardAppTest):
         self.assertEqual(saved_edited_post_history.count(), 1)
         self.assertEqual(saved_edited_post_history[0].title, 'some post title')
         self.assertEqual(saved_edited_post_history[0].content, 'some post content')
-        self.assertEqual(saved_edited_post_history[0].file.name, '')
 
         upload_file.close()
 
