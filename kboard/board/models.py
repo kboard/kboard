@@ -80,7 +80,6 @@ class EditedPostHistory(TimeStampedModel):
     post = models.ForeignKey(Post, null=False, default=None)
     title = models.TextField(default='')
     content = models.TextField(default='')
-    file = models.FileField(null=True)
 
 
 class Attachment(models.Model):
