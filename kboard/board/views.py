@@ -1,5 +1,7 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 from django.core.urlresolvers import reverse
 from django.db.models import F
@@ -258,8 +260,9 @@ def delete_post(request, post_id):
 
 
 @require_POST
+@csrf_exempt
 def like_post(request, post_id):
     post = Post.objects.filter(id=post_id)
     post.update(like_count=F('like_count') + 1)
 
-    return redirect(post[0])
+    return HttpResponse(post[0].like_count)
