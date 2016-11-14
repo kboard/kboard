@@ -19,14 +19,18 @@ class PostLikeTest(FunctionalTest):
         post.click()
 
         # 추천 수가 0개이다.
-        like_button = self.browser.find_element_by_class_name('like-button')
-        self.assertIn('0', like_button.text)
+        like_button = self.browser.find_element_by_class_name('like-count')
+        self.assertEqual('0', like_button.text)
 
         # 추천 버튼을 누른다.
         like_button.click()
 
+        # 추천되었다는 메시지가 뜨고 확인 버튼을 누른다.
+        alert = self.browser.switch_to_alert()
+        alert.accept()
+
         # 추천 수가 1 로 증가했다.
-        like_button = self.browser.find_element_by_class_name('like-button')
-        self.assertIn('1', like_button.text)
+        like_button = self.browser.find_element_by_class_name('like-count')
+        self.assertEqual('1', like_button.text)
 
         # 현준이는 눈물을 흘리며 페이지를 닫는다.
