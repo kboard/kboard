@@ -3,62 +3,63 @@
 {% block title %}{{ board.name }}{% endblock %}
 
 {% block body %}
-
-<div class="col-sm-12">
-    <h3>{{ board.name }}</h3>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <table id="id_post_list_table" class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th class="table-title">제목</th>
-                        <th>날짜</th>
-                        <th>추천</th>
-                        <th>조회 수</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for post in posts %}
+<div class="row">
+    <div class="col-sm-12">
+        <h3>{{ board.name }}</h3>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <table id="id_post_list_table" class="table table-hover">
+                    <thead>
                         <tr>
-                            <td>{{ post.id }}</td>
-                            <td><a href="{% url 'board:view_post' post.id %}">{{ post.title }}</a></td>
-                            <td>{{ post.created_time|date:"Y-m-d H:i:s" }}</td>
-                            <td>{{ post.like_count }}</td>
-                            <td class="page-view-count">{{ post.page_view_count }}</td>
+                            <th>#</th>
+                            <th class="table-title">제목</th>
+                            <th>날짜</th>
+                            <th>추천</th>
+                            <th>조회 수</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for post in posts %}
+                            <tr>
+                                <td>{{ post.id }}</td>
+                                <td><a href="{% url 'board:view_post' post.id %}">{{ post.title }}</a></td>
+                                <td>{{ post.created_time|date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ post.like_count }}</td>
+                                <td class="page-view-count">{{ post.page_view_count }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 
-            {% include 'pagination.html' with pages_nav_info=pages_nav_info search_info=search_info %}
-        </div>
-    </div>
-
-    <!-- pagination -->
-    <div class="row">
-        <div class="col-sm-10">
-        <form method="GET" class="form-inline">
-            <select name="search_flag" class="form-control search-flag">
-                {% for key, value in search_info.flags %}
-                    <option value="{{ key }}"
-                            {% if search_info.selected_flag == key %} selected {% endif %}>{{ value }}</option>
-                {% endfor %}
-            </select>
-            <div class="input-group">
-                <input type="text" class="form-control" name="query"
-                   placeholder="검색어 입력" value="{{search_info.query}}">
-                <span class="input-group-btn">
-                    <button type="submit" class="btn btn-default btn-search">
-                        <i class="glyphicon glyphicon-search"></i>
-                    </button>
-                </span>
+                {% include 'pagination.html' with pages_nav_info=pages_nav_info search_info=search_info %}
             </div>
-        </form>
         </div>
-        <div class="col-sm-2">
-            <button type="button" id="id_create_post_button" class="form-control btn btn-primary redirection-button"
-                    path="{% url 'board:new_post' board.slug %}">글쓰기</button>
+
+        <!-- pagination -->
+        <div class="row">
+            <div class="col-sm-10">
+            <form method="GET" class="form-inline">
+                <select name="search_flag" class="form-control search-flag">
+                    {% for key, value in search_info.flags %}
+                        <option value="{{ key }}"
+                                {% if search_info.selected_flag == key %} selected {% endif %}>{{ value }}</option>
+                    {% endfor %}
+                </select>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="query"
+                       placeholder="검색어 입력" value="{{search_info.query}}">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default btn-search">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+            </div>
+            <div class="col-sm-2">
+                <button type="button" id="id_create_post_button" class="form-control btn btn-primary redirection-button"
+                        path="{% url 'board:new_post' board.slug %}">글쓰기</button>
+            </div>
         </div>
     </div>
 </div>

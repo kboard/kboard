@@ -6,35 +6,36 @@
         alert('{{ error_alert }}');
     </script>
     {% endif %}
+<div class="row">
+    <div class="col-sm-12">
+        <form method="post" action="{% block form_action_url %}{% endblock %}" class="post-form"
+              enctype="multipart/form-data" novalidate>
+        <h3>{% block header %}{% endblock %}</h3>
 
-<div class="col-sm-12">
-    <form method="post" action="{% block form_action_url %}{% endblock %}" class="post-form"
-          enctype="multipart/form-data" novalidate>
-    <h3>{% block header %}{% endblock %}</h3>
-
-    <div class="panel panel-default">
-        <div class="panel-body">
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-sm-12">
-                    {{ post_form.as_p | safe }}
-                    {{ attachment_form.as_p }}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-sm-12">
+                        {{ post_form.as_p | safe }}
+                        {{ attachment_form.as_p }}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col-sm-2 col-sm-offset-8">
-            <button type="button" class="form-control btn btn-primary post-submit-button">
-                {% block submit_button_name %}{% endblock %}
-            </button>
+        <div class="row">
+            <div class="col-sm-2 col-sm-offset-8">
+                <button type="button" class="form-control btn btn-primary post-submit-button">
+                    {% block submit_button_name %}{% endblock %}
+                </button>
+            </div>
+            <div class="col-sm-2">
+                <button id="id_cancel_button" type="button" class="form-control btn btn-default redirection-button"
+                    path="{% block cancel_url %}{% endblock %}">취소</button>
+            </div>
         </div>
-        <div class="col-sm-2">
-            <button id="id_cancel_button" type="button" class="form-control btn btn-default redirection-button"
-                path="{% block cancel_url %}{% endblock %}">취소</button>
-        </div>
+        </form>
     </div>
-    </form>
 </div>
 {% endblock %}
