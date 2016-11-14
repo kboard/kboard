@@ -31,7 +31,7 @@ def home(request):
 def new_post(request, board_slug):
     board = Board.objects.get(slug=board_slug)
     if request.method == 'POST':
-        post_form = PostForm(request.POST, request.FILES)
+        post_form = PostForm(request.POST)
         attachment_form = AttachmentForm(request.POST, request.FILES)
         if post_form.is_valid() and attachment_form.is_valid():
             post = post_form.save(commit=False)
@@ -173,7 +173,7 @@ def edit_post(request, post_id):
         origin_attachment_name = ''
 
     if request.method == 'POST':
-        post_form = PostForm(request.POST, request.FILES, instance=edited_post)
+        post_form = PostForm(request.POST, instance=edited_post)
         attachment_form = AttachmentForm(request.POST, request.FILES)
         if origin_post.title != request.POST['title'] or origin_post.content != request.POST['content'] or \
                 origin_attachment_name != request.FILES.get('attachment', ''):
@@ -220,7 +220,7 @@ def edit_post(request, post_id):
                 'error_alert': error_message
             })
     else:
-        post_form = PostForm(initial={'title': origin_post.title, 'content': origin_post.content, 'file': origin_post.file})
+        post_form = PostForm(initial={'title': origin_post.title, 'content': origin_post.content})
         if origin_attachment:
             attachment_form = AttachmentForm(initial={'attachment': origin_attachment.attachment})
         else:
