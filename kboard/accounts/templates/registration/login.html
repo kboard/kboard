@@ -2,14 +2,19 @@
 {% load i18n %}
 
 {% block body %}
-<form method="post" action="">
-    {% csrf_token %}
-    {{ form.as_p }}
+<div class="panel panel-primary block-center" style="width:400px;">
+    <div class="panel-heading">
+        <h5 class="panel-title">로그인</h5>
+    </div>
+    <div class="panel-body">
+        <form method="post" action="">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">로그인</button>
+        </form>
 
-    <input type="submit" value="{% trans 'Log in' %}" />
-    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
-</form>
-
-<p>{% trans "Forgot password?" %} <a href="{% url 'auth_password_reset' %}">{% trans "Reset" %}</a>!</p>
-<p>{% trans "Join us" %} <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>!</p>
+        <p><a href="{% url 'auth_password_reset' %}">비밀번호 재설정하기</a></p>
+        <p><a href="{% url 'registration_register' %}">가입하기</a></p>
+    </div>
+</div>
 {% endblock %}

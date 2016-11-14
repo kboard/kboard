@@ -2,12 +2,19 @@
 {% load i18n %}
 
 {% block body %}
-    <div class="container">
-    <h1>Profile</h1>
-    <p>This is your personal account</p>
-    <p>Username: {{user.username}}</p>
-    <p>Email: {{user.email}}</p>
-    <p>Full name: {{account.fullName}}</p>
-    <p>Status: {{account.status}}</p>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="panel-title">계정 정보</div>
+            </div>
+            <div class="panel-body">
+                <p>Username: {{user.username}}</p>
+                <p>Email: {{user.email}}</p>
+                <p>Full name: {{account.fullName}}</p>
+                <p>Status: {{account.status}}</p>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
