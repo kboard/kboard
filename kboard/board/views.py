@@ -10,12 +10,7 @@ from board.forms import PostForm, AttachmentForm
 from core.utils import get_pages_nav_info
 
 
-def handle_uploaded_file(f):
-    with open(settings.BASE_DIR + '/file/' + f.name, 'wb+') as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-
-
+@require_GET
 def home(request):
     boards = Board.objects.all()
 
@@ -48,6 +43,7 @@ def new_post(request, board_slug):
     return render(request, 'new_post.html', {'board': board, 'post_form': post_form, 'attachment_form': attachment_form})
 
 
+@require_GET
 def post_list(request, board_slug):
     board = Board.objects.get(slug=board_slug)
 
@@ -86,6 +82,7 @@ def post_list(request, board_slug):
     })
 
 
+@require_GET
 def view_post(request, post_id):
     non_sliced_query_set = Post.objects.filter(id=post_id)
     non_sliced_query_set.update(page_view_count=F('page_view_count') + 1)
@@ -126,6 +123,7 @@ def view_post(request, post_id):
     })
 
 
+@require_GET
 def comment_list(request, post_id):
     post = Post.objects.get(id=post_id)
     comments_all_list = Comment.objects.filter(post=post, is_deleted=False).order_by('-id')
@@ -231,30 +229,27 @@ def edit_post(request, post_id):
 
 @require_POST
 def new_comment(request, post_id):
-    if request.method == 'POST':
-        post = Post.objects.get(id=post_id)
-        Comment.objects.create(post=post, content=request.POST['comment_content'])
-        return redirect(reverse('board:comment_list', args=[post_id]))
+    post = Post.objects.get(id=post_id)
+    Comment.objects.create(post=post, content=request.POST['comment_content'])
+    return redirect(reverse('board:comment_list', args=[post_id]))
 
 
 @require_POST
 def delete_comment(request, post_id, comment_id):
-    if request.method == 'POST':
-        comment = Comment.objects.get(id=comment_id)
-        comment.is_deleted = True
-        comment.save()
+    comment = Comment.objects.get(id=comment_id)
+    comment.is_deleted = True
+    comment.save()
 
-        return redirect(reverse('board:comment_list', args=[post_id]))
+    return redirect(reverse('board:comment_list', args=[post_id]))
 
 
 @require_POST
 def delete_post(request, post_id):
-    if request.method == 'POST':
-        post = Post.objects.get(id=post_id)
-        post.is_deleted = True
-        post.save(update_fields=['is_deleted'])
+    post = Post.objects.get(id=post_id)
+    post.is_deleted = True
+    post.save(update_fields=['is_deleted'])
 
-        return redirect(post.board)
+    return redirect(post.board)
 
 
 @require_POST
