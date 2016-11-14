@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-sm-12" class="history-container">
         <h2>수정 내역</h2>
-        {% for history in history_list %}
+        {% for history, uploaded_file in history_list %}
             <hr/>
             <div class="panel panel-default post-panel post-history">
                 <div class="panel-heading">
