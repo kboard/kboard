@@ -219,11 +219,11 @@ class DeletePostTest(BoardAppTest):
 
 
 class LikePostTest(BoardAppTest):
-    def test_redirect_to_post_list_after_like_post(self):
+    def test_response_increased_post_like_count(self):
         post = Post.objects.create(board=self.default_board, title='post', content='content')
         response = self.client.post(reverse('board:like_post', args=[post.id]))
 
-        self.assertRedirects(response, reverse('board:view_post', args=[post.id]))
+        self.assertEqual(response.content.decode(), '1')
 
     def test_increase_count_after_like_post(self):
         post = Post.objects.create(board=self.default_board, title='post', content='content')

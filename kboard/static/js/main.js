@@ -31,4 +31,11 @@ $(document).ready(function() {
             alert("제목과 내용을 채워주세요!" + content);
         }
     });
+
+    $('.like-button').click(function() {
+        $.post('like/', function(result) {
+            $('.like-count').text(result);
+            alert("추천되었습니다!");
+        });
+    });
 });
