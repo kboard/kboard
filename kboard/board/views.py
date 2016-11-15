@@ -154,10 +154,18 @@ def comment_list(request, post_id):
 @require_GET
 def post_history_list(request, post_id):
     post = Post.objects.get(id=post_id)
-    post_history = EditedPostHistory.objects.filter(post=post).order_by('-id')
+    post_histories = EditedPostHistory.objects.filter(post=post).order_by('-id')
+    history_list = []
+    for history in post_histories:
+        try:
+            attachment = Attachment.objects.get(editedPostHistory=history)
+            uploaded_file = attachment.attachment
+        except Attachment.DoesNotExist:
+            uploaded_file = None
+        history_list.append([history, uploaded_file])
 
     return render(request, 'post_history_list.html', {
-        'history_list': post_history,
+        'history_list': history_list,
         'post_id': post_id
     })
 
