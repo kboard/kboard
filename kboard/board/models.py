@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Q
 
 from core.models import TimeStampedModel
+from accounts.models import Account
 
 
 class Board(models.Model):
@@ -70,6 +71,7 @@ class Post(TimeStampedModel):
     is_deleted = models.BooleanField(default=False)
     page_view_count = models.IntegerField(default=0)
     like_count = models.IntegerField(default=0)
+    account = models.ForeignKey(Account, null=True)
 
     def get_absolute_url(self):
         return reverse('board:view_post', args=[self.id])
