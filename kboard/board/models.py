@@ -13,8 +13,8 @@ class Board(models.Model):
     def get_absolute_url(self):
         return reverse('board:post_list', args=[self.slug])
 
-    slug = models.TextField(default='', unique=True)
-    name = models.TextField(default='')
+    slug = models.CharField(default='', unique=True, max_length=100)
+    name = models.CharField(default='', max_length=100)
     posts_chunk_size = models.IntegerField(default=10)
     post_pages_nav_chunk_size = models.IntegerField(default=10)
     comments_chunk_size = models.IntegerField(default=5)
@@ -79,7 +79,7 @@ class Post(TimeStampedModel):
 
 class EditedPostHistory(TimeStampedModel):
     post = models.ForeignKey(Post, null=False, default=None)
-    title = models.TextField(default='')
+    title = models.CharField(default='', max_length=100)
     content = models.TextField(default='')
 
 
