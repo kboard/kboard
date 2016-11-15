@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-sm-12" class="history-container">
         <h2>수정 내역</h2>
-        {% for history in history_list %}
+        {% for history, uploaded_file in history_list %}
             <hr/>
             <div class="panel panel-default post-panel post-history">
                 <div class="panel-heading">
@@ -18,9 +18,13 @@
                 <div class="panel-body">
                     {{ history.content|safe }}
                 </div>
+                {% if uploaded_file %}
+                <div class="panel-footer">
+                    <a id="id_uploaded_file" href="{{ uploaded_file.url }}" download>{{ uploaded_file.name }}</a>
+                </div>
+            {% endif %}
             </div>
         {% endfor %}
-
         <div class="row">
             <div class="col-sm-2">
                 <button id="back_to_view_post_button" class="form-control btn btn-default redirection-button"
