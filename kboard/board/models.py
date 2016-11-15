@@ -93,4 +93,4 @@ class Comment(TimeStampedModel):
     content = models.TextField(default='')
     post = models.ForeignKey(Post, null=True)
     is_deleted = models.BooleanField(default=False)
-
+    account = models.ForeignKey(Account, null=True)
