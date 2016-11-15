@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Q
 
 from core.models import TimeStampedModel
+from accounts.models import Account
 
 
 class Board(models.Model):
@@ -91,4 +92,4 @@ class Comment(TimeStampedModel):
     content = models.TextField(default='')
     post = models.ForeignKey(Post, null=True)
     is_deleted = models.BooleanField(default=False)
-
+    account = models.ForeignKey(Account, null=True)
