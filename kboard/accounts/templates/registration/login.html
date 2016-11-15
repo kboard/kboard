@@ -2,19 +2,27 @@
 {% load i18n %}
 
 {% block body %}
-<div class="panel panel-primary block-center" style="width:400px;">
-    <div class="panel-heading">
-        <h5 class="panel-title">로그인</h5>
-    </div>
-    <div class="panel-body">
-        <form method="post" action="">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">로그인</button>
-        </form>
+    {% if user.is_authenticated %}
+    <p>이미 로그인 되어있습니다.</p>
+    <p>현재 계정을 로그아웃 하고 다른 계정으로 로그인 하시겠습니까?</p>
+    <p><a href="{% url 'auth_logout' %}">{% trans "Log out" %}</a></p>
+    {% endif %}
 
-        <p><a href="{% url 'auth_password_reset' %}">비밀번호 재설정하기</a></p>
-        <p><a href="{% url 'registration_register' %}">가입하기</a></p>
+    {% if not user.is_authenticated %}
+    <div class="panel panel-primary block-center" style="width:400px;">
+        <div class="panel-heading">
+            <h5 class="panel-title">로그인</h5>
+        </div>
+        <div class="panel-body">
+            <form method="post" action="">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">로그인</button>
+            </form>
+
+            <p><a href="{% url 'auth_password_reset' %}">비밀번호 재설정하기</a></p>
+            <p><a href="{% url 'registration_register' %}">가입하기</a></p>
+        </div>
     </div>
-</div>
+    {% endif %}
 {% endblock %}
