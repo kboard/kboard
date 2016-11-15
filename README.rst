@@ -21,9 +21,20 @@ Developing Process
         [...]
         #Email Activation
         [...]
-        EMAIL_HOST_USER = 'your mail'
-        EMAIL_HOST_PASSWORD = 'your password'
-        SERVER_EMAIL = 'your mail'
+        EMAIL_HOST_USER = '[YOUR EMAIL]'
+        EMAIL_HOST_PASSWORD = '[YOUR EMAIL PASSWORD]'
+        SERVER_EMAIL = '[YOUR EMAIL]'
+
+- To set mysql database, fill your's. ::
+
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.mysql',
+                'NAME': '[YOUR DATABASE]',
+                'USER': '[YOUR USER]',
+                'PASSWORD': '[YOUR USER PASSWORD]'
+            }
+        }
 
 - To set initial data, run ``python ./kboard/manage.py loaddata default``.
 
