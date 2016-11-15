@@ -199,3 +199,4 @@ DEFAULT_FROM_MAIL = 'KBoard_Developer'
 # When Login success, go to main page.
 
 LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
