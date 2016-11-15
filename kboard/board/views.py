@@ -246,7 +246,13 @@ def edit_post(request, post_id):
 @require_POST
 def new_comment(request, post_id):
     post = Post.objects.get(id=post_id)
-    Comment.objects.create(post=post, content=request.POST['comment_content'])
+    account = None
+    if request.user.is_authenticated:
+        try:
+            account = Account.objects.get(user=request.user)
+        except Attachment.DoesNotExist:
+            account = None
+    Comment.objects.create(post=post, content=request.POST['comment_content'], account=account)
     return redirect(reverse('board:comment_list', args=[post_id]))
 
 
