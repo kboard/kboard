@@ -1,4 +1,5 @@
 from .base import FunctionalTest
+import time
 
 
 class PostValidationTest(FunctionalTest):
@@ -51,5 +52,6 @@ class PostValidationTest(FunctionalTest):
         contentbox = self.get_contentbox()
         contentbox.send_keys('Content of This Post')
         self.browser.switch_to.default_content()
+        time.sleep(1)
         self.click_submit_button()
         self.check_for_row_in_list_table('id_post_list_table', 'Title of This Post')
