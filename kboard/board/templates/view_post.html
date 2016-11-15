@@ -12,6 +12,9 @@
                     {% if is_modified %}
                         <span id="post_history"><a href="{% url 'board:post_history_list' post.id%}">수정 내역</a></span>
                     {% endif %}
+                    {% if post.account %}
+                        <span class="text-muted">작성자: {{ post.account.user.username }}</span>
+                    {% endif %}
                     <span class="text-muted" id="id_page_view_count">조회수: {{ post.page_view_count }}</span>
                     <span class="text-muted">날짜: {{ post.created_time|date:"Y-m-d H:i:s" }}</span>
                 </div>

@@ -34,6 +34,11 @@ def new_post(request, board_slug):
         if post_form.is_valid() and attachment_form.is_valid():
             post = post_form.save(commit=False)
             post.board = board
+            if request.user.is_authenticated:
+                try:
+                    post.account = Account.objects.get(user=request.user)
+                except Attachment.DoesNotExist:
+                    post.account = None
             post.save()
             attachment = attachment_form.save(commit=False)
             attachment.post = post
@@ -241,6 +246,7 @@ def edit_post(request, post_id):
 @require_POST
 def new_comment(request, post_id):
     post = Post.objects.get(id=post_id)
+    account = None
     if request.user.is_authenticated:
         try:
             account = Account.objects.get(user=request.user)
