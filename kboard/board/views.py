@@ -8,6 +8,7 @@ from django.db.models import F
 from django.conf import settings
 
 from board.models import Post, Board, Comment, EditedPostHistory, Attachment
+from accounts.models import Account
 from board.forms import PostForm, AttachmentForm
 from core.utils import get_pages_nav_info
 
@@ -33,6 +34,11 @@ def new_post(request, board_slug):
         if post_form.is_valid() and attachment_form.is_valid():
             post = post_form.save(commit=False)
             post.board = board
+            if request.user.is_authenticated:
+                try:
+                    post.account = Account.objects.get(user=request.user)
+                except Attachment.DoesNotExist:
+                    post.account = None
             post.save()
             attachment = attachment_form.save(commit=False)
             attachment.post = post
