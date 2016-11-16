@@ -7,7 +7,7 @@
     {% if user.is_authenticated %}
     <p>이미 로그인 되어있습니다.</p>
     <p>현재 계정을 로그아웃 하고 다른 계정으로 로그인 하시겠습니까?</p>
-    <p><a href="{% url 'auth_logout' %}">{% trans "Log out" %}</a></p>
+    <p><a href="{% url 'auth_logout' %}">로그아웃</a></p>
 
     {% else %}
     <div class="panel panel-primary block-center" style="width:400px;">

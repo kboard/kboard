@@ -1,1 +1,1 @@
-{% load i18n %}{% trans "Account activation on" %} {{ site.name }}
+{% load i18n %}계정 활성화됨 {{ site.name }}
