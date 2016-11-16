@@ -25,11 +25,11 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if not user.is_authenticated %}
-                    <li><a href="/accounts/login/">Login</a></li>
+                    <li><a href="/accounts/login/">로그인</a></li>
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <li><a href="/accounts/logout/">Logout</a></li>
-                    <li><a href="/accounts/profile/">Hi, {{ user.username }}</a></li>
+                    <li><a href="/accounts/profile/">{{ user.username }}</a></li>
+                    <li><a href="/accounts/logout/">로그아웃</a></li>
                 {% endif %}
             </ul>
         </nav>
