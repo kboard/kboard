@@ -14,13 +14,14 @@
                         <form method="POST" class="delete-comment-form" action="{% url 'board:delete_comment' post.id comment.id %}">
                             {% csrf_token %}
                         </form>
-                        {% if comment.account %}
-                            <small class="text-muted">{{ comment.account.user.username }}</small>
-                        {% endif %}
                         <small class="text-muted comment-date">{{ comment.created_time|date:"Y-m-d H:i:s" }}</small>
                         <small class="delete-comment">삭제</small>
                     </div>
-                    <span class="text-primary">사용자 이름</span>
+                    {% if comment.account %}
+                        <span class="text-primary">{{ comment.account.user.username }}</span>
+                    {% else %}
+                        <span class="text-primary">익명</span>
+                    {% endif %}
                     <p class="comment-content">
                         {{ comment.content }}
                     </p>
