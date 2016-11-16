@@ -122,12 +122,17 @@ def view_post(request, post_id):
 
     pages_nav_info = get_pages_nav_info(comments, nav_chunk_size=post.board.comment_pages_nav_chunk_size)
 
+    is_authenticated = False
+    if post.account and request.user == post.account.user:
+        is_authenticated = True
+
     return render(request, 'view_post.html', {
         'post': post,
         'uploaded_file': uploaded_file,
         'is_modified': is_modified,
         'comments': comments,
-        'pages_nav_info': pages_nav_info
+        'pages_nav_info': pages_nav_info,
+        'is_authenticated': is_authenticated,
     })
 
 

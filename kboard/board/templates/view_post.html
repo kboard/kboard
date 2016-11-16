@@ -51,6 +51,11 @@
                 <button id="id_edit_post_button" class="form-control btn btn-default redirection-button"
                         path="{% url 'board:edit_post' post.id %}">수정</button>
             </div>
+            <script>
+                if("{{ is_authenticated }}" == "False") {
+                    $('#id_edit_post_button').hide();
+                }
+            </script>
             <div class="col-sm-4">
                 <form method="POST" action="{% url 'board:delete_post' post.id %}">
                     {% csrf_token %}
