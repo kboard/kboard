@@ -4,7 +4,9 @@
 
 {% block body %}
 {% for data in home_data %}
-<div class="row">
+    {% if not forloop.counter|divisibleby:"2" %}
+        <div class="row">
+    {% endif %}
     <div class="col-md-6">
         <div class="panel panel-post-summary">
             <div class="panel-heading">
@@ -23,6 +25,8 @@
             </div>
         </div>
     </div>
-</div>
+    {% if forloop.counter|divisibleby:"2" %}
+        </div>
+    {% endif %}
 {% endfor %}
 {% endblock %}
