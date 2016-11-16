@@ -255,8 +255,8 @@ def new_comment(request, post_id):
     if request.user.is_authenticated:
         try:
             account = Account.objects.get(user=request.user)
-        except Attachment.DoesNotExist:
-            account = None
+        except Account.DoesNotExist:
+            pass
     Comment.objects.create(post=post, content=request.POST['comment_content'], account=account)
     return redirect(reverse('board:comment_list', args=[post_id]))
 

@@ -35,10 +35,11 @@
 </div>
 {% else %}
 <p class="no-comment">
-    <strong>댓글이 없습니다</strong>
+    <strong>댓글이 없습니다.</strong>
 </p>
 {% endif %}
 
+{% if user.is_authenticated %}
 <div class="row">
     <form method="POST" action="{% url 'board:new_comment' post.id %}">
         {% csrf_token %}
@@ -51,4 +52,9 @@
         </div>
     </form>
 </div>
+{% else %}
+<p class="no-comment">
+    <strong>댓글을 달기 위해 로그인하세요.</strong>
+</p>
+{% endif %}
 </body>
