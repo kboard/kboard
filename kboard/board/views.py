@@ -264,8 +264,9 @@ def new_comment(request, post_id):
 @require_POST
 def delete_comment(request, post_id, comment_id):
     comment = Comment.objects.get(id=comment_id)
-    comment.is_deleted = True
-    comment.save()
+    if request.user == comment.account.user:
+        comment.is_deleted = True
+        comment.save()
 
     return redirect(reverse('board:comment_list', args=[post_id]))
 
