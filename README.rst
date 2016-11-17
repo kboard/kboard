@@ -38,6 +38,10 @@ Developing Process
 
 - To set initial data, run ``python ./kboard/manage.py loaddata default``.
 
+Add Terms and Services
+-----
+- You can edit contents of terms at ``kboard/accounts/templates/accounts/terms.html``
+
 Developers
 -----
 - Bae KwonHan <darjeeling@gmail.com>
