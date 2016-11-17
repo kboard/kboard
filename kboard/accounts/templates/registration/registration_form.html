@@ -4,6 +4,14 @@
 {% block title %}회원가입{% endblock %}
 
 {% block body %}
+<style>
+    #terms {
+        max-height: 150px;
+        overflow-y: scroll;
+        border: 1px solid;
+        margin: 0 0 20px 0;
+    }
+</style>
 <div class="panel panel-primary block-center" style="width:800px;">
     <div class="panel-heading">
         <h5 class="panel-title">회원가입</h5>
@@ -12,6 +20,9 @@
         <form method="post" class="registration-form" action="">
             {% csrf_token %}
             {{ form.as_p }}
+            <div id="terms">
+                {% include "accounts/terms.html" %}
+            </div>
             <button class="btn btn-primary" type="submit">가입하기</button>
         </form>
     </div>
