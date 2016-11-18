@@ -36,7 +36,7 @@ def new_post(request, board_slug):
             post.board = board
             if request.user.is_authenticated:
                 try:
-                    post.account = Account.objects.get(user=request.user)
+                    post.account = Account.objects.get(username=request.user.username)
                 except Attachment.DoesNotExist:
                     post.account = None
             post.save()
