@@ -10,8 +10,6 @@ from .models import Account
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
-    name = forms.CharField(max_length=150)
-    terms = forms.BooleanField(error_messages={'required': 'You must agree to the terms to register'})
 
     class Meta:
         model = Account
@@ -59,7 +57,7 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2')}
+            'fields': ('username', 'email', 'name', 'password1', 'password2')}
         ),
     )
     search_fields = ('username',)
