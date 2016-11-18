@@ -123,7 +123,7 @@ def view_post(request, post_id):
     pages_nav_info = get_pages_nav_info(comments, nav_chunk_size=post.board.comment_pages_nav_chunk_size)
 
     is_authenticated = False
-    if post.account and request.user == post.account.user:
+    if post.account and request.user.username == post.account.username:
         is_authenticated = True
 
     return render(request, 'view_post.html', {
