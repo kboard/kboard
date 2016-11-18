@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
 
 from registration.forms import RegistrationFormUniqueEmail
@@ -40,4 +41,4 @@ class RegistrationForm(RegistrationFormUniqueEmail):
 
     class Meta:
         model = Account
-        fields = ("username", "password1", "password2", "email", "fullname", )
+        fields = ("username", "password1", "password2", "email", "fullname")
