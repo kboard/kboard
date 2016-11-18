@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}계정 정보{% endblock %}
-
 {% block body %}
 <div class="row">
     <div class="col-md-12">
@@ -11,11 +9,11 @@
                 <div class="panel-title">계정 정보</div>
             </div>
             <div class="panel-body">
-                <p>ID: {{user.username}}</p>
+                <p>Username: {{user.username}}</p>
                 <p>Email: {{user.email}}</p>
-                <p>이름: {{account.fullName}}</p>
-                <p>상태: {{account.status}}</p>
-                <p><a href="{% url 'auth_password_reset' %}">비밀번호 재설정하기</a></p>
+                <p>이름: {{user.fullname}}</p>
+                <p>Admin: {{user.is_admin}}</p>
+                <p><a href="{% url 'auth_password_change' %}">비밀번호 변경</a></p>
             </div>
         </div>
     </div>
