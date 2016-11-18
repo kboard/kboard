@@ -4,6 +4,10 @@ from .base import FunctionalTest
 
 
 class EditPostTest(FunctionalTest):
+    def setUp(self):
+        super().setUp()
+        self.log_in()
+
     def test_modify_post(self):
         self.browser.get(self.live_server_url)
         self.move_to_default_board()

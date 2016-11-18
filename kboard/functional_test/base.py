@@ -4,7 +4,7 @@ import os
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 
-from board.models import Board
+from accounts.models import Account
 
 
 class FunctionalTest(StaticLiveServerTestCase):
@@ -64,3 +64,12 @@ class FunctionalTest(StaticLiveServerTestCase):
     def register_send_key(self, css_id, send_text):
         id = self.browser.find_element_by_id(css_id)
         id.send_keys(send_text)
+
+    def log_in(self):
+        user = Account.objects.get(username='test')
+        self.browser.get(self.live_server_url)
+        self.browser.find_element_by_id('id_log_in_button').click()
+        self.browser.find_element_by_id('id_username').send_keys(user.username)
+        self.browser.find_element_by_id('id_password').send_keys('kboard123')
+        self.browser.find_element_by_class_name('btn-primary').click()
+
