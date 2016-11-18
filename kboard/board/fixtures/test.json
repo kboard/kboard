@@ -1,0 +1,30 @@
+[
+  {
+    "model": "board.board",
+    "pk": 1,
+    "fields": {
+      "slug": "default",
+      "name": "Default",
+      "posts_chunk_size": 10,
+      "post_pages_nav_chunk_size": 10,
+      "comments_chunk_size": 5,
+      "comment_pages_nav_chunk_size": 10
+    }
+  },
+  {
+    "model": "accounts.account",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$30000$Z4suwZpBrQoc$Nfnrf9eoEyB2vEI+FWN3VeFWIp1QXmPJsrHJ/murdvM=",
+      "last_login": null,
+      "created_time": "2016-11-18T04:11:54.888Z",
+      "modified_time": "2016-11-18T04:11:54.890Z",
+      "username": "test",
+      "email": "test@test.com",
+      "fullname": "test",
+      "is_admin": false,
+      "is_active": true,
+      "is_superuser": false
+    }
+  }
+]
