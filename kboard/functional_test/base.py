@@ -8,7 +8,7 @@ from board.models import Board
 
 
 class FunctionalTest(StaticLiveServerTestCase):
-    fixtures = ['default.json']
+    fixtures = ['test.json']
 
     def setUp(self):
         if sys.platform == 'darwin':

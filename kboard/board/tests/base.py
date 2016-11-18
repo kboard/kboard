@@ -5,7 +5,7 @@ from board.models import Post, Board, Comment
 
 
 class BoardAppTest(TestCase):
-    fixtures = ['default.json']
+    fixtures = ['test.json']
 
     @classmethod
     def setUpTestData(cls):
