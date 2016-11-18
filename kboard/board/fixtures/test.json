@@ -21,7 +21,7 @@
       "modified_time": "2016-11-18T04:11:54.890Z",
       "username": "test",
       "email": "test@test.com",
-      "fullname": "test",
+      "name": "test",
       "is_admin": false,
       "is_active": true,
       "is_superuser": false
