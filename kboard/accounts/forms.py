@@ -12,15 +12,15 @@ class RegistrationForm(RegistrationFormUniqueEmail):
         'password_mismatch': _('The two password fields didn\'t match.'),
     }
 
-    fullname = forms.CharField(max_length=150)
+    name = forms.CharField(max_length=150)
     terms = forms.BooleanField(error_messages={'required': _(u'You must agree to the terms to register')})
 
     def __init__(self, *args, **kwargs):
         super(RegistrationFormUniqueEmail, self).__init__(*args, **kwargs)
         if 'username' in self.fields:
             self.fields['username'].widget.attrs.update({'placeholder': _(u'Your ID'), 'autofocus': ''})
-        if 'fullname' in self.fields:
-            self.fields['fullname'].widget.attrs.update({'placeholder': _(u'Your name')})
+        if 'name' in self.fields:
+            self.fields['name'].widget.attrs.update({'placeholder': _(u'Your name')})
         if 'email' in self.fields:
             self.fields['email'].widget.attrs.update({'placeholder': _(u'Your email')})
         if 'password1' in self.fields:
@@ -41,4 +41,4 @@ class RegistrationForm(RegistrationFormUniqueEmail):
 
     class Meta:
         model = Account
-        fields = ("username", "password1", "password2", "email", "fullname")
+        fields = ("username", "password1", "password2", "email", "name")

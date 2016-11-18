@@ -10,12 +10,10 @@ from .models import Account
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Password confirmation', widget=forms.PasswordInput)
-    fullname = forms.CharField(max_length=150)
-    terms = forms.BooleanField(error_messages={'required': 'You must agree to the terms to register'})
 
     class Meta:
         model = Account
-        fields = ('username', 'email', 'fullname')
+        fields = ('username', 'email', 'name')
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -38,7 +36,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = Account
-        fields = ('username', 'email', 'fullname', 'password')
+        fields = ('username', 'email', 'name', 'password')
 
     def clean_password(self):
         return self.initial["password"]
@@ -48,18 +46,18 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('username', 'email', 'fullname', 'is_admin')
+    list_display = ('username', 'email', 'name', 'is_admin', 'is_superuser')
     list_filter = ('is_admin',)
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal info', {'fields': ('email', 'fullname', )}),
-        ('Permissions', {'fields': ('is_admin',)}),
+        ('Personal info', {'fields': ('email', 'name', )}),
+        ('Permissions', {'fields': ('is_admin', 'is_superuser', 'is_active')}),
     )
 
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2')}
+            'fields': ('username', 'email', 'name', 'password1', 'password2')}
         ),
     )
     search_fields = ('username',)
