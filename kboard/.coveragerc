@@ -8,3 +8,5 @@ omit =
     board/admin.py
     board/apps.py
     board/urls.py
+    accounts/apps.py
+    accounts/urls.py
