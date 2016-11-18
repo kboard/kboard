@@ -12,7 +12,7 @@ class RegistrationView(BaseRegistrationView):
     def register(self, form):
         new_user = BaseRegistrationView.register(self, form)
         acc = Account()
-        acc.fullname = form.cleaned_data['fullname']
+        acc.name = form.cleaned_data['name']
         acc.user = new_user
         acc.status = 'created'
         acc.save()

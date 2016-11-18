@@ -28,8 +28,8 @@
                     <li><a id="id_log_in_button" href="/accounts/login/">로그인</a></li>
                 {% endif %}
                 {% if user.is_authenticated %}
-                    <li><a href="/accounts/profile/">{{ user.username }}</a></li>
-                    <li><a href="/accounts/logout/">로그아웃</a></li>
+                    <li><a id="username" href="/accounts/profile/">{{ user.username }}</a></li>
+                    <li><a id="logout_button" href="/accounts/logout/">로그아웃</a></li>
                 {% endif %}
             </ul>
         </nav>

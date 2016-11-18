@@ -14,7 +14,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         if sys.platform == 'darwin':
             project_root = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
             repo_root = os.path.dirname(project_root)
-            sys.path.append(os.path.join(repo_root,'dev'))
+            sys.path.append(os.path.join(repo_root, 'dev'))
             from download_chromedriver import get_chromedriver_path
             chrome_path = get_chromedriver_path()
             if chrome_path is False:
@@ -72,4 +72,3 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_username').send_keys(user.username)
         self.browser.find_element_by_id('id_password').send_keys('kboard123')
         self.browser.find_element_by_class_name('btn-primary').click()
-
