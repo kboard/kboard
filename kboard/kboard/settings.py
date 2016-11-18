@@ -27,6 +27,7 @@ SECRET_KEY = 'fbk#a_$7&@566onvmd1xfxyszz)npb+d5gq#y9q(n0wg_k)v0x'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL = 'accounts.Account'
 
 
 # Application definition
@@ -209,3 +210,5 @@ DEFAULT_FROM_MAIL = 'KBoard_Developer'
 
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+
