@@ -29,3 +29,18 @@ def get_pages_nav_info(page, nav_chunk_size=10):
         'current_page_num': page.number,
         'next_nav_page': next_nav_page}
     return pages_nav_info
+
+
+def get_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip_address = x_forwarded_for.split(',')[-1].strip()
+    else:
+        ip_address = request.META.get('REMOTE_ADDR')
+    return ip_address
+
+
+def hide_ip(ip_str):
+    ip_arr = str(ip_str).split('.')
+    ip_arr[2] = 'xxx'
+    return '.'.join(ip_arr)

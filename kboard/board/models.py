@@ -72,6 +72,7 @@ class Post(TimeStampedModel):
     page_view_count = models.IntegerField(default=0)
     like_count = models.IntegerField(default=0)
     account = models.ForeignKey(Account, null=True)
+    ip = models.GenericIPAddressField(null=True, default='')
 
     def get_absolute_url(self):
         return reverse('board:view_post', args=[self.id])
@@ -94,3 +95,4 @@ class Comment(TimeStampedModel):
     post = models.ForeignKey(Post, null=True)
     is_deleted = models.BooleanField(default=False)
     account = models.ForeignKey(Account, null=True)
+    ip = models.GenericIPAddressField(null=True, default='')

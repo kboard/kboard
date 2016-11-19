@@ -16,6 +16,7 @@
                         <span class="text-muted">작성자: {{ post.account.username }}</span>
                     {% endif %}
                     <span class="text-muted" id="id_page_view_count">조회수: {{ post.page_view_count }}</span>
+                    <span class="text-muted" id="id_post_ip">IP: {{ post.ip }}</span>
                     <span class="text-muted">날짜: {{ post.created_time|date:"Y-m-d H:i:s" }}</span>
                 </div>
             </div>
