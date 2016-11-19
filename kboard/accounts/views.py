@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from registration.backends.hmac.views import RegistrationView as BaseRegistrationView
 
@@ -31,3 +31,11 @@ def profile(request):
     }
 
     return render(request, 'accounts/profile.html', context)
+
+@login_required
+def delete_user(request):
+    user = Account.objects.get(username=request.user.username)
+    user.is_active = False
+    user.save(update_fields=['is_active'])
+
+    return redirect('/')
