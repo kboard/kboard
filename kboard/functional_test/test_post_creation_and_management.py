@@ -139,6 +139,10 @@ class NewVisitorTest(FunctionalTest):
         post_content = self.browser.find_element_by_css_selector('.post-panel .panel-body').text
         self.assertIn('Content of This Post', post_content)
 
+        # 게시글의 제목 옆에는 IP가 표시된다.
+        post_ip = self.browser.find_element_by_id('id_post_ip').text
+        self.assertRegex(post_ip, 'IP: \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}')
+
         # 지훈이는 게시글 내용 하단의 댓글 란에 'This is a comment'라고 입력한다.
         comment_iframe = self.browser.find_element_by_class_name('comment-iframe')
         self.browser.switch_to.frame(comment_iframe)
