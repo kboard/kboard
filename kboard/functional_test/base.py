@@ -8,14 +8,23 @@ from selenium import webdriver
 from accounts.models import Account
 
 
+def login_test_user(self):
+    if hasattr(self, 'browser'):
+        self.browser.get(self.live_server_url)
+        self.browser.find_element_by_id('login_button').click()
+        self.browser.find_element_by_id('id_username').send_keys(self.test_user.username)
+        self.browser.find_element_by_id('id_password').send_keys('kboard123')
+        self.browser.find_element_by_class_name('btn-primary').click()
+
+
 def logout_current_user(self):
     self.browser.find_element_by_id('logout_button').click()
 
 
-def logout_current_user_with_browser(method):
+def login_test_user_with_browser(method):
     @wraps(method)
     def _impl(self, *args, **kwargs):
-        logout_current_user(self)
+        login_test_user(self)
         method(self, *args, **kwargs)
 
     return _impl
@@ -36,6 +45,8 @@ class FunctionalTest(StaticLiveServerTestCase):
             self.browser = webdriver.Chrome(chrome_path)
         else:
             self.browser = webdriver.Firefox()
+
+        self.test_user = Account.objects.get(username='test')
 
     def tearDown(self):
         self.browser.quit()
@@ -78,11 +89,3 @@ class FunctionalTest(StaticLiveServerTestCase):
     def register_send_key(self, css_id, send_text):
         id = self.browser.find_element_by_id(css_id)
         id.send_keys(send_text)
-
-    def login(self):
-        user = Account.objects.get(username='test')
-        self.browser.get(self.live_server_url)
-        self.browser.find_element_by_id('login_button').click()
-        self.browser.find_element_by_id('id_username').send_keys(user.username)
-        self.browser.find_element_by_id('id_password').send_keys('kboard123')
-        self.browser.find_element_by_class_name('btn-primary').click()
