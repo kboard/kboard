@@ -1,4 +1,4 @@
-from .base import FunctionalTest
+from .base import FunctionalTest, login_test_user
 
 
 class AccountTest(FunctionalTest):
@@ -6,7 +6,7 @@ class AccountTest(FunctionalTest):
         self.browser.get(self.live_server_url)
 
         # 현준이는 테스트 계정으로 로그인을 한다.
-        self.login()
+        login_test_user(self)
 
         # 로그인을 하자 메인페이지로 이동한다.
         self.assertRegex(self.browser.current_url, '.+/$')
@@ -33,7 +33,7 @@ class AccountTest(FunctionalTest):
         self.browser.get(self.live_server_url)
 
         # 혜선이는 테스트 계정으로 로그인을 한다.
-        self.login()
+        login_test_user(self)
 
         # profile 페이지로 이동하기 위해 우측 상단의 'test'를 클릭한다.
         username = self.browser.find_element_by_id('username')
@@ -50,7 +50,7 @@ class AccountTest(FunctionalTest):
         self.assertRegex(self.browser.current_url, '.+/$')
 
         # 탈퇴한 계정으로 로그인을 다시 시도해본다.
-        self.login()
+        login_test_user(self)
 
         # 로그인이 안되고 에러메시지가 나온다.
         error_list = self.browser.find_element_by_class_name('errorlist')

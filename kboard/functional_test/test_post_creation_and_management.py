@@ -1,6 +1,6 @@
 from selenium.common.exceptions import NoSuchElementException
 
-from .base import FunctionalTest
+from .base import FunctionalTest, login_test_user_with_browser
 
 
 class NewVisitorTest(FunctionalTest):
@@ -54,9 +54,8 @@ class NewVisitorTest(FunctionalTest):
         self.assertEqual(len(panel_posts), 1)
         self.assertEqual(panel_posts[0].text, 'Hello')
 
+    @login_test_user_with_browser
     def test_write_post_and_confirm_post_view(self):
-        self.browser.get(self.live_server_url)
-        self.login()
         self.move_to_default_board()
 
         # 지훈이는 새 게시글을 작성하기 위해 글 쓰기 버튼을 누른다.
@@ -186,11 +185,9 @@ class NewVisitorTest(FunctionalTest):
         # 게시글 목록 페이지로 돌아온다.
         self.assertRegex(self.browser.current_url, '.+/boards/default/$')
 
+    @login_test_user_with_browser
     def test_forbid_comment_input_when_does_not_login(self):
-        self.browser.get(self.live_server_url)
-
-        # 지훈이는 로그인을 하고 글을 작성한다.
-        self.login()
+        # 지훈이는 로그인을 한 상태로 글을 작성한다.
         self.move_to_default_board()
         self.add_post('hello', 'content')
 

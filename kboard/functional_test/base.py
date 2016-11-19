@@ -1,10 +1,29 @@
 import sys
 import os
+from functools import wraps
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 
 from accounts.models import Account
+
+
+def login_test_user(self):
+    if hasattr(self, 'browser'):
+        self.browser.get(self.live_server_url)
+        self.browser.find_element_by_id('login_button').click()
+        self.browser.find_element_by_id('id_username').send_keys(self.test_user.username)
+        self.browser.find_element_by_id('id_password').send_keys('kboard123')
+        self.browser.find_element_by_class_name('btn-primary').click()
+
+
+def login_test_user_with_browser(method):
+    @wraps(method)
+    def _impl(self, *args, **kwargs):
+        login_test_user(self)
+        method(self, *args, **kwargs)
+
+    return _impl
 
 
 class FunctionalTest(StaticLiveServerTestCase):
@@ -22,6 +41,8 @@ class FunctionalTest(StaticLiveServerTestCase):
             self.browser = webdriver.Chrome(chrome_path)
         else:
             self.browser = webdriver.Firefox()
+
+        self.test_user = Account.objects.get(username='test')
 
     def tearDown(self):
         self.browser.quit()
@@ -64,14 +85,6 @@ class FunctionalTest(StaticLiveServerTestCase):
     def register_send_key(self, css_id, send_text):
         id = self.browser.find_element_by_id(css_id)
         id.send_keys(send_text)
-
-    def login(self):
-        user = Account.objects.get(username='test')
-        self.browser.get(self.live_server_url)
-        self.browser.find_element_by_id('login_button').click()
-        self.browser.find_element_by_id('id_username').send_keys(user.username)
-        self.browser.find_element_by_id('id_password').send_keys('kboard123')
-        self.browser.find_element_by_class_name('btn-primary').click()
 
     def logout(self):
         self.browser.find_element_by_id('logout_button').click()
