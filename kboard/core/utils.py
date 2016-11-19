@@ -38,3 +38,9 @@ def get_ip(request):
     else:
         ip_address = request.META.get('REMOTE_ADDR')
     return ip_address
+
+
+def hide_ip(ip_str):
+    ip_arr = str(ip_str).split('.')
+    ip_arr[2] = 'xxx'
+    return '.'.join(ip_arr)
