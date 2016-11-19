@@ -253,7 +253,12 @@ def edit_post(request, post_id):
 def new_comment(request, post_id):
     post = Post.objects.get(id=post_id)
     if request.user.is_authenticated:
-        Comment.objects.create(post=post, content=request.POST['comment_content'], account=request.user)
+        Comment.objects.create(
+            post=post,
+            content=request.POST['comment_content'],
+            account=request.user,
+            ip=get_ip(request)
+        )
 
     return redirect(reverse('board:comment_list', args=[post_id]))
 
