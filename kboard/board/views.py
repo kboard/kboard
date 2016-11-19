@@ -10,7 +10,7 @@ from django.conf import settings
 from board.models import Post, Board, Comment, EditedPostHistory, Attachment
 from accounts.models import Account
 from board.forms import PostForm, AttachmentForm
-from core.utils import get_pages_nav_info
+from core.utils import get_pages_nav_info, get_ip
 
 
 @require_GET
@@ -32,15 +32,9 @@ def new_post(request, board_slug):
         post_form = PostForm(request.POST)
         attachment_form = AttachmentForm(request.POST, request.FILES)
         if post_form.is_valid() and attachment_form.is_valid():
-            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-            if x_forwarded_for:
-                ip_address = x_forwarded_for.split(',')[-1].strip()
-            else:
-                ip_address = request.META.get('REMOTE_ADDR')
-
             post = post_form.save(commit=False)
             post.board = board
-            post.ip = ip_address
+            post.ip = get_ip(request)
             if request.user.is_authenticated:
                 try:
                     post.account = Account.objects.get(username=request.user.username)
