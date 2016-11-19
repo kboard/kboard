@@ -15,12 +15,12 @@
                             {% csrf_token %}
                         </form>
                         <small class="text-muted comment-date">{{ comment.created_time|date:"Y-m-d H:i:s" }}</small>
-                        {% if comment.account.user == user %}
+                        {% if comment.account == user %}
                             <small class="delete-comment">삭제</small>
                         {% endif %}
                     </div>
                     {% if comment.account %}
-                        <span class="text-primary">{{ comment.account.user.username }}</span>
+                        <span class="text-primary">{{ comment.account.username }}</span>
                     {% else %}
                         <span class="text-primary">익명</span>
                     {% endif %}
@@ -55,7 +55,7 @@
     </form>
 </div>
 {% else %}
-<p class="no-comment">
+<p class="comment-require-login">
     <strong>댓글을 달기 위해 로그인하세요.</strong>
 </p>
 {% endif %}
