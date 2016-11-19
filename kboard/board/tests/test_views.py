@@ -7,7 +7,7 @@ from django.conf import settings
 
 from .base import BoardAppTest
 from board.views import new_post, post_list, edit_post
-from board.models import Post, Board, Comment, EditedPostHistory, Attachment
+from board.models import Post, Board, Comment, EditedPostHistory, Attachment, Account
 from board.forms import PostForm, EMPTY_TITLE_ERROR, EMPTY_CONTENT_ERROR
 from board.tests.test_models import AttachmentModelTest
 
@@ -104,6 +104,16 @@ class CreatePostPageTest(BoardAppTest):
             'content': '',
         })
         self.assertEqual(Attachment.objects.count(), 0)
+
+    def test_save_user_in_post_when_post_is_created(self):
+        self.login()
+        self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': 'NEW POST TITLE',
+            'content': 'NEW POST CONTENT',
+        })
+
+        post = Post.objects.get(title='NEW POST TITLE', content='NEW POST CONTENT')
+        self.assertEqual(post.account, self.user)
 
 
 class PostListTest(BoardAppTest):
