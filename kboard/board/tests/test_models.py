@@ -229,12 +229,14 @@ class CommentModelTest(BoardAppTest):
         first_comment.post = self.default_post
         first_comment.content = 'This is a first comment'
         first_comment.account = self.user
+        first_comment.ip = '127.0.0.1'
         first_comment.save()
 
         second_comment = Comment()
         second_comment.post = second_post
         second_comment.content = 'This is a second comment'
         second_comment.account = self.user
+        second_comment.ip = '127.0.0.1'
         second_comment.save()
 
         saved_comments = Comment.objects.all()
