@@ -5,6 +5,7 @@ from unittest import skip
 class PaginationTest(FunctionalTest):
     def test_pagination_post_list(self):
         self.browser.get(self.live_server_url)
+        self.login()
         self.move_to_default_board()
 
         # 지훈이는 게시판에 13일 동안 매일 일기를 쓰기로 결심한다.
@@ -60,6 +61,7 @@ class PaginationTest(FunctionalTest):
 
     def test_pagination_comment(self):
         self.browser.get(self.live_server_url)
+        self.login()
         self.move_to_default_board()
         self.add_post('title', 'content')
 

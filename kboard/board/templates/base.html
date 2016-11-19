@@ -25,7 +25,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if not user.is_authenticated %}
-                    <li><a id="id_log_in_button" href="/accounts/login/">로그인</a></li>
+                    <li><a id="login_button" href="/accounts/login/">로그인</a></li>
                 {% endif %}
                 {% if user.is_authenticated %}
                     <li><a id="username" href="/accounts/profile/">{{ user.username }}</a></li>

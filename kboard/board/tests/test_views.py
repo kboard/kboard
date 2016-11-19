@@ -440,12 +440,21 @@ class NewCommentTest(BoardAppTest):
         )
 
     def test_can_create_comment(self):
+        self.login()
         self.client.post(
             reverse('board:new_comment', args=[self.default_post.id]),
             data={'comment_content': 'This is a comment'}
         )
 
         self.assertEqual(Comment.objects.count(), 1)
+
+    def test_can_not_create_comment_when_does_not_login(self):
+        self.client.post(
+            reverse('board:new_comment', args=[self.default_post.id]),
+            data={'comment_content': 'This is a comment'}
+        )
+
+        self.assertEqual(Comment.objects.count(), 0)
 
     def test_can_not_access_with_GET_on_new_comment(self):
         response = self.client.get(
@@ -467,9 +476,11 @@ class DeleteCommentTest(BoardAppTest):
         )
 
     def test_can_delete_comment(self):
+        self.login()
         comment = Comment.objects.create(
             post=self.default_post,
-            content='This is a comment'
+            content='This is a comment',
+            account=self.user
         )
         response = self.client.post(
             reverse('board:delete_comment', args=[self.default_post.id, comment.id])
@@ -478,9 +489,11 @@ class DeleteCommentTest(BoardAppTest):
         self.assertEqual(Comment.objects.count(), 1)
 
     def test_can_not_access_with_GET_on_delete_comment(self):
+        self.login()
         comment = Comment.objects.create(
             post=self.default_post,
-            content='This is a comment'
+            content='This is a comment',
+            account=self.user
         )
         response = self.client.get(
             reverse('board:delete_comment', args=[self.default_post.id, comment.id])
