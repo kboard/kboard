@@ -280,7 +280,7 @@ class PostViewTest(BoardAppTest):
     def test_hide_edit_post_button_if_user_is_not_authenticated(self):
         self.client.login(username='test', password='kboard123')
 
-        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+        self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
         })
@@ -292,6 +292,22 @@ class PostViewTest(BoardAppTest):
         self.client.logout()
         response = self.client.get(reverse('board:view_post', args=[post.id]))
         self.assertNotContains(response, 'id_edit_post_button')
+
+    def test_hide_delete_post_button_if_user_is_not_authenticated(self):
+        self.client.login(username='test', password='kboard123')
+
+        self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': 'NEW POST TITLE',
+            'content': 'NEW POST CONTENT',
+        })
+
+        post = Post.objects.get(title='NEW POST TITLE')
+        response = self.client.get(reverse('board:view_post', args=[post.id]))
+        self.assertContains(response, 'id_delete_post_button')
+
+        self.client.logout()
+        response = self.client.get(reverse('board:view_post', args=[post.id]))
+        self.assertNotContains(response, 'id_delete_post_button')
 
 
 class CommentListTest(BoardAppTest):
