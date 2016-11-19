@@ -1,10 +1,24 @@
 import sys
 import os
+from functools import wraps
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 
 from accounts.models import Account
+
+
+def logout_current_user(self):
+    self.browser.find_element_by_id('logout_button').click()
+
+
+def logout_current_user_with_browser(method):
+    @wraps(method)
+    def _impl(self, *args, **kwargs):
+        logout_current_user(self)
+        method(self, *args, **kwargs)
+
+    return _impl
 
 
 class FunctionalTest(StaticLiveServerTestCase):
@@ -72,6 +86,3 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.find_element_by_id('id_username').send_keys(user.username)
         self.browser.find_element_by_id('id_password').send_keys('kboard123')
         self.browser.find_element_by_class_name('btn-primary').click()
-
-    def logout(self):
-        self.browser.find_element_by_id('logout_button').click()
