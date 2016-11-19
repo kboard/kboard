@@ -16,12 +16,14 @@ class PostModelTest(BoardAppTest):
         first_post.board = self.default_board
         first_post.title = 'first post of title'
         first_post.content = 'first post of content'
+        first_post.ip = '127.0.0.1'
         first_post.save()
 
         second_post = Post()
         second_post.board = self.default_board
         second_post.title = 'second post of title'
         second_post.content = 'second post of content'
+        second_post.ip = '127.0.0.1'
         second_post.save()
 
         saved_posts = Post.objects.all()
@@ -31,6 +33,7 @@ class PostModelTest(BoardAppTest):
         second_saved_post = saved_posts[1]
         self.assertEqual(first_saved_post.title, 'first post of title')
         self.assertEqual(first_saved_post.content, 'first post of content')
+        self.assertEqual(first_saved_post.ip, '127.0.0.1')
         self.assertEqual(second_saved_post.title, 'second post of title')
         self.assertEqual(second_saved_post.content, 'second post of content')
 
@@ -39,6 +42,7 @@ class PostModelTest(BoardAppTest):
         delete_post.board = self.default_board
         delete_post.title = 'post of title'
         delete_post.content = 'post of content'
+        delete_post.ip = '192.168.0.1'
         delete_post.save()
 
         self.assertEqual(delete_post.is_deleted, False)

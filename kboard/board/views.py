@@ -10,7 +10,7 @@ from django.conf import settings
 from board.models import Post, Board, Comment, EditedPostHistory, Attachment
 from accounts.models import Account
 from board.forms import PostForm, AttachmentForm
-from core.utils import get_pages_nav_info
+from core.utils import get_pages_nav_info, get_ip
 
 
 @require_GET
@@ -34,6 +34,7 @@ def new_post(request, board_slug):
         if post_form.is_valid() and attachment_form.is_valid():
             post = post_form.save(commit=False)
             post.board = board
+            post.ip = get_ip(request)
             if request.user.is_authenticated:
                 try:
                     post.account = Account.objects.get(username=request.user.username)
