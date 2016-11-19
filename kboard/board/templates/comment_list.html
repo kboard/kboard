@@ -15,10 +15,12 @@
                             {% csrf_token %}
                         </form>
                         <small class="text-muted comment-date">{{ comment.created_time|date:"Y-m-d H:i:s" }}</small>
-                        <small class="delete-comment">삭제</small>
+                        {% if comment.account == user %}
+                            <small class="delete-comment">삭제</small>
+                        {% endif %}
                     </div>
                     {% if comment.account %}
-                        <span class="text-primary">{{ comment.account.user.username }}</span>
+                        <span class="text-primary">{{ comment.account.username }}</span>
                     {% else %}
                         <span class="text-primary">익명</span>
                     {% endif %}
@@ -35,10 +37,11 @@
 </div>
 {% else %}
 <p class="no-comment">
-    <strong>댓글이 없습니다</strong>
+    <strong>댓글이 없습니다.</strong>
 </p>
 {% endif %}
 
+{% if user.is_authenticated %}
 <div class="row">
     <form method="POST" action="{% url 'board:new_comment' post.id %}">
         {% csrf_token %}
@@ -51,4 +54,9 @@
         </div>
     </form>
 </div>
+{% else %}
+<p class="comment-require-login">
+    <strong>댓글을 달기 위해 로그인하세요.</strong>
+</p>
+{% endif %}
 </body>

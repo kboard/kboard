@@ -56,6 +56,7 @@ class NewVisitorTest(FunctionalTest):
 
     def test_write_post_and_confirm_post_view(self):
         self.browser.get(self.live_server_url)
+        self.login()
         self.move_to_default_board()
 
         # 지훈이는 새 게시글을 작성하기 위해 글 쓰기 버튼을 누른다.
@@ -157,8 +158,8 @@ class NewVisitorTest(FunctionalTest):
         comment_date = comment_list.find_element_by_class_name('comment-date')
         self.assertRegex(comment_date.text, '\d{4}-[01]\d-[0-3]\d [0-2]\d:[0-5]\d:[0-5]\d')
 
-        # 댓글이 마음에 들지 않아 다시 삭제하려고 한다. 댓글 우측에 x 버튼을 누른다.
-        remove_comment_button = self.browser.find_elements_by_class_name("delete-comment")[0]
+        # 댓글이 마음에 들지 않아 다시 삭제하려고 한다. 댓글 우측에 삭제 버튼을 누른다.
+        remove_comment_button = self.browser.find_element_by_class_name("delete-comment")
         remove_comment_button.click()
 
         # 남아있는 댓글이 없는 것을 확인한다.
@@ -180,3 +181,29 @@ class NewVisitorTest(FunctionalTest):
 
         # 게시글 목록 페이지로 돌아온다.
         self.assertRegex(self.browser.current_url, '.+/boards/default/$')
+
+    def test_forbid_comment_input_when_does_not_login(self):
+        self.browser.get(self.live_server_url)
+
+        # 지훈이는 로그인을 하고 글을 작성한다.
+        self.login()
+        self.move_to_default_board()
+        self.add_post('hello', 'content')
+
+        # 게시글 목록 페이지가 보여지고 있다.
+        self.assertRegex(self.browser.current_url, '.+/boards/default/$')
+
+        # 익명으로 댓글을 달고 싶어 로그아웃한다.
+        self.logout()
+
+        # 게시판에 들어간다.
+        self.move_to_default_board()
+
+        # 게시글에 들어간다.
+        post_list = self.browser.find_elements_by_css_selector('#id_post_list_table > tbody > tr > td > a')
+        post_list[0].click()
+
+        # 댓글 입력하는 form이 없고 '댓글을 달기 위해 로그인하세요.'가 보인다.
+        comment_iframe = self.browser.find_element_by_class_name('comment-iframe')
+        self.browser.switch_to.frame(comment_iframe)
+        self.browser.find_element_by_class_name('comment-require-login')

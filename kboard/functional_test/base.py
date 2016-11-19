@@ -65,10 +65,13 @@ class FunctionalTest(StaticLiveServerTestCase):
         id = self.browser.find_element_by_id(css_id)
         id.send_keys(send_text)
 
-    def log_in(self):
+    def login(self):
         user = Account.objects.get(username='test')
         self.browser.get(self.live_server_url)
-        self.browser.find_element_by_id('id_log_in_button').click()
+        self.browser.find_element_by_id('login_button').click()
         self.browser.find_element_by_id('id_username').send_keys(user.username)
         self.browser.find_element_by_id('id_password').send_keys('kboard123')
         self.browser.find_element_by_class_name('btn-primary').click()
+
+    def logout(self):
+        self.browser.find_element_by_id('logout_button').click()

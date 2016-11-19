@@ -6,7 +6,7 @@ class AccountTest(FunctionalTest):
         self.browser.get(self.live_server_url)
 
         # 현준이는 테스트 계정으로 로그인을 한다.
-        self.log_in()
+        self.login()
 
         # 로그인을 하자 메인페이지로 이동한다.
         self.assertRegex(self.browser.current_url, '.+/$')
@@ -26,5 +26,5 @@ class AccountTest(FunctionalTest):
         self.assertRegex(self.browser.current_url, '.+/$')
 
         # 네비게이션 바 우측에 '로그인'이라는 버튼이 보인다.
-        login_button = self.browser.find_element_by_id('id_log_in_button')
+        login_button = self.browser.find_element_by_id('login_button')
         self.assertEqual(login_button.text, '로그인')

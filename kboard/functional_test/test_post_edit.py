@@ -6,7 +6,7 @@ from .base import FunctionalTest
 class EditPostTest(FunctionalTest):
     def setUp(self):
         super().setUp()
-        self.log_in()
+        self.login()
 
     def test_modify_post(self):
         self.browser.get(self.live_server_url)

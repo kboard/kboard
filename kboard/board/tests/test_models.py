@@ -186,7 +186,11 @@ class CommentModelTest(BoardAppTest):
         )
 
     def test_can_save_and_delete_a_comment_in_a_particular_post(self):
-        comment = Comment.objects.create(post=self.default_post, content='This is a comment')
+        comment = Comment.objects.create(
+            post=self.default_post,
+            content='This is a comment',
+            account=self.user
+        )
         saved_comments = Comment.objects.filter(post=self.default_post)
 
         self.assertEqual(saved_comments.count(), 1)
@@ -201,6 +205,7 @@ class CommentModelTest(BoardAppTest):
         self.assertEqual(deleted_comments.count(), 0)
 
     def test_can_pass_comment_POST_data(self):
+        self.login()
         self.client.post(reverse('board:new_comment', args=[self.default_post.id]), data={
             'comment_content': 'This is a comment'
         })
@@ -219,11 +224,13 @@ class CommentModelTest(BoardAppTest):
         first_comment = Comment()
         first_comment.post = self.default_post
         first_comment.content = 'This is a first comment'
+        first_comment.account = self.user
         first_comment.save()
 
         second_comment = Comment()
         second_comment.post = second_post
         second_comment.content = 'This is a second comment'
+        second_comment.account = self.user
         second_comment.save()
 
         saved_comments = Comment.objects.all()
