@@ -55,13 +55,13 @@
                     <button id="id_edit_post_button" class="form-control btn btn-default redirection-button"
                             path="{% url 'board:edit_post' post.id %}">수정</button>
             </div>
-            {% endif %}
             <div class="col-sm-4">
                 <form method="POST" action="{% url 'board:delete_post' post.id %}">
                     {% csrf_token %}
                     <button id="id_delete_post_button" type="submit" class="form-control btn btn-danger">삭제</button>
                 </form>
             </div>
+            {% endif %}
         </div>
     </div>
 </div>

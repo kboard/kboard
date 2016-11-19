@@ -2,6 +2,10 @@ from .base import FunctionalTest
 
 
 class DeletePostTest(FunctionalTest):
+    def setUp(self):
+        super().setUp()
+        self.log_in()
+
     def test_delete_post(self):
         self.browser.get(self.live_server_url)
         self.move_to_default_board()
