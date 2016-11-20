@@ -11,7 +11,7 @@
       text-align: right;
       float: right;
 
-      span + span {
+      & > * + * {
         margin-left: 10px;
       }
     }
