@@ -1,22 +1,26 @@
-.. kboard documentation master file, created by
-   sphinx-quickstart on Sun Oct 16 16:12:25 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+KBoard
+======
 
-Welcome to kboard's documentation!
-==================================
+.. image:: https://api.travis-ci.org/kboard/kboard.svg?branch=master
+    :alt: Build Status
+    :target: https://travis-ci.org/kboard/kboard
 
-Contents:
+.. image:: https://coveralls.io/repos/github/kboard/kboard/badge.svg?branch=master
+        :alt: Coverage status
+        :target: https://coveralls.io/github/kboard/kboard?branch=master
 
-.. toctree::
-   :maxdepth: 2
+KBoard는 Django 기반의 한국형 커뮤니티 플랫폼 입니다.
 
 
+설명 문서 (Documents)
+-------------------
 
-Indices and tables
-==================
+설치 (Installation)
+''''''''''''''''''
+입력하자
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+설정 (Settings)
+''''''''''''''
+입력하자
+
 
