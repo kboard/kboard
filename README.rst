@@ -1,14 +1,21 @@
 
 KBoard_
-=====
+=======
+
+KBoard는 Django 기반의 한국형 커뮤니티 플랫폼 입니다.
+
+Docs
+    http://kboard.readthedocs.io
 
 Continuous Integration (Travis CI)
-   https://travis-ci.org/kboard/kboard
-      .. image:: https://api.travis-ci.org/kboard/kboard.svg?branch=master
-            :alt: Build Status
-                  :target: https://travis-ci.org/kboard/kboard
-      .. image:: https://coveralls.io/repos/github/kboard/kboard/badge.svg?branch=master
-      :target: https://coveralls.io/github/kboard/kboard?branch=master
+    .. image:: https://api.travis-ci.org/kboard/kboard.svg?branch=master
+        :alt: Build Status
+        :target: https://travis-ci.org/kboard/kboard
+
+Code Coverage (Coveralls)
+    .. image:: https://coveralls.io/repos/github/kboard/kboard/badge.svg?branch=master
+        :alt: Coverage status
+        :target: https://coveralls.io/github/kboard/kboard?branch=master
 
 
 
