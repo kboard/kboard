@@ -204,6 +204,7 @@ def edit_post(request, post_id):
                     post=origin_post,
                     title=origin_post.title,
                     content=origin_post.content,
+                    ip=origin_post.ip
                 )
                 edited_post_history.save()
 
