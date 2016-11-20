@@ -82,6 +82,7 @@ class EditedPostHistory(TimeStampedModel):
     post = models.ForeignKey(Post, null=False, default=None)
     title = models.CharField(default='', max_length=100)
     content = models.TextField(default='')
+    ip = models.GenericIPAddressField(null=True, default='')
 
 
 class Attachment(models.Model):

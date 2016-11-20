@@ -88,6 +88,10 @@ class EditPostTest(FunctionalTest):
         history_body = self.browser.find_element_by_class_name('panel-body')
         self.assertIn('Hello pjango', history_body.text)
 
+        # 그 기록은 IP를 가지고 있다.
+        history_ip = self.browser.find_element_by_class_name('post-history-ip')
+        self.assertRegex(history_ip.text, '\d{1,3}\.\d{1,3}\.xxx\.\d{1,3}')
+
         # 내역을 확인한 지훈이는 글 보기 버튼을 누른다.
         back_button = self.browser.find_element_by_id('back_to_view_post_button')
         back_button.click()

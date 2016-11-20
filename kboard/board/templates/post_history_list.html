@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load hide_ip %}
+
 {% block title %}Post History List{% endblock %}
 
 {% block body %}
@@ -13,6 +15,7 @@
                     <span class="panel-title">{{ history.title }}</span>
                     <div class="post-info">
                         <strong class="text-primary">~ {{ history.created_time|date:"Y-m-d H:i:s" }}</strong>
+                        <span class="text-muted post-history-ip">IP: {% hide_ip history.ip %}</span>
                     </div>
                 </div>
                 <div class="panel-body">

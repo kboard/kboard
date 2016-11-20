@@ -164,12 +164,14 @@ class EditedPostHistoryModelTest(BoardAppTest):
         history1 = EditedPostHistory.objects.create(
             post=self.default_post,
             title='hello',
-            content='This is a content'
+            content='This is a content',
+            ip='127.0.0.1'
         )
         history2 = EditedPostHistory.objects.create(
             post=another_post,
             title='hello2',
-            content='This is a content2'
+            content='This is a content2',
+            ip='192.168.231.188'
         )
 
         saved_history = EditedPostHistory.objects.all()
