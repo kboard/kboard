@@ -288,7 +288,7 @@ class PostViewTest(BoardAppTest):
         self.assertNotContains(response, 'other post of content')
 
     def test_hide_edit_post_button_if_user_is_not_authenticated(self):
-        self.client.login(username='test', password='kboard123')
+        self.login()
 
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
@@ -304,7 +304,7 @@ class PostViewTest(BoardAppTest):
         self.assertNotContains(response, 'id_edit_post_button')
 
     def test_hide_delete_post_button_if_user_is_not_authenticated(self):
-        self.client.login(username='test', password='kboard123')
+        self.login()
 
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
