@@ -314,7 +314,8 @@ class EditPostTest(BoardAppTest):
         cls.default_post = Post.objects.create(
             board=cls.default_board,
             title='some post title',
-            content='some post content'
+            content='some post content',
+            ip='123.123.123.124'
         )
 
     def tearDown(self):
@@ -352,6 +353,7 @@ class EditPostTest(BoardAppTest):
         self.assertEqual(saved_edited_post_history.count(), 1)
         self.assertEqual(saved_edited_post_history[0].title, 'some post title')
         self.assertEqual(saved_edited_post_history[0].content, 'some post content')
+        self.assertEqual(saved_edited_post_history[0].ip, self.default_post.ip)
 
         upload_file.close()
 
