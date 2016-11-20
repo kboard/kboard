@@ -161,6 +161,10 @@ class NewVisitorTest(FunctionalTest):
         comment_date = comment_list.find_element_by_class_name('comment-date')
         self.assertRegex(comment_date.text, '\d{4}-[01]\d-[0-3]\d [0-2]\d:[0-5]\d:[0-5]\d')
 
+        # 댓글에는 IP도 표시된다.
+        comment_ip = comment_list.find_element_by_class_name('comment-ip')
+        self.assertRegex(comment_ip.text, '\d{1,3}\.\d{1,3}\.xxx\.\d{1,3}')
+
         # 댓글이 마음에 들지 않아 다시 삭제하려고 한다. 댓글 우측에 삭제 버튼을 누른다.
         remove_comment_button = self.browser.find_element_by_class_name("delete-comment")
         remove_comment_button.click()

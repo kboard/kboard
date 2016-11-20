@@ -1,3 +1,5 @@
+{% load hide_ip %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +17,7 @@
                             {% csrf_token %}
                         </form>
                         <small class="text-muted comment-date">{{ comment.created_time|date:"Y-m-d H:i:s" }}</small>
+                        <small class="text-muted comment-ip">{% hide_ip comment.ip %}</small>
                         {% if comment.account == user %}
                             <small class="delete-comment">삭제</small>
                         {% endif %}
