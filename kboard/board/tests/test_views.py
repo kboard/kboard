@@ -293,6 +293,17 @@ class PostViewTest(BoardAppTest):
         response = self.client.get(reverse('board:view_post', args=[post.id]))
         self.assertNotContains(response, 'id_edit_post_button')
 
+    def test_view_writer_of_post(self):
+        post = Post.objects.create(
+            board=self.default_board,
+            title='NEW POST TITLE',
+            content='NEW POST CONTENT',
+            account=self.user,
+        )
+
+        response = self.client.get(reverse('board:view_post', args=[post.id]))
+        self.assertContains(response, self.user.username)
+
 
 class CommentListTest(BoardAppTest):
     def test_use_pagination_template_when_post_has_comments(self):
