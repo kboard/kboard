@@ -1,6 +1,6 @@
 from selenium.common.exceptions import NoSuchElementException
 
-from .base import FunctionalTest, login_test_user_with_browser
+from .base import FunctionalTest, logout_current_user, login_test_user_with_browser
 
 
 class NewVisitorTest(FunctionalTest):
@@ -195,7 +195,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertRegex(self.browser.current_url, '.+/boards/default/$')
 
         # 익명으로 댓글을 달고 싶어 로그아웃한다.
-        self.logout()
+        logout_current_user(self)
 
         # 게시판에 들어간다.
         self.move_to_default_board()

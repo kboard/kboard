@@ -17,6 +17,10 @@ def login_test_user(self):
         self.browser.find_element_by_class_name('btn-primary').click()
 
 
+def logout_current_user(self):
+    self.browser.find_element_by_id('logout_button').click()
+
+
 def login_test_user_with_browser(method):
     @wraps(method)
     def _impl(self, *args, **kwargs):
@@ -85,6 +89,3 @@ class FunctionalTest(StaticLiveServerTestCase):
     def register_send_key(self, css_id, send_text):
         id = self.browser.find_element_by_id(css_id)
         id.send_keys(send_text)
-
-    def logout(self):
-        self.browser.find_element_by_id('logout_button').click()
