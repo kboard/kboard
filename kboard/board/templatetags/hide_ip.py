@@ -13,4 +13,4 @@ def hide_ip(ip):
         ip_arr[2] = 'xxx'
         return '.'.join(ip_arr)
     else:
-        return str(ip)
+        return ip
