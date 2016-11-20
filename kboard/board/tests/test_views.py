@@ -464,6 +464,16 @@ class NewCommentTest(BoardAppTest):
 
         self.assertEqual(response.status_code, 405)
 
+    def test_save_user_in_comment_when_comment_is_created(self):
+        self.login()
+        self.client.post(
+            reverse('board:new_comment', args=[self.default_post.id]),
+            data={'comment_content': 'This is a comment'}
+        )
+
+        comment = Comment.objects.get(content='This is a comment')
+        self.assertEqual(comment.account, self.user)
+
 
 class DeleteCommentTest(BoardAppTest):
     @classmethod
