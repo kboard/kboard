@@ -37,7 +37,7 @@ def new_post(request, board_slug):
             post.ip = get_ip(request)
             if request.user.is_authenticated:
                 try:
-                    post.account = Account.objects.get(username=request.user.username)
+                    post.account = request.user
                 except Attachment.DoesNotExist:
                     post.account = None
             post.save()
@@ -124,7 +124,7 @@ def view_post(request, post_id):
     pages_nav_info = get_pages_nav_info(comments, nav_chunk_size=post.board.comment_pages_nav_chunk_size)
 
     is_authenticated = False
-    if post.account and request.user.username == post.account.username:
+    if post.account == request.user:
         is_authenticated = True
 
     return render(request, 'view_post.html', {
