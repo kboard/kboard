@@ -30,6 +30,12 @@ def login_test_user_with_browser(method):
     return _impl
 
 
+class NotFoundPostError(Exception):
+    def __init__(self, message):
+        super(NotFoundPostError, self).__init__(message)
+        self.message = message
+
+
 class FunctionalTest(StaticLiveServerTestCase):
     fixtures = ['test.json']
 
@@ -55,6 +61,16 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.get(self.live_server_url)
         default_board = self.browser.find_element_by_css_selector('.panel-post-summary > .panel-heading > a')
         default_board.click()
+
+    def open_post(self, title):
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        for row in rows:
+            if title in row.text:
+                row.find_element_by_tag_name('a').click()
+                return
+
+        raise NotFoundPostError(message="Not Found Post")
 
     def click_create_post_button(self):
         create_post_button = self.browser.find_element_by_id('id_create_post_button')
