@@ -13,7 +13,6 @@ class SearchPostTest(FunctionalTest):
     }
 
     def test_search_post_title(self):
-        self.browser.get(self.live_server_url)
         self.move_to_default_board()
 
         # 지훈이는 하고 싶은 게임 리스트를 게시물로 여러개 작성한다. (한 페이지에 나오는 게시글 개수 미만으로 작성한다.)

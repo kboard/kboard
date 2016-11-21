@@ -4,7 +4,6 @@ from .base import FunctionalTest, login_test_user_with_browser
 class CountPageViewTest(FunctionalTest):
     @login_test_user_with_browser
     def test_count_view_of_post(self):
-        self.browser.get(self.live_server_url)
         self.move_to_default_board()
 
         # 혜선이는 'grape'에 대한 게시글을 작성한다

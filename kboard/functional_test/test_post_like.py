@@ -3,7 +3,6 @@ from .base import FunctionalTest
 
 class PostLikeTest(FunctionalTest):
     def test_search_post_title(self):
-        self.browser.get(self.live_server_url)
         self.move_to_default_board()
 
         # 현준이는 좋아요를 받기 위해서 아재개그를 올린다.

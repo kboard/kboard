@@ -14,7 +14,6 @@ class PostFileUploadTest(FunctionalTest):
         super().tearDown()
 
     def test_file_upload(self):
-        self.browser.get(self.live_server_url)
         self.move_to_default_board()
 
         # 지훈이는 첨부파일을 추가하여 새 게시글을 작성하기 위해 글 쓰기 버튼을 누른다.

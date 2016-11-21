@@ -52,6 +52,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.browser.quit()
 
     def move_to_default_board(self):
+        self.browser.get(self.live_server_url)
         default_board = self.browser.find_element_by_css_selector('.panel-post-summary > .panel-heading > a')
         default_board.click()
 
