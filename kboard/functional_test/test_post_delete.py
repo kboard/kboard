@@ -22,13 +22,7 @@ class DeletePostTest(FunctionalTest):
         delete_post_button.click()
 
         # 'spring' 게시글이 잘 삭제 돼서 목록에 보이지 않는다.
-        table = self.browser.find_element_by_id('id_post_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        title_list = ''
-        for row in rows:
-            title_list += row.text
-
-        self.assertNotRegex(title_list, '.+spring')
+        self.assertPostNotIn('spring')
 
         # 'django' 게시글은 삭제되지 않고 잘 남아있다.
-        self.assertRegex(title_list, '.+django')
+        self.assertPostIn('django')

@@ -30,6 +30,12 @@ def login_test_user_with_browser(method):
     return _impl
 
 
+class NotFoundPostError(Exception):
+    def __init__(self, message):
+        super(NotFoundPostError, self).__init__(message)
+        self.message = message
+
+
 class FunctionalTest(StaticLiveServerTestCase):
     fixtures = ['test.json']
 
@@ -101,8 +107,19 @@ class FunctionalTest(StaticLiveServerTestCase):
         id = self.browser.find_element_by_id(css_id)
         id.send_keys(send_text)
 
+    def get_post_title_list(self):
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        title_list = ''
+        for row in rows:
+            title_list += row.text
 
-class NotFoundPostError(Exception):
-    def __init__(self, message):
-        super(NotFoundPostError, self).__init__(message)
-        self.message = message
+        return title_list
+
+    def assertPostNotIn(self, title):
+        post_title_list = self.get_post_title_list()
+        self.assertNotRegex(post_title_list, '.+' + title)
+
+    def assertPostIn(self, title):
+        post_title_list = self.get_post_title_list()
+        self.assertRegex(post_title_list, '.+' + title)
