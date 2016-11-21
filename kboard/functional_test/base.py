@@ -90,3 +90,20 @@ class FunctionalTest(StaticLiveServerTestCase):
     def register_send_key(self, css_id, send_text):
         id = self.browser.find_element_by_id(css_id)
         id.send_keys(send_text)
+
+    def get_post_title_list(self):
+        table = self.browser.find_element_by_id('id_post_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        title_list = ''
+        for row in rows:
+            title_list += row.text
+
+        return title_list
+
+    def assertPostNotIn(self, title):
+        post_title_list = self.get_post_title_list()
+        self.assertNotRegex(post_title_list, '.+' + title)
+
+    def assertPostIn(self, title):
+        post_title_list = self.get_post_title_list()
+        self.assertRegex(post_title_list, '.+' + title)
