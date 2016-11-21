@@ -56,7 +56,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         default_board = self.browser.find_element_by_css_selector('.panel-post-summary > .panel-heading > a')
         default_board.click()
 
-    def move_to_post(self, title):
+    def open_post(self, title):
         table = self.browser.find_element_by_id('id_post_list_table')
         rows = table.find_elements_by_tag_name('tr')
         for row in rows:
