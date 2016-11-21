@@ -12,13 +12,7 @@ class DeletePostTest(FunctionalTest):
 
         # 나중에 보니 'spring' 게시글이 마음에 들지 않아서 삭제를 한다.
         # 'spring' 게시글을 눌러서 게시글 페이지로 이동한 후 '삭제' 버튼을 누른다.
-        table = self.browser.find_element_by_id('id_post_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        for row in rows:
-            if 'spring' in row.text:
-                break
-
-        row.find_element_by_tag_name('a').click()
+        self.move_to_post(title='spring')
 
         delete_post_button = self.browser.find_element_by_id('id_delete_post_button')
         delete_post_button.click()
