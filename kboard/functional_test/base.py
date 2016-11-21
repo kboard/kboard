@@ -62,7 +62,9 @@ class FunctionalTest(StaticLiveServerTestCase):
         for row in rows:
             if title in row.text:
                 row.find_element_by_tag_name('a').click()
-                break
+                return
+
+        raise NotFoundPostError(message="Not Found Post")
 
     def click_create_post_button(self):
         create_post_button = self.browser.find_element_by_id('id_create_post_button')
@@ -98,3 +100,9 @@ class FunctionalTest(StaticLiveServerTestCase):
     def register_send_key(self, css_id, send_text):
         id = self.browser.find_element_by_id(css_id)
         id.send_keys(send_text)
+
+
+class NotFoundPostError(Exception):
+    def __init__(self, message):
+        super(NotFoundPostError, self).__init__(message)
+        self.message = message

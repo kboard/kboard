@@ -1,4 +1,4 @@
-from .base import FunctionalTest, login_test_user_with_browser
+from .base import FunctionalTest, login_test_user_with_browser, NotFoundPostError
 
 
 class DeletePostTest(FunctionalTest):
@@ -13,7 +13,10 @@ class DeletePostTest(FunctionalTest):
 
         # 나중에 보니 'spring' 게시글이 마음에 들지 않아서 삭제를 한다.
         # 'spring' 게시글을 눌러서 게시글 페이지로 이동한 후 '삭제' 버튼을 누른다.
-        self.open_post(title='spring')
+        try:
+            self.open_post(title='spring')
+        except NotFoundPostError as notFoundPostError:
+            self.fail(notFoundPostError.message)
 
         delete_post_button = self.browser.find_element_by_id('id_delete_post_button')
         delete_post_button.click()
