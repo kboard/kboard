@@ -32,11 +32,14 @@ def get_pages_nav_info(page, nav_chunk_size=10):
 
 
 def get_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', None)
+    x_real_ip = request.META.get('HTTP_X_REAL_IP', None)
     if x_forwarded_for:
         ip_address = x_forwarded_for.split(',')[-1].strip()
+    elif x_real_ip:
+        ip_address = x_real_ip
     else:
-        ip_address = request.META.get('REMOTE_ADDR')
+        ip_address = request.META.get('REMOTE_ADDR', None)
     return ip_address
 
 
