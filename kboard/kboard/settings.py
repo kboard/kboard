@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from django.core.mail import send_mail
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -135,6 +136,7 @@ SUMMERNOTE_CONFIG = {}
 
 # pipeline settings
 PIPELINE = {
+    'PIPELINE_ENABLED': False,
     'COMPILERS': {
         'libsasscompiler.LibSassCompiler',
     },
