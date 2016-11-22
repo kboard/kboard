@@ -3,6 +3,7 @@ import os
 from functools import wraps
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from django.conf import settings
 from selenium import webdriver
 
 from accounts.models import Account
@@ -40,6 +41,7 @@ class FunctionalTest(StaticLiveServerTestCase):
     fixtures = ['test.json']
 
     def setUp(self):
+        settings.PIPELINE['PIPELINE_ENABLED'] = False
         if sys.platform == 'darwin':
             project_root = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
             repo_root = os.path.dirname(project_root)
