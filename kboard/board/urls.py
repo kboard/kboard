@@ -1,8 +1,6 @@
 # Created by JHJ on 2016. 10. 5.
 
 from django.conf.urls import url
-from django.conf import settings
-from django.conf.urls.static import static
 
 from . import views
 
@@ -19,4 +17,4 @@ urlpatterns = [
     url(r'^posts/(?P<post_id>\d+)/comments/$', views.comment_list, name='comment_list'),
     url(r'^posts/(?P<post_id>\d+)/comments/new/$', views.new_comment, name='new_comment'),
     url(r'^posts/(?P<post_id>\d+)/comments/(?P<comment_id>\d+)/delete/$', views.delete_comment, name='delete_comment'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
