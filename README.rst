@@ -17,6 +17,9 @@ Code Coverage (Coveralls)
         :alt: Coverage status
         :target: https://coveralls.io/github/kboard/kboard?branch=master
 
+ERD (Entity Relationship Diagram)
+    .. image:: k-board/board_models.png
+
 Developers
 -----
 - Bae KwonHan <darjeeling@gmail.com>

@@ -67,8 +67,3 @@ Mysql 설정
 ^^^^^^^^^^
 | 사용자는 회원가입 페이지에서 이용약관을 보게 됩니다.
 | 이용약관은 ``kboard/accounts/templates/accounts/terms.html`` 에 작성하시면 됩니다.
-
-
-ERD (Entity Relationship Model)
--------------------
-.. image:: k-board/board_models.png
