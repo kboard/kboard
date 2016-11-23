@@ -319,7 +319,7 @@ class PostViewTest(BoardAppTest):
         response = self.client.get(reverse('board:view_post', args=[post.id]))
         self.assertNotContains(response, 'id_delete_post_button')
 
-    def test_hide_edited_post_history_if_user_is_not_authenticated(self):
+    def test_view_edited_post_history_if_user_is_not_authenticated(self):
         self.login()
         post = Post.objects.create(
             board=self.default_board,
@@ -339,7 +339,7 @@ class PostViewTest(BoardAppTest):
 
         self.client.logout()
         response = self.client.get(reverse('board:view_post', args=[post.id]))
-        self.assertNotContains(response, 'post_history')
+        self.assertContains(response, 'post_history')
 
     def test_view_writer_of_post(self):
         post = Post.objects.create(
