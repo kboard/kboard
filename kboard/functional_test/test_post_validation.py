@@ -1,8 +1,9 @@
-from .base import FunctionalTest
+from .base import FunctionalTest, login_test_user_with_browser
 import time
 
 
 class PostValidationTest(FunctionalTest):
+    @login_test_user_with_browser
     def test_cannot_add_empty_title(self):
         self.move_to_default_board()
 
@@ -23,6 +24,7 @@ class PostValidationTest(FunctionalTest):
         alert = self.browser.switch_to_alert()
         alert.accept()
 
+    @login_test_user_with_browser
     def test_cannot_add_empty_content(self):
         self.move_to_default_board()
 

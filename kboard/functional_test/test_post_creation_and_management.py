@@ -4,6 +4,7 @@ from .base import FunctionalTest, logout_current_user, login_test_user_with_brow
 
 
 class NewVisitorTest(FunctionalTest):
+    @login_test_user_with_browser
     def test_default_page(self):
         # 지훈이는 멋진 게시판 앱이 나왔다는 소식을 듣고
         # 해당 웹 사이트를 확인하러 간다.
