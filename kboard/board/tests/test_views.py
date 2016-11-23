@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 
-from .base import BoardAppTest
+from .base import BoardAppTest, login_test_user
 from board.views import new_post, post_list, edit_post
 from board.models import Post, Board, Comment, EditedPostHistory, Attachment, Account
 from board.forms import PostForm, EMPTY_TITLE_ERROR, EMPTY_CONTENT_ERROR
@@ -105,8 +105,8 @@ class CreatePostPageTest(BoardAppTest):
         })
         self.assertEqual(Attachment.objects.count(), 0)
 
+    @login_test_user
     def test_save_user_in_post_when_post_is_created(self):
-        self.login()
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
@@ -287,9 +287,8 @@ class PostViewTest(BoardAppTest):
         self.assertNotContains(response, 'other post of title')
         self.assertNotContains(response, 'other post of content')
 
+    @login_test_user
     def test_hide_edit_post_button_if_user_is_not_authenticated(self):
-        self.login()
-
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
@@ -303,9 +302,8 @@ class PostViewTest(BoardAppTest):
         response = self.client.get(reverse('board:view_post', args=[post.id]))
         self.assertNotContains(response, 'id_edit_post_button')
 
+    @login_test_user
     def test_hide_delete_post_button_if_user_is_not_authenticated(self):
-        self.login()
-
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
@@ -319,8 +317,8 @@ class PostViewTest(BoardAppTest):
         response = self.client.get(reverse('board:view_post', args=[post.id]))
         self.assertNotContains(response, 'id_delete_post_button')
 
+    @login_test_user
     def test_view_edited_post_history_if_user_is_not_authenticated(self):
-        self.login()
         post = Post.objects.create(
             board=self.default_board,
             title='NEW POST TITLE',
@@ -500,8 +498,8 @@ class NewCommentTest(BoardAppTest):
             content='some post content'
         )
 
+    @login_test_user
     def test_can_create_comment(self):
-        self.login()
         self.client.post(
             reverse('board:new_comment', args=[self.default_post.id]),
             data={'comment_content': 'This is a comment'}
@@ -525,8 +523,8 @@ class NewCommentTest(BoardAppTest):
 
         self.assertEqual(response.status_code, 405)
 
+    @login_test_user
     def test_save_user_in_comment_when_comment_is_created(self):
-        self.login()
         self.client.post(
             reverse('board:new_comment', args=[self.default_post.id]),
             data={'comment_content': 'This is a comment'}
@@ -546,8 +544,8 @@ class DeleteCommentTest(BoardAppTest):
             content='some post content'
         )
 
+    @login_test_user
     def test_can_delete_comment(self):
-        self.login()
         comment = Comment.objects.create(
             post=self.default_post,
             content='This is a comment',
@@ -559,8 +557,8 @@ class DeleteCommentTest(BoardAppTest):
 
         self.assertEqual(Comment.objects.count(), 1)
 
+    @login_test_user
     def test_can_not_access_with_GET_on_delete_comment(self):
-        self.login()
         comment = Comment.objects.create(
             post=self.default_post,
             content='This is a comment',
