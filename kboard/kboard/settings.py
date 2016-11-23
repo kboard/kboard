@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django_summernote',
     'djangobower',
     'pipeline',
+    'django_extensions',
 ]
 
 STATICFILES_FINDERS = [
