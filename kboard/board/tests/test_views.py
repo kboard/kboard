@@ -115,6 +115,15 @@ class CreatePostPageTest(BoardAppTest):
         post = Post.objects.get(title='NEW POST TITLE', content='NEW POST CONTENT')
         self.assertEqual(post.account, self.user)
 
+    def test_redirect_to_login_page_if_not_authenticated(self):
+        self.assertEqual(Post.objects.count(), 0)
+        self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': 'NEW POST TITLE',
+            'content': 'NEW POST CONTENT',
+        })
+        self.assertEqual(Post.objects.count(), 0)
+        self.assertRedirects()
+
 
 class PostListTest(BoardAppTest):
     def get_response_from_post_list_search_request(self, search_flag, query):
