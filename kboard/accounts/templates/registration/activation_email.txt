@@ -1,6 +1,6 @@
 {% load i18n %}
-{% trans "Activate account at" %} {{ site.name }}:
+다음의 링크를 클릭하여 인증하세요!
 
 http://{{ site.domain }}{% url 'registration_activate' activation_key %}
 
-{% blocktrans %}Link is valid for {{ expiration_days }} days.{% endblocktrans %}
+링크는 {{ expiration_days }}일 동안 유효합니다.
