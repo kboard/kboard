@@ -1,7 +1,8 @@
-from .base import FunctionalTest
+from .base import FunctionalTest, login_test_user_with_browser
 
 
 class PostLikeTest(FunctionalTest):
+    @login_test_user_with_browser
     def test_search_post_title(self):
         self.move_to_default_board()
 

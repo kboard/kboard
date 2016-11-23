@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
 from django.core.urlresolvers import reverse
 from django.db.models import F
-from django.conf import settings
+from django.contrib.auth.decorators import login_required
 
 from board.models import Post, Board, Comment, EditedPostHistory, Attachment
 from accounts.models import Account
@@ -26,20 +26,20 @@ def home(request):
     return render(request, 'home.html', {'home_data': data})
 
 
+@login_required
 def new_post(request, board_slug):
     board = Board.objects.get(slug=board_slug)
     if request.method == 'POST':
         post_form = PostForm(request.POST)
         attachment_form = AttachmentForm(request.POST, request.FILES)
-        if post_form.is_valid() and attachment_form.is_valid():
+        if post_form.is_valid() and attachment_form.is_valid() and request.user.is_authenticated:
             post = post_form.save(commit=False)
             post.board = board
             post.ip = get_ip(request)
-            if request.user.is_authenticated:
-                try:
-                    post.account = request.user
-                except Attachment.DoesNotExist:
-                    post.account = None
+            try:
+                post.account = request.user
+            except Post.DoesNotExist:
+                post.account = None
             post.save()
             attachment = attachment_form.save(commit=False)
             attachment.post = post

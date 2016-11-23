@@ -1,6 +1,6 @@
 from selenium.webdriver.support.ui import Select
 
-from .base import FunctionalTest
+from .base import FunctionalTest, login_test_user_with_browser
 
 
 class SearchPostTest(FunctionalTest):
@@ -12,6 +12,7 @@ class SearchPostTest(FunctionalTest):
         'minecraft': 'Nogada game'
     }
 
+    @login_test_user_with_browser
     def test_search_post_title(self):
         self.move_to_default_board()
 
@@ -50,8 +51,8 @@ class SearchPostTest(FunctionalTest):
         self.assertEqual(len(searched_posts), 1)
         self.check_for_row_in_list_table('id_post_list_table', 'dungeon and fighter')
 
+    @login_test_user_with_browser
     def test_search_by_flag(self):
-        self.browser.get(self.live_server_url)
         self.move_to_default_board()
 
         # 지훈이는 하고 싶은 게임 리스트를 게시물로 여러개 작성한다. (한 페이지에 나오는 게시글 개수 미만으로 작성한다.)
