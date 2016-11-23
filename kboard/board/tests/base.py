@@ -1,8 +1,19 @@
 import re
+from functools import wraps
+
 from django.test import TestCase
 
 from board.models import Post, Board, Comment
 from accounts.models import Account
+
+
+def login_test_user(method):
+    @wraps(method)
+    def _impl(self, *args, **kwargs):
+        self.login()
+        method(self, *args, **kwargs)
+
+    return _impl
 
 
 class BoardAppTest(TestCase):
