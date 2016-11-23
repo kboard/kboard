@@ -18,7 +18,7 @@ Code Coverage (Coveralls)
         :target: https://coveralls.io/github/kboard/kboard?branch=master
 
 ERD (Entity Relationship Diagram)
-    .. image:: k-board/board_models.png
+    .. image:: board_models.png
 
 Developers
 -----
