@@ -200,9 +200,6 @@ EMAIL_PORT = 587
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.environ.get('KBOARD_EMAIL')
 EMAIL_HOST_PASSWORD = os.environ.get('KBOARD_PASSWORD')
-SERVER_EMAIL = os.environ.get('KBOARD_EMAIL')
-DEFAULT_FROM_MAIL = 'KBoard_Developer'
-
 
 # When Login success, go to main page.
 
