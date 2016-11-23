@@ -64,6 +64,7 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('username',)
     filter_horizontal = ()
 
-
+admin.site.site_title = 'K-Board'
+admin.site.site_header = 'K-Board 관리자 페이지'
 admin.site.register(Account, UserAdmin)
 admin.site.unregister(Group)

@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 
-from .base import BoardAppTest
+from .base import BoardAppTest, login_test_user
 from board.views import new_post, post_list, edit_post
 from board.models import Post, Board, Comment, EditedPostHistory, Attachment, Account
 from board.forms import PostForm, EMPTY_TITLE_ERROR, EMPTY_CONTENT_ERROR
@@ -38,12 +38,14 @@ class HomePageTest(BoardAppTest):
 
 
 class CreatePostPageTest(BoardAppTest):
+    @login_test_user
     def test_new_post_page_returns_correct_html(self):
         response = self.client.get(reverse('board:new_post', args=[self.default_board.slug]))
 
         response_decoded = self.remove_csrf(response.content.decode())
         self.assertIn('settings_id_content', response_decoded)
 
+    @login_test_user
     def test_new_post_can_save_a_POST_request(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
@@ -54,6 +56,7 @@ class CreatePostPageTest(BoardAppTest):
         first_new_post = Post.objects.first()
         self.assertEqual(first_new_post.title, 'NEW POST TITLE')
 
+    @login_test_user
     def test_new_post_page_redirects_after_POST(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
@@ -62,11 +65,14 @@ class CreatePostPageTest(BoardAppTest):
 
         self.assertRedirects(response, reverse('board:post_list', args=[self.default_board.slug]))
 
+    @login_test_user
     def test_create_post_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
+        request.user = self.user
         new_post(request, self.default_board.slug)
         self.assertEqual(Post.objects.count(), 0)
 
+    @login_test_user
     def test_invalid_input_renders_new_post_template(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': '',
@@ -75,6 +81,7 @@ class CreatePostPageTest(BoardAppTest):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'new_post.html')
 
+    @login_test_user
     def test_title_invalid_error_is_shown(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': '',
@@ -82,6 +89,7 @@ class CreatePostPageTest(BoardAppTest):
         })
         self.assertContains(response, EMPTY_TITLE_ERROR)
 
+    @login_test_user
     def test_content_invalid_error_is_shown(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
@@ -89,6 +97,7 @@ class CreatePostPageTest(BoardAppTest):
         })
         self.assertContains(response, EMPTY_CONTENT_ERROR)
 
+    @login_test_user
     def test_both_title_and_content_invalid_errors_are_shown(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': '',
@@ -105,8 +114,8 @@ class CreatePostPageTest(BoardAppTest):
         })
         self.assertEqual(Attachment.objects.count(), 0)
 
+    @login_test_user
     def test_save_user_in_post_when_post_is_created(self):
-        self.login()
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
@@ -114,6 +123,13 @@ class CreatePostPageTest(BoardAppTest):
 
         post = Post.objects.get(title='NEW POST TITLE', content='NEW POST CONTENT')
         self.assertEqual(post.account, self.user)
+
+    def test_redirect_to_login_page_if_not_authenticated(self):
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+            'title': 'NEW POST TITLE',
+            'content': 'NEW POST CONTENT',
+        })
+        self.assertRegex(response.url, '/accounts/login.+')
 
 
 class PostListTest(BoardAppTest):
@@ -287,9 +303,8 @@ class PostViewTest(BoardAppTest):
         self.assertNotContains(response, 'other post of title')
         self.assertNotContains(response, 'other post of content')
 
+    @login_test_user
     def test_hide_edit_post_button_if_user_is_not_authenticated(self):
-        self.login()
-
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
@@ -303,9 +318,8 @@ class PostViewTest(BoardAppTest):
         response = self.client.get(reverse('board:view_post', args=[post.id]))
         self.assertNotContains(response, 'id_edit_post_button')
 
+    @login_test_user
     def test_hide_delete_post_button_if_user_is_not_authenticated(self):
-        self.login()
-
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
@@ -318,6 +332,28 @@ class PostViewTest(BoardAppTest):
         self.client.logout()
         response = self.client.get(reverse('board:view_post', args=[post.id]))
         self.assertNotContains(response, 'id_delete_post_button')
+
+    @login_test_user
+    def test_view_edited_post_history_if_user_is_not_authenticated(self):
+        post = Post.objects.create(
+            board=self.default_board,
+            title='NEW POST TITLE',
+            content='NEW POST CONTENT',
+            account=self.user,
+        )
+
+        EditedPostHistory.objects.create(
+            post=post,
+            title='EDITED POST TITLE',
+            content='EDITED POST CONTENT',
+        )
+
+        response = self.client.get(reverse('board:view_post', args=[post.id]))
+        self.assertContains(response, 'post_history')
+
+        self.client.logout()
+        response = self.client.get(reverse('board:view_post', args=[post.id]))
+        self.assertContains(response, 'post_history')
 
     def test_view_writer_of_post(self):
         post = Post.objects.create(
@@ -394,6 +430,7 @@ class EditPostTest(BoardAppTest):
 
         upload_file.close()
 
+    @login_test_user
     def test_show_origin_value_when_start_editing(self):
         upload_file = open(FileUploadTest.UPLOAD_TEST_FILE_NAME)
 
@@ -478,8 +515,8 @@ class NewCommentTest(BoardAppTest):
             content='some post content'
         )
 
+    @login_test_user
     def test_can_create_comment(self):
-        self.login()
         self.client.post(
             reverse('board:new_comment', args=[self.default_post.id]),
             data={'comment_content': 'This is a comment'}
@@ -503,8 +540,8 @@ class NewCommentTest(BoardAppTest):
 
         self.assertEqual(response.status_code, 405)
 
+    @login_test_user
     def test_save_user_in_comment_when_comment_is_created(self):
-        self.login()
         self.client.post(
             reverse('board:new_comment', args=[self.default_post.id]),
             data={'comment_content': 'This is a comment'}
@@ -524,8 +561,8 @@ class DeleteCommentTest(BoardAppTest):
             content='some post content'
         )
 
+    @login_test_user
     def test_can_delete_comment(self):
-        self.login()
         comment = Comment.objects.create(
             post=self.default_post,
             content='This is a comment',
@@ -537,8 +574,8 @@ class DeleteCommentTest(BoardAppTest):
 
         self.assertEqual(Comment.objects.count(), 1)
 
+    @login_test_user
     def test_can_not_access_with_GET_on_delete_comment(self):
-        self.login()
         comment = Comment.objects.create(
             post=self.default_post,
             content='This is a comment',
@@ -574,6 +611,7 @@ class FileUploadTest(BoardAppTest):
         if os.path.isfile(AttachmentModelTest.SAVED_TEST_FILE_PATH_2):
             os.remove(AttachmentModelTest.SAVED_TEST_FILE_PATH_2)
 
+    @login_test_user
     def test_save_upload_file(self):
         upload_file = open(self.UPLOAD_TEST_FILE_NAME)
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {

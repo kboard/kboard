@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-from django.core.mail import send_mail
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -45,6 +44,7 @@ INSTALLED_APPS = [
     'django_summernote',
     'djangobower',
     'pipeline',
+    'django_extensions',
 ]
 
 STATICFILES_FINDERS = [
@@ -136,7 +136,6 @@ SUMMERNOTE_CONFIG = {}
 
 # pipeline settings
 PIPELINE = {
-    'PIPELINE_ENABLED': False,
     'COMPILERS': {
         'libsasscompiler.LibSassCompiler',
     },
@@ -202,9 +201,6 @@ EMAIL_PORT = 587
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = os.environ.get('KBOARD_EMAIL')
 EMAIL_HOST_PASSWORD = os.environ.get('KBOARD_PASSWORD')
-SERVER_EMAIL = os.environ.get('KBOARD_EMAIL')
-DEFAULT_FROM_MAIL = 'KBoard_Developer'
-
 
 # When Login success, go to main page.
 

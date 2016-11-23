@@ -6,7 +6,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.conf import settings
 
 
-from .base import BoardAppTest
+from .base import BoardAppTest, login_test_user
 from board.models import Post, Board, Comment, EditedPostHistory, Attachment
 
 
@@ -210,8 +210,8 @@ class CommentModelTest(BoardAppTest):
 
         self.assertEqual(deleted_comments.count(), 0)
 
+    @login_test_user
     def test_can_pass_comment_POST_data(self):
-        self.login()
         self.client.post(reverse('board:new_comment', args=[self.default_post.id]), data={
             'comment_content': 'This is a comment'
         })

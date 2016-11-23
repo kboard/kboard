@@ -1,10 +1,10 @@
-from .base import FunctionalTest
+from .base import FunctionalTest, login_test_user_with_browser
 import time
 
 
 class PostValidationTest(FunctionalTest):
+    @login_test_user_with_browser
     def test_cannot_add_empty_title(self):
-        self.browser.get(self.live_server_url)
         self.move_to_default_board()
 
         # 지훈이는 새 게시글을 작성하기 위해 글 쓰기 버튼을 누른다.
@@ -24,8 +24,8 @@ class PostValidationTest(FunctionalTest):
         alert = self.browser.switch_to_alert()
         alert.accept()
 
+    @login_test_user_with_browser
     def test_cannot_add_empty_content(self):
-        self.browser.get(self.live_server_url)
         self.move_to_default_board()
 
         # 지훈이는 새 게시글을 작성하기 위해 글 쓰기 버튼을 누른다.
