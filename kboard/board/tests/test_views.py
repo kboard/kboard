@@ -38,12 +38,14 @@ class HomePageTest(BoardAppTest):
 
 
 class CreatePostPageTest(BoardAppTest):
+    @login_test_user
     def test_new_post_page_returns_correct_html(self):
         response = self.client.get(reverse('board:new_post', args=[self.default_board.slug]))
 
         response_decoded = self.remove_csrf(response.content.decode())
         self.assertIn('settings_id_content', response_decoded)
 
+    @login_test_user
     def test_new_post_can_save_a_POST_request(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
@@ -54,6 +56,7 @@ class CreatePostPageTest(BoardAppTest):
         first_new_post = Post.objects.first()
         self.assertEqual(first_new_post.title, 'NEW POST TITLE')
 
+    @login_test_user
     def test_new_post_page_redirects_after_POST(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
@@ -62,11 +65,14 @@ class CreatePostPageTest(BoardAppTest):
 
         self.assertRedirects(response, reverse('board:post_list', args=[self.default_board.slug]))
 
+    @login_test_user
     def test_create_post_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
+        request.user = self.user
         new_post(request, self.default_board.slug)
         self.assertEqual(Post.objects.count(), 0)
 
+    @login_test_user
     def test_invalid_input_renders_new_post_template(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': '',
@@ -75,6 +81,7 @@ class CreatePostPageTest(BoardAppTest):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'new_post.html')
 
+    @login_test_user
     def test_title_invalid_error_is_shown(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': '',
@@ -82,6 +89,7 @@ class CreatePostPageTest(BoardAppTest):
         })
         self.assertContains(response, EMPTY_TITLE_ERROR)
 
+    @login_test_user
     def test_content_invalid_error_is_shown(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
@@ -89,6 +97,7 @@ class CreatePostPageTest(BoardAppTest):
         })
         self.assertContains(response, EMPTY_CONTENT_ERROR)
 
+    @login_test_user
     def test_both_title_and_content_invalid_errors_are_shown(self):
         response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': '',
@@ -116,13 +125,11 @@ class CreatePostPageTest(BoardAppTest):
         self.assertEqual(post.account, self.user)
 
     def test_redirect_to_login_page_if_not_authenticated(self):
-        self.assertEqual(Post.objects.count(), 0)
-        self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
+        response = self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {
             'title': 'NEW POST TITLE',
             'content': 'NEW POST CONTENT',
         })
-        self.assertEqual(Post.objects.count(), 0)
-        self.assertRedirects()
+        self.assertRegex(response.url, '/accounts/login.+')
 
 
 class PostListTest(BoardAppTest):
@@ -423,6 +430,7 @@ class EditPostTest(BoardAppTest):
 
         upload_file.close()
 
+    @login_test_user
     def test_show_origin_value_when_start_editing(self):
         upload_file = open(FileUploadTest.UPLOAD_TEST_FILE_NAME)
 
@@ -603,6 +611,7 @@ class FileUploadTest(BoardAppTest):
         if os.path.isfile(AttachmentModelTest.SAVED_TEST_FILE_PATH_2):
             os.remove(AttachmentModelTest.SAVED_TEST_FILE_PATH_2)
 
+    @login_test_user
     def test_save_upload_file(self):
         upload_file = open(self.UPLOAD_TEST_FILE_NAME)
         self.client.post(reverse('board:new_post', args=[self.default_board.slug]), {

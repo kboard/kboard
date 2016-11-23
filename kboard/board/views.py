@@ -32,7 +32,7 @@ def new_post(request, board_slug):
     if request.method == 'POST':
         post_form = PostForm(request.POST)
         attachment_form = AttachmentForm(request.POST, request.FILES)
-        if post_form.is_valid() and attachment_form.is_valid():
+        if post_form.is_valid() and attachment_form.is_valid() and request.user.is_authenticated:
             post = post_form.save(commit=False)
             post.board = board
             post.ip = get_ip(request)
