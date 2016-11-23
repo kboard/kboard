@@ -11,9 +11,7 @@
             <div class="panel-heading">
                 <span class="panel-title">{{ post.title }}</span>
                 <div class="post-info">
-                    {% if is_modified and is_authenticated %}
-                        <span id="post_history"><a href="{% url 'board:post_history_list' post.id%}">수정 내역</a></span>
-                    {% endif %}
+                    <span id="post_history"><a href="{% url 'board:post_history_list' post.id%}">수정 내역</a></span>
                     {% if post.account %}
                         <span class="text-muted">작성자: {{ post.account.username }}</span>
                     {% endif %}
