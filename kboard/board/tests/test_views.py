@@ -504,6 +504,10 @@ class EditPostTest(BoardAppTest):
         self.assertEqual(edited_post.title, 'some post title')
         self.assertEqual(edited_attachment.attachment.name, 'test.txt')
 
+    def test_does_not_view_edited_post_history_if_post_is_not_edited(self):
+        response = self.client.get(reverse('board:view_post', args=[self.default_post.id]))
+        self.assertNotContains(response, 'post_history')
+
 
 class NewCommentTest(BoardAppTest):
     @classmethod
