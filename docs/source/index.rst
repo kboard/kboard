@@ -18,6 +18,11 @@ KBoard
 다운로드
 ^^^^^^^^^^
 | ``$ git clone https://github.com/kboard/kboard.git``
+| ``$ cd kboard``
+
+requirements.txt 설치
+^^^^^^^^^^^^^^^^^^^^^
+| ``$ pip install -r requirements.txt`` 로 pip 패키지들을 설치합니다.
 
 Bower, Yuglify 설치
 ^^^^^^^^^^
@@ -46,7 +51,6 @@ Gunicorn, Nginx 설치
 Nginx 설정
 ^^^^^^^^^
 | ``/etc/nginx/sites-available/`` 에 다음을 추가하세요.
-| ``[도메인 혹은 IP 이름]`` 에 알맞게 입력하세요.
 
 ::
 
@@ -61,6 +65,14 @@ Nginx 설정
                 proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
                 proxy_set_header X-Scheme $scheme;
                 proxy_set_header REMOTE_ADDR $remote_addr;
+        }
+
+        location /static {
+                alias /[다운받은 경로]/kboard/static;
+        }
+
+        location /file {
+                alias /[다운받은 경로]/kboard/kboard/file;
         }
     }
 
@@ -100,6 +112,7 @@ Mysql 설정
 이메일 설정
 ^^^^^^^^^^
 | ``kboard/kboard/settings.py`` 에서 회원가입 인증 이메일을 보낼 계정을 입력해 주세요.
+| `구글 계정 등록 <https://accounts.google.com/DisplayUnlockCaptcha>`_ 에서 액세스를 허용해야합니다.
 | **현재 구글 계정만 가능합니다.**
 
 ::
